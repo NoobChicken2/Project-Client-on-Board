@@ -1,8 +1,11 @@
 <script lang="ts">
+  import TailwindCss from './TailwindCSS.svelte';
+
   import svelteLogo from './assets/svelte.svg'
   import Counter from './lib/Counter.svelte'
 </script>
 
+<TailwindCss />
 <main>
   <div>
     <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> 
