@@ -1,4 +1,4 @@
-GET {{host}}:{{port}}
+GET localhost:3000
 
 > {%
 client.test(
