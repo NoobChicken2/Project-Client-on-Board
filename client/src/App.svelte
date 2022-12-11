@@ -15,10 +15,10 @@
 
 <main>
 <!--  <div>-->
-<!--    <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> -->
+<!--    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">-->
 <!--      <img src="/vite.svg" class="logo" alt="Vite Logo" />-->
 <!--    </a>-->
-<!--    <a href="https://svelte.dev" target="_blank" rel="noreferrer"> -->
+<!--    <a href="https://svelte.dev" target="_blank" rel="noreferrer">-->
 <!--      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />-->
 <!--    </a>-->
 <!--  </div>-->
@@ -52,5 +52,5 @@
   }
   .read-the-docs {
     color: #888;
-  }
+  /*}*/
 </style>
