@@ -1,6 +1,5 @@
 <script lang="ts">
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+
   import router from 'page'
   import company from "./pages/Company.svelte";
   import login from './pages/Login.svelte'
