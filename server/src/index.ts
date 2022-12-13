@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import converterRouter from "./routes/converterScript";
 
 const app = express();
 const port = 3000;
@@ -8,14 +7,35 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/converters',converterRouter);
-
 app.get('/', (req, res) => {
     console.log(req);
     // res.send('Hello World!')
     res.json({ msg: "hello world"});
 });
 
+
+app.get('/converters', (req, res) => {
+});
+
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 });
+
+
+const {Client} = require('pg')
+
+const client = new Client({
+    host: "localhost",
+    user: "admin",
+    password: "admin123",
+    database: "postgres",
+    port: 7000
+})
+
+client.connect()
+    .then(() => console.log("Success"))
+    .then(() => client.query("select * from users"))
+    .then((results: { rows: any }) => console.table(results.rows))
+    .catch((e: any) => console.log(e))
+    .then(() => client.end())

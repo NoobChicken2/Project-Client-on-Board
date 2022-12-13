@@ -5,11 +5,11 @@ const mysql = require("mysql");
 
 ///Create DB Connection
 const db = mysql.createConnection({
-    host: "23.97.194.191",
-    user:"vm001admin",
-    password:"oEXfpxSTxdFKNq101!",
+    host: "localhost",
+    user:"postgres",
+    password:"postgres",
     database:"postgres",
-    port:22
+    port:7676
 });
 db.connect();
 db.query("SELECT * FROM `Users`", (results: any) => {
