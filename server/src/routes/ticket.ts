@@ -1,6 +1,5 @@
-import express from 'express'
-export const ticketRouter = express.Router();
-ticketRouter.use(express.json());
+import express from 'express';
+const router = express.Router();
 
 
 const Pool = require('pg').Pool
@@ -13,7 +12,7 @@ const pool = new Pool({
 })
 
 
-ticketRouter.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
     pool.query('SELECT * FROM tickets', (error: any, results: { rows: any; }) => {
         if (error) {
             throw error
@@ -22,7 +21,7 @@ ticketRouter.get('/', async (req, res) => {
     })
 });
 
-ticketRouter.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     let id = req.params.id;
     pool.query(`SELECT *
                 FROM tickets
@@ -34,7 +33,7 @@ ticketRouter.get('/:id', async (req, res) => {
     })
 });
 
-ticketRouter.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
     let id = req.body.log_id
     pool.query(`INSERT INTO tickets (log_id)
                 VALUES (${id})`, (error: any, results: { rows: any; }) => {
@@ -46,7 +45,7 @@ ticketRouter.post('/', async (req, res) => {
 
 });
 
-ticketRouter.patch('/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
     let t_id = req.params.id
     let l_id = req.body.log_id
 
@@ -60,7 +59,7 @@ ticketRouter.patch('/:id', async (req, res) => {
     })
 });
 
-ticketRouter.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     let id = req.params.id
 
     pool.query(`DELETE
@@ -72,3 +71,5 @@ ticketRouter.delete('/:id', async (req, res) => {
         res.status(200).json(results.rows)
     })
 });
+
+export default router;
