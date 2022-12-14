@@ -1,17 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 
+import ticket from './routes/ticket';
+
+
 const app = express();
 const port = 3000;
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    console.log(req);
-    // res.send('Hello World!')
-    res.json({ msg: "hello world"});
-});
+app.use('/tickets', ticket);
 
 
 app.get('/converters', (req, res) => {
