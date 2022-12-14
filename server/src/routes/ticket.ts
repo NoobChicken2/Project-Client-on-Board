@@ -6,10 +6,10 @@ ticketRouter.use(express.json());
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'admin',
-    host: 'localhost',
+    host: '23.97.194.191',
     database: 'postgres',
-    password: 'admin123',
-    port: 7000,
+    password: 'rP9S%557bx!V',
+    port: 8000,
 })
 
 
