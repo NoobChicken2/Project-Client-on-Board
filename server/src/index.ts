@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import ticket from './routes/ticket';
 import converter from'./routes/converters'
+import customers from "./routes/customers";
 
 
 const app = express();
@@ -13,6 +14,8 @@ app.use(express.json());
 
 app.use('/tickets', ticket);
 app.use('/converters',converter);
+app.use('/customers',customers)
+
 
 
 app.get('/converters', (req, res) => {
