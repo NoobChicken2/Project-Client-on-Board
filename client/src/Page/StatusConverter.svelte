@@ -1,8 +1,8 @@
 <script>
-    import ConvertersList from "../Components/ConvertersList.svelte";
+    import ConverterList from "../Components/ConverterList.svelte";
 </script>
 <body>
-<ConvertersList/>
+<ConverterList/>
 </body>
 <style>
     body {

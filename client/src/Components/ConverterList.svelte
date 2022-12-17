@@ -5,12 +5,12 @@
 <div class="box">
     <h2>List of Converters</h2>
     <ul>
-        <li><span>1</span><a href="./src/Page/SingleConverterInfo.svelte">Converter</a></li>
-        <li><span>2</span><a href="./src/Page/SingleConverterInfo.svelte">Converter</a></li>
-        <li><span>3</span><a href="./src/Page/SingleConverterInfo.svelte">Converter</a></li>
-        <li><span>4</span><a href="./src/Page/SingleConverterInfo.svelte">Converter</a></li>
-        <li><span>5</span><a href="./src/Page/SingleConverterInfo.svelte">Converter</a></li>
-        <li><span>6</span><a href="./src/Page/SingleConverterInfo.svelte">Converter</a></li>
+        <li><span>1</span><a href="./src/Page/SingleConverterPage.svelte">Converter</a></li>
+        <li><span>2</span><a href="./src/Page/SingleConverterPage.svelte">Converter</a></li>
+        <li><span>3</span><a href="./src/Page/SingleConverterPage.svelte">Converter</a></li>
+        <li><span>4</span><a href="./src/Page/SingleConverterPage.svelte">Converter</a></li>
+        <li><span>5</span><a href="./src/Page/SingleConverterPage.svelte">Converter</a></li>
+        <li><span>6</span><a href="./src/Page/SingleConverterPage.svelte">Converter</a></li>
     </ul>
 </div>
 </body>
