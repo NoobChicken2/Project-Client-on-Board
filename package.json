@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "pg": "^8.8.0",
+    "bootstrap-icons": "^1.10.2",
     "svelte": "^3.53.1"
   },
   "devDependencies": {
