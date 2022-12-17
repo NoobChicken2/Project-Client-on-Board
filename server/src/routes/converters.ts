@@ -43,12 +43,11 @@ router.get('/installer/:id',async(req,resp) => {
 });
 
 router.post('/',async(req,resp) => {
-    let converterId = req.body.converter_id;
     let ownerId = req.body.owner_id;
     let installerId = req.body.installer_id;
     let expected_throughput = req.body.expected_throughput;
 
-    pool.query('INSERT INTO converters(converter_id,owner_id,installer_id,expected_throughput) VALUES ($1,$2,$3,$4)',[converterId,ownerId,installerId,expected_throughput],(err:any,result:{rows:any;}) => {
+    pool.query('INSERT INTO converters(owner_id,installer_id,expected_throughput) VALUES ($1,$2,$3)',[ownerId,installerId,expected_throughput],(err:any,result:{rows:any;}) => {
         if (err){
             return resp.status(400).json({error:"Server side issue (POST)"})
         }
@@ -64,17 +63,18 @@ router.patch('/:id',async(req,resp) => {
        if(err){
            return resp.status(400).json({error:"Server side issue (PATCH)"})
        }
-       return resp.status(200);
+       return resp.status(200).json("COMPLETE");
    })
 });
 
 router.delete('/:id',async(req,resp) => {
     let converter_id = req.params.id;
-    pool.query(`DELETE FROM converters WHERE converer_id = ${converter_id}`,(err) => {
+    pool.query(`DELETE FROM converters WHERE converter_id = ${converter_id}`,(err) => {
         if (err){
+            throw err
             return resp.status(400).json({error:"Issue on the server side (DELETE)"})
         }
-        return resp.status(200);
+        return resp.status(200).json("COMPLETE");
     })
 })
 
