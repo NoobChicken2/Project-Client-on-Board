@@ -1,5 +1,9 @@
 {
   "dependencies": {
+    "pg": "^8.8.0",
     "svelte": "^3.53.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.6.5"
   }
 }
