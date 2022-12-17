@@ -1,3 +1,4 @@
+// this comment does not serve any purpose, just to be able to make a commit (git merge workaround)
 import {Pool} from 'pg';
 
 const pool = new Pool({

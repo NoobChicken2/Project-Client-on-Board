@@ -1,6 +1,25 @@
 <script lang="ts">
-    import NavigationBar from "./components/NavigationBar.svelte";
+
+  import router from 'page'
+  import company from "./pages/Company.svelte";
+  import login from './pages/Login.svelte'
+  let page;
+
+  router('/companies', (ctx) =>{
+    page = company;
+  })
+  router('/login', (ctx) => {
+    page = login;
+  })
+  router.start()
 </script>
 
 
-<NavigationBar/>
+
+<main>
+
+  <svelte:component this={page} />
+</main>
+
+<style>
+</style>

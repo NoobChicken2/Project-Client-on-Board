@@ -1,0 +1,88 @@
+POST localhost:3000/companyAdmins
+Content-Type: application/json
+
+{
+  "username": "ConCac3",
+  "password": "$2a$10$7I2yyGBoxZ37ecuVDjpG8.VttuBvDdHzl99CLdwoZmMNqjiX2ZDWG",
+  "email": "concac3@concac3.com",
+  "phone_number": "0651009497"
+}
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    }
+);
+%}
+
+###
+GET localhost:3000/companyAdmins/12
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
+
+###
+GET localhost:3000/companyAdmins/
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
+
+###
+###
+###
+GET localhost:3000/companyAdmins?phone=0651009497
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
+
+###
+PATCH localhost:3000/companyAdmins/12
+Content-Type: application/json
+
+{
+  "username": "ConCac22",
+  "email": "concac22@concac22.com"
+}
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
+
+###
+###
+###
+DELETE localhost:3000/companyAdmins/9
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
