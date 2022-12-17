@@ -76,7 +76,7 @@
             <li class="menu__Item"><a id="customer" class="menu_customers_Link" href="#"><h1 class="customerHeading"
                                                                                              id="customerText">
                 Customer</h1></a></li>
-            <li class="menu__Item"><a id="converters" class="menu_converters__Link" href="#"><h1
+            <li class="menu__Item"><a id="converters" class="menu_converters__Link" href="http://127.0.0.1:3030/converterstatus"><h1
                     class="converterHeading" id="converterText">Converters</h1></a>
             </li>
             <li class="menu__Item"><a id="signOut" class="menu__Link" href="#"><h1 class="signOutHeading"
