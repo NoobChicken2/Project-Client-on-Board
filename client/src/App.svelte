@@ -1,21 +1,25 @@
 <script lang="ts">
-    import NavigationBar from "./components/NavigationBar.svelte";
-    import router from 'page'
-    import statusConverter from "./Page/StatusConverter.svelte";
-    import singleConverter from "./Page/SingleConverterPage.svelte";
-    let page;
 
-    router('/converterstatus', (ctx) => {
-        page = statusConverter;
-    })
-    router('/converterinfo', (ctx) => {
-        page = singleConverter;
-    })
-    router.start()
+  import router from 'page'
+  import company from "./pages/Company.svelte";
+  import login from './pages/Login.svelte'
+  let page;
+
+  router('/companies', (ctx) =>{
+    page = company;
+  })
+  router('/login', (ctx) => {
+    page = login;
+  })
+  router.start()
 </script>
+
+
+
 <main>
-    <svelte:component this={page} />
+
+  <svelte:component this={page} />
 </main>
 
-
-<NavigationBar/>
+<style>
+</style>
