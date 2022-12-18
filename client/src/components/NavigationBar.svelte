@@ -85,7 +85,7 @@
         </ul>
     </nav>
     <div class="wrapper" class:active="{ navActive }">
-        <h1>Content</h1>
+<!--        <h1>Content</h1>-->
     </div>
 </main>
 
