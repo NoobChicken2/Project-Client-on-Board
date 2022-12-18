@@ -5,6 +5,7 @@ import ticket from './routes/ticket';
 import companyAdmin from './routes/companyAdministrators';
 import converter from'./routes/converters'
 import customers from "./routes/customers";
+import companies from "./routes/companies"
 
 const app = express();
 const port = 3000;
@@ -15,7 +16,8 @@ app.use(express.json());
 app.use('/tickets', ticket);
 app.use('/companyAdmins', companyAdmin);
 app.use('/converters',converter);
-app.use('/customers',customers)
+app.use('/customers',customers);
+app.use('/companies', companies);
 
 
 
