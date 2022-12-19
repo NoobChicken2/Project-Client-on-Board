@@ -46,7 +46,7 @@
                     <button type="button" class="bi bi-card-text btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
                 </tr>
             {/each}
-               
+
             </tbody>
         </table>
 
