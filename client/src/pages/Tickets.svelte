@@ -1,5 +1,6 @@
 <script>
     import NavigationBar from "../components/NavigationBar.svelte";
+    import { Popover } from 'sveltestrap';
     import {onMount} from "svelte";
     import {loadTickets} from "../scripts/ticketScript.ts";
     import {apiData} from "../stores/store.ts";
@@ -43,17 +44,21 @@
                     <td>Test</td>
                     <td>{Ticket.log_id}</td>
                     <td>{Ticket.created_at}</td>
-                    <button type="button" class="bi bi-card-text btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
+                    <button type="button" id="ticket-popover" class="bi bi-card-text btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
                 </tr>
             {/each}
-               
+
             </tbody>
         </table>
 
-        <!-- TEST TICKET BUTTON -->
-        <button type="button" class="btn-outline-dark" data-bs-toggle="popover" data-bs-title="Ticket Title" data-bs-content="Ticket content (description, status, priority)">
-            <i class = ""></i>
-        </button>
+        <Popover placement="left" target="ticket-popover">
+            <div slot="title">
+                <b>Title</b>
+            </div>
+            <div>Description</div>
+            <div>Status</div>
+            <div>Date</div>
+        </Popover>
 
     </div>
 </body>
@@ -64,4 +69,10 @@
         left: 150px;
         position: absolute;
     }
+
+    /*.popover{*/
+    /*    width: 200px;*/
+    /*    height: 200px;*/
+    /*}*/
+
 </style>

@@ -1,8 +1,13 @@
 <script>
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte";
+    import {onMount} from "svelte";
+    import {loadCustomers} from "../scripts/customerScript.ts";
+    import {apiData} from "../stores/store.ts";
 
     const myInput = document.getElementById('myInput');
+
+    onMount(loadCustomers)
 
 </script>
 
@@ -28,43 +33,26 @@
                     <th style="width: 50px" scope="col"></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    </td>
-                    <th scope="row">1</th>
-                    <td>Andrew</td>
-                    <td>Albert</td>
-                    <td>Allie_Albert@example.com</td>
-                    <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    </td>
-                    <th scope="row">2</th>
-                    <td>Ben</td>
-                    <td>Bailey</td>
-                    <td>Ben_Bright@example.com</td>
-                    <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    </td>
-                    <th scope="row">3</th>
-                    <td>Chris</td>
-                    <td>Collins</td>
-                    <td>Larry@example.com</td>
-                    <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
-                </tr>
-            </tbody>
-        </table>
+        <tbody>
 
+        {#each $apiData as Customer}
+            <tr>
+                <td>
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                </td>
+                <th scope="row">{Customer.id}</th>
+                <td>{Customer.first_name}</td>
+                <td>{Customer.last_name}</td>
+                <td>{Customer.email}</td>
+                <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
+            </tr>
+        {/each}
+
+        </tbody>
+    </table>
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#staticBackdrop add-Modal">
             <span class = "bi bi-person-plus"></span>
             Add new Customer
         </button>
@@ -87,7 +75,7 @@
         </nav>
 
         <!-- Modal -->
-        <Modal class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <Modal class="modal fade" id="staticBackdrop add-model" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
