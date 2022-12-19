@@ -1,7 +1,12 @@
 <script>
     import NavigationBar from "../components/NavigationBar.svelte";
+    import {onMount} from "svelte";
+    import {loadTickets} from "../scripts/ticketScript.ts";
+    import {apiData} from "../stores/store.ts";
 
     const myInput = document.getElementById('myInput');
+
+    onMount(loadTickets)
 
 </script>
 
@@ -22,42 +27,26 @@
                     <th style="width: 50px" scope="col"></th>
                     <th style="width: 100px" scope="col">#id</th>
                     <th style="width: 300px" scope="col">Title</th>
-                    <th style="width: 150px" scope="col">CustomerID</th>
+                    <th style="width: 150px" scope="col">LogID</th>
                     <th style="width: 200px" scope="col">Date</th>
                     <th style="width: 50px" scope="col"></th>
                 </tr>
             </thead>
             <tbody>
+
+            {#each $apiData as Ticket}
                 <tr>
                     <td>
                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                     </td>
-                    <th scope="row">1</th>
-                    <td>Ticket One</td>
-                    <td>2</td>
-                    <td>12-14-2022</td>
+                    <th scope="row">{Ticket.ticket_id}</th>
+                    <td>Test</td>
+                    <td>{Ticket.log_id}</td>
+                    <td>{Ticket.created_at}</td>
                     <button type="button" class="bi bi-card-text btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
                 </tr>
-                <tr>
-                    <td>
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    </td>
-                    <th scope="row">2</th>
-                    <td>Ticket Two</td>
-                    <td>3</td>
-                    <td>10-14-2022</td>
-                    <button type="button" class="bi bi-card-text btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    </td>
-                    <th scope="row">3</th>
-                    <td>Ticket Three</td>
-                    <td>1</td>
-                    <td>06-14-2022</td>
-                    <button type="button" class="bi bi-card-text btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
-                </tr>
+            {/each}
+               
             </tbody>
         </table>
 
