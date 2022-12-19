@@ -13,17 +13,20 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.1.0",
     "@tsconfig/svelte": "^3.0.0",
+    "@types/page": "^1.11.5",
     "autoprefixer": "^10.4.13",
-    "svelte": "^3.52.0",
+    "postcss": "^8.4.19",
+    "svelte": "^3.54.0",
     "svelte-check": "^2.9.2",
     "svelte-preprocess": "^4.10.7",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4",
-    "vite": "^3.2.3"
+    "vite": "^3.2.5"
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.2",
-    "svelte-sidebar-menu": "^0.9.12"
+    "page": "^1.11.6",
+    "sveltestrap": "^5.10.0"
   }
 }
