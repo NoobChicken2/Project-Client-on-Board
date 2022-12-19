@@ -3,7 +3,7 @@ import pool from "../database/databaseConnection";
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    pool.query(`SELECT * FROM users WHERE role = 'Company'` , (error: any, results: {rows: any}) => {
+    pool.query(`SELECT * FROM users WHERE role = 'CompanyAdmin'` , (error: any, results: {rows: any}) => {
         if (error) {
             throw error
         }
