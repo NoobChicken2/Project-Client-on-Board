@@ -63,7 +63,7 @@ router.patch('/:id',async(req,resp) => {
        if(err){
            return resp.status(400).json({error:"Server side issue (PATCH)"})
        }
-       return resp.status(200).json("COMPLETE");
+            return resp.status(200).json("COMPLETE");
    })
 });
 
