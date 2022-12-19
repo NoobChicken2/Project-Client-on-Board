@@ -1,4 +1,4 @@
-GET localhost:3000/tickets
+GET localhost:3000/customers
 
 > {%
 client.test(
@@ -8,3 +8,13 @@ client.test(
     }
 );
 %}
+
+###
+POST localhost:3000/token
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "LukeMitch",
+  "password": "password123"
+}
