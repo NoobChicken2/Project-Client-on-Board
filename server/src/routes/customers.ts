@@ -70,7 +70,7 @@ router.patch('/:id',async(req,resp) => {
 
 router.delete('/:id',async(req,resp) => {
     let user_id = req.params.id;
-    pool.query(`DELETE FROM users WHERE user_id = ${user_id}`,(err,result:{rows:any;}) => {
+    pool.query(`DELETE FROM users WHERE user_id = ${user_id}`,(err:any,result:{rows:any;}) => {
         if (err){
             return resp.status(400).json({error:"Issue on the server side (DELETE)"})
         }

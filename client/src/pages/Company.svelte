@@ -2,10 +2,18 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
+    import {loadCompanies} from "../scripts/companyScript";
 
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
+getCompanies();
+   async function getCompanies(){
+       let companies =await loadCompanies();
+       console.log(companies)
+       return companies;
+   }
+
 
     const editCompany = () => {
 
@@ -124,33 +132,22 @@
                 </tr>
             </thead>
             <tbody>
+            {#await getCompanies()}
+                <p>Loading companies...</p>
+                {:then companies}
+                {#each companies as company (company.user_id)}
             <tr>
-                <th scope="row">1</th>
-                <td>company</td>
-                <td>something</td>
+                <th scope="row">{company.username}</th>
+                <td>{company.phone_number}</td>
+                <td>{company.email}</td>
                 <td>
                     <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>
                     <i class="bi bi-pencil-square ; btn btn-primary"></i>
                 </td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>company</td>
-                <td>something</td>
-                <td>
-                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>
-                    <i class="bi bi-pencil-square ; btn btn-primary"></i>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>company</td>
-                <td>something</td>
-                <td>
-                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>
-                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"  on:click={ () => showEditPopup = true}></button>
-                </td>
-            </tr>
+
+                    {/each}
+                {/await}
             </tbody>
         </table>
             <Pagination ariaLabel="Page navigation example">
