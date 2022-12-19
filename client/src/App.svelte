@@ -1,8 +1,12 @@
 <script lang="ts">
 
   import router from 'page'
-  import company from "./pages/Company.svelte";
+  import company from './pages/Company.svelte';
   import login from './pages/Login.svelte'
+  import register from './pages/Customers.svelte'
+  import ticket from './pages/Tickets.svelte'
+  import converter from './pages/StatusConverter.svelte'
+
   let page;
 
   router('/companies', (ctx) =>{
@@ -11,14 +15,22 @@
   router('/login', (ctx) => {
     page = login;
   })
+  router('/customers', (ctx) =>{
+      page = register;
+  })
+  router('/tickets', (ctx) =>{
+      page = ticket;
+  })
+  router('/converters', (ctx) => {
+      page = converter;
+  })
+
   router.start()
 </script>
 
 
-
 <main>
-
-  <svelte:component this={page} />
+    <svelte:component this={page} />
 </main>
 
 <style>

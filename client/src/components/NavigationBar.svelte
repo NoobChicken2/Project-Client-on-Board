@@ -49,13 +49,10 @@
             converterText.style.color = "transparent";
             signOutText.style.color = "transparent";
 
-
-
             home.style.width = "30px";
             customer.style.width = "30px";
             converter.style.width = "30px";
             signOut.style.width = "30px";
-
 
             home.style.background = "";
             customer.style.background = "";
@@ -63,29 +60,72 @@
             signOut.style.background = "";
         }
     };
-</script>
 
+    //Will be used in the future
+    let navOptions = [
+        {
+            optionName: 'Home',
+            listId: 'home',
+            listClass: 'menu_home__Link',
+            link: '#',
+            headingId: 'homeText',
+            headingClass: 'homeHeading'
+        },
+        {
+            optionName: 'Customer',
+            listId: 'customer',
+            listClass: 'menu_customer__Link',
+            link: 'http://127.0.0.1:3030/customers',
+            headingId: 'customerText',
+            headingClass: 'customerHeading'
+        },
+        {
+            optionName: 'Converters',
+            listId: 'converters',
+            listClass: 'menu_converters__Link',
+            link: 'http://127.0.0.1:3030/converters',
+            headingId: 'converterText',
+            headingClass: 'converterHeading'
+        },
+        {
+            optionName: 'Sign Out',
+            listId: 'signOut',
+            listClass: 'menu__Link',
+            link: '#',
+            headingId: 'signOutText',
+            headingClass: 'signOutHeading'
+        }
+    ]
+
+</script>
 
 <main>
     <nav class="menu" class:active="{ navActive }">
         <button class="menu__Toggle" on:click="{ () => toggleNav() }">{ navActive ? 'X' : '≡'}</button>
-        <ul class="menu__List">
-            <li class="menu__Item"><a id="home" class="menu_home__Link" href="#"><h1 class="homeHeading" id="homeText">
-                Home</h1></a>
-            </li>
-            <li class="menu__Item"><a id="customer" class="menu_customers_Link" href="#"><h1 class="customerHeading"
-                                                                                             id="customerText">
-                Customer</h1></a></li>
-            <li class="menu__Item"><a id="converters" class="menu_converters__Link" href="#"><h1
-                    class="converterHeading" id="converterText">Converters</h1></a>
-            </li>
-            <li class="menu__Item"><a id="signOut" class="menu__Link" href="#"><h1 class="signOutHeading"
-                                                                                   id="signOutText">Sign out</h1></a>
-            </li>
-        </ul>
+        <section class="menu__List">
+            <ul class="menu__List">
+                <li class="menu__Item"><a id="home" class="menu_home__Link" href="#"><h1 class="homeHeading" id="homeText">
+                    Home</h1></a>
+                </li>
+                <li class="menu__Item"><a id="customer" class="menu_customers_Link" href="http://127.0.0.1:3030/customers"><h1 class="customerHeading"
+                                                                                                 id="customerText">
+                    Customer</h1></a></li>
+                <li class="menu__Item"><a id="converters" class="menu_converters__Link" href="http://127.0.0.1:3030/converters"><h1
+                        class="converterHeading" id="converterText">Converters</h1></a>
+                </li>
+                <li class="menu__Item"><a id="signOut" class="menu__Link" href="#"><h1 class="signOutHeading"
+                                                                                       id="signOutText">Sign out</h1></a>
+                </li>
+            </ul>
+<!--            <ul class="menu__List">-->
+<!--                {#each navOptions as option}-->
+<!--                    <li class="menu__Item"><a id={option.listId} class={option.listClass} href={option.link}><h1 class={option.headingClass} id={option.headingId}>{option.optionName}</h1></a></li>-->
+<!--                {/each}-->
+<!--            </ul>-->
+        </section>
     </nav>
     <div class="wrapper" class:active="{ navActive }">
-        <h1>Content</h1>
+<!--        <h1>Content</h1>-->
     </div>
 </main>
 
@@ -160,6 +200,7 @@
         all: unset;
         display: block;
         width: 100%;
+        z-index: 999;
     }
 
     .menu__Item {

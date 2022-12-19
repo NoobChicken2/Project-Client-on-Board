@@ -2,38 +2,28 @@ import express from 'express';
 import pool from "../database/databaseConnection";
 const router = express.Router();
 
-router.get('/',async (req,res) => {
-    pool.query(`SELECT * FROM users WHERE role = 'Client'`,(err:any,result: { rows:any;})  => {
-        if (err){
-            throw err
+router.get('/', async (req, res) => {
+    pool.query(`SELECT * FROM users WHERE role = 'CompanyAdmin'` , (error: any, results: {rows: any}) => {
+        if (error) {
+            throw error
         }
-        res.status(200).json(result.rows);
+        res.status(200).json(results.rows)
     })
 });
-router.get('/:id',async (req,resp) => {
+
+router.get('/:id', async(req, res) => {
     let id = req.params.id;
-    pool.query(`SELECT *  FROM users WHERE user_id = ${id}`,(err:any,result: {rows:any;}) => {
-        if (err){
-            resp.json({error:"Server side issue(GET)"})
+    pool.query(`SELECT *
+        FROM users
+        WHERE user_id = ${id}`, (err: any, results: {rows: any;}) => {
+        if (err) {
+            res.json({error: "Server side issue(GET)"})
         }
-        resp.status(200).json(result.rows);
+        res.status(200).json(results.rows);
     })
+});
 
-})
-
-// router.get('/?username={:username}',async(req,resp,) => {
-//     let username = req.query.username;
-//     pool.query(`SELECT * FROM users WHERE username = $1`,[username],(err:any,result:{rows:any;}) =>{
-//         if (err){
-//             throw err
-//             return resp.status(400).json({error:"Server side issue(GET)"});
-//         }
-//         return resp.status(200).json(result)
-//     });
-// });
-
-
-router.post('/',async(req,resp) => {
+router.post('/', async(req, res) => {
     let role = req.body.role;
     let username = req.body.username;
     let password = req.body.password;
@@ -42,11 +32,13 @@ router.post('/',async(req,resp) => {
     let email = req.body.email;
     let phone_number = req.body.phone_number;
 
-    pool.query(`INSERT INTO users (role,username,password,first_name,last_name,email,phone_number) VALUES ($1,$2,$3,$4,$5,$6,$7)`,[role,username,password,first_name,last_name,email,phone_number],(err:any,result:{rows:any;}) => {
-        if (err){
-             return resp.status(400).json({error:"Server side issue (POST)"})
+    pool.query(`INSERT INTO users (role, username, password, first_name, last_name, email, phone_number)
+                VALUES ($1, $2, $3, $4, $5, $6,
+                        $7)`, [role, username, password, first_name, last_name, email, phone_number], (err: any, result: { rows: any; }) => {
+        if (err) {
+            return res.status(400).json({error: "Server side issue (POST)"})
         }
-        return resp.status(201).json(req.body);
+        return res.status(201).json(req.body);
     })
 });
 
@@ -70,13 +62,12 @@ router.patch('/:id',async(req,resp) => {
 
 router.delete('/:id',async(req,resp) => {
     let user_id = req.params.id;
-    pool.query(`DELETE FROM users WHERE user_id = ${user_id}`,(err:any,result:{rows:any;}) => {
+    pool.query(`DELETE FROM users WHERE user_id = ${user_id}`,(err,result:{rows:any;}) => {
         if (err){
             return resp.status(400).json({error:"Issue on the server side (DELETE)"})
         }
         return resp.status(200).json("COMPLETE");
     })
 })
-
 
 export default router;
