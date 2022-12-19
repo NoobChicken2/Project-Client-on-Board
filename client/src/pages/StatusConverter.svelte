@@ -1,8 +1,13 @@
 <script>
+    import {onMount} from "svelte";
+    import {loadConverters} from "../scripts/converterScript";
     import ConverterList from "../Components/ConverterList.svelte";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
+    import {apiData} from "../stores/store.ts";
+
+    onMount(loadConverters)
 
     let showEditPopup = false;
     let showAddPopup = false;
@@ -18,10 +23,13 @@
 
     }
 
+
+
 </script>
 <NavigationBar/>
 
 <body>
+
 <div class="container">
     <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
         <form>
@@ -78,7 +86,7 @@
 
 
 <div class="container">
-    <Modal open={showEditPopup} on:click={ () => showEditPopup = false}>
+    <Modal open={showEditPopup} on:click={() => showEditPopup = false}>
         <form>
             <div class="modal-header">
                 <h5 class="modal-title" >Edit</h5>
@@ -119,42 +127,45 @@
         <table class="table table-hover ; table table-striped" >
             <thead>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Status</th>
+                <th scope="col">Converter_id</th>
+                <th scope="col">Owner_id</th>
+                <th scope="col">Installer_id</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
+            {#each $apiData as Converter}
             <tr>
-                <th scope="row">1</th>
-                <td>Converter</td>
-                <td>Working</td>
+                <th scope="row">{Converter.converter_id}</th>
+                <td>{Converter.owner_id}</td>
+                <td>{Converter.installer_id}</td>
                 <td>
                     <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>
                     <i class="bi bi-pencil-square ; btn btn-primary"></i>
                 </td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Converter</td>
-                <td>Working</td>
-                <td>
-                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>
-                    <i class="bi bi-pencil-square ; btn btn-primary"></i>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Converter</td>
-                <td>Working</td>
-                <td>
-                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>
-                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"  on:click={ () => showEditPopup = true}></button>
-                </td>
-            </tr>
-            </tbody>
+            {/each}
+<!--            <tr>-->
+<!--                <th scope="row">2</th>-->
+<!--                <td>Converter</td>-->
+<!--                <td>Working</td>-->
+<!--                <td>-->
+<!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
+<!--                    <i class="bi bi-pencil-square ; btn btn-primary"></i>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <th scope="row">3</th>-->
+<!--                <td>Converter</td>-->
+<!--                <td>Working</td>-->
+<!--                <td>-->
+<!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
+<!--                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"  on:click={ () => showEditPopup = true}></button>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
         </table>
+
         <Pagination ariaLabel="Page navigation example">
             <PaginationItem disabled>
                 <PaginationLink first href="#" />
@@ -187,9 +198,9 @@
     </div>
 </div>
 
+
 </body>
 
 <style>
 
 </style>
-
