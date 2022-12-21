@@ -8,3 +8,12 @@ export async function loadCustomers() {
         return customers;
     });
 }
+
+
+export async function removeCustomer(id) {
+    return await fetch(`http://localhost:3000/customers/${id}`, {method: 'DELETE'})
+        .then((response) => response.json())
+        .then((data) => {
+            return data;
+        });
+}

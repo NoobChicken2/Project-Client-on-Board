@@ -2,17 +2,33 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte";
     import {onMount} from "svelte";
-    import {loadCustomers} from "../scripts/customerScript.ts";
     import {apiData} from "../stores/store.ts";
+    import {loadCustomers, removeCustomer} from "../scripts/customerScript.ts";
 
     const myInput = document.getElementById('myInput');
+    let showDeletePopup = false;
 
     onMount(loadCustomers);
 
-    async function deleteCustomer(){
+    let selectedCompanyId;
+
+    onMount(loadCustomers);
+
+    const editCustomer = () => {
 
     }
 
+    const deleteCustomer = async () => {
+        await removeCustomer(selectedCompanyId)
+        showDeletePopup = false;
+        await loadCustomers();
+    }
+
+    function deleteClicked(user_id) {
+        selectedCompanyId = user_id;
+        showDeletePopup = true;
+        deleteCustomer()
+    }
 
 
 </script>
@@ -46,10 +62,14 @@
                 <td>
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                 </td>
-                <th scope="row">{Customer.id}</th>
+                <th scope="row">{Customer.user_id}</th>
                 <td>{Customer.first_name}</td>
                 <td>{Customer.last_name}</td>
                 <td>{Customer.email}</td>
+                <td>
+                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
+                            on:click={ () =>deleteClicked(Customer.user_id)}></button>
+                </td>
                 <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop"></button>
             </tr>
