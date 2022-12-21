@@ -8,8 +8,8 @@
     let message;
 
     function clickHandler(){
-        error = undefined;
-        message = undefined;
+        error = undefined
+        message = undefined
 
         logIn(username,password).then((response) => {
             console.log(username)
@@ -17,7 +17,8 @@
             if (response.error !== undefined){
                 error = response.error;
             } else {
-                message = response.message;
+                console.log(response)
+                message = "Logged in";
             }
         });
 
@@ -46,7 +47,7 @@
                     Please enter your password
                 </div>
             </div>
-            <input  class="btn btn-primary" type="submit" value="Login" on:click={clickHandler}>
+            <input  class="btn btn-primary" value="Log In" on:click={clickHandler}>
         </form>
     </div>
     {#if error}
