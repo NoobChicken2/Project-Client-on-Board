@@ -2,7 +2,7 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {loadCompanies} from "../scripts/companyScript";
+    import {loadCompanies,removeCompany} from "../scripts/companyScript";
 
     let showEditPopup = false;
     let showAddPopup = false;
@@ -20,7 +20,7 @@
 
     }
     const deleteCompany = () => {
-
+        removeCompany()
     }
     const addCompany = () => {
 
