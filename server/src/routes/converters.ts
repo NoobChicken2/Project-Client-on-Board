@@ -1,5 +1,7 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
+import {checkInput,compareLoginDetails} from "../middleware/converterMiddleware";
+
 const router = express.Router();
 
 
@@ -43,6 +45,7 @@ router.get('/installer/:id',async(req,resp) => {
 });
 
 router.post('/',async(req,resp) => {
+
     let ownerId = req.body.owner_id;
     let installerId = req.body.installer_id;
     let expected_throughput = req.body.expected_throughput;

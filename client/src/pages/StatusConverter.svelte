@@ -1,6 +1,6 @@
 <script>
     import {onMount} from "svelte";
-    import {loadConverters} from "../scripts/converterScript";
+    import {loadConverters,addConverter,removeConverter} from "../scripts/converterScript";
     import ConverterList from "../Components/ConverterList.svelte";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
@@ -13,14 +13,39 @@
     let showAddPopup = false;
     let showDeletePopup = false;
 
+    let ownerId;
+    let installerId;
+    let expected_throughput;
+
+    let error;
+    let message;
+    let deleteId;
+
     const editConverter = () => {
 
     }
-    const deleteConverter = () => {
-
+    function deleteConverter(converter_id){
+        deleteId = converter_id;
+        showDeletePopup = true;
     }
-    const addConverter = () => {
+    const execute = async () => {
+        await removeConverter(deleteId);
+        showDeletePopup = false;
+        await loadConverters();
+    }
 
+    function handleAdd(){
+        error = undefined;
+        message = undefined;
+         addConverter(ownerId,installerId,expected_throughput).then((response) => {
+            if (response.error !== undefined){
+                error = response.error
+            } else {
+                message = "Converter added!"
+                showAddPopup = false;
+                loadConverters()
+            }
+        })
     }
 
 
@@ -43,8 +68,7 @@
             <h3 class="d-flex justify-content-center">Are you sure?</h3>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" on:click={() => showDeletePopup = false}>Close</button>
-                <button type="button" class="btn btn-danger" on:click={() =>deleteConverter()
-                }>Delete</button>
+                <button type="button" class="btn btn-danger" on:click={() =>execute()}>Delete</button>
             </div>
         </form>
     </Modal>
@@ -59,27 +83,27 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" required>
+                    <label>Owner ID</label>
+                    <input type="number" class="form-control" bind:value={ownerId} required>
                 </div>
                 <div class="form-group">
-                    <label>###</label>
-                    <input type="email" class="form-control" required>
+                    <label>Installer ID</label>
+                    <input type="number" class="form-control" bind:value={installerId} required/>
                 </div>
                 <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required/>
+                    <label>Expected Throughput</label>
+                    <input type="number" class="form-control" bind:value={expected_throughput} required>
                 </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required>
-                </div>
+                {#if error}<p>{error}</p> {/if}
+                {#if message}<p>{message}</p>{/if}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"  on:click={ () => showAddPopup = false}>Close</button>
-                <button type="button" class="btn btn-success" on:click={() => addConverter()}>Add</button>
+                <button type="button" class="btn btn-success" on:click={() => handleAdd()}>Add</button>
             </div>
+
         </form>
     </Modal>
 </div>
@@ -139,8 +163,9 @@
                 <th scope="row">{Converter.converter_id}</th>
                 <td>{Converter.owner_id}</td>
                 <td>{Converter.installer_id}</td>
+                <td>{Converter.expected_throughput}</td>
                 <td>
-                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>
+                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={deleteConverter(Converter.converter_id) } ></button>
                     <i class="bi bi-pencil-square ; btn btn-primary"></i>
                 </td>
             </tr>
