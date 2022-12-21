@@ -33,4 +33,9 @@ app.listen(port, () => {
 });
 
 
-
+const cron = require('node-cron');
+// cron.schedule("*/5 * * * * *",()=>{
+//     fetch('https://jsonplaceholder.typicode.com/todos/1')
+//         .then(response => response.json())
+//         .then(json => console.log(json))
+// })
