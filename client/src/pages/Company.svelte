@@ -2,28 +2,41 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {loadCompanies} from "../scripts/companyScript";
+    import {loadCompanies, removeCompany} from "../scripts/companyScript";
 
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
+
+    let selectedCompaniesId;
+
+    let companies = getCompanies();
+
     getCompanies();
 
     async function getCompanies() {
-        let companies = await loadCompanies();
-        console.log(companies)
-        return companies;
+        return await loadCompanies();
+
     }
 
 
     const editCompany = () => {
 
     }
-    const deleteCompany = () => {
+    const deleteCompany = async () => {
+        await removeCompany(selectedCompaniesId)
+        showDeletePopup = false;
+        companies = getCompanies();
 
     }
     const addCompany = () => {
 
+    }
+
+
+    function deleteClicked(user_id) {
+        selectedCompaniesId = user_id;
+        showDeletePopup = true;
     }
 </script>
 <NavigationBar/>
@@ -144,7 +157,7 @@
             </tr>
             </thead>
             <tbody>
-            {#await getCompanies()}
+            {#await companies}
                 <p>Loading companies...</p>
             {:then companies}
                 {#each companies as company (company.user_id)}
@@ -154,7 +167,7 @@
                         <td>{company.email}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
-                                    on:click={ () => showDeletePopup = true}></button>
+                                    on:click={ () =>deleteClicked(company.user_id)}></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
                         </td>
                     </tr>
