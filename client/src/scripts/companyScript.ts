@@ -1,7 +1,12 @@
+import {apiData} from "../stores/store";
+let companies;
 export async function loadCompanies() {
-    let companies: string[];
-    companies = await getCompanies();
-    return companies;
+    const resp = await fetch('http://localhost:3000/companies');
+    companies = await resp.json();
+
+    apiData.update((oldValue) => {
+        return companies;
+    });
 }
 
 

@@ -3,41 +3,35 @@
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {loadCompanies, removeCompany} from "../scripts/companyScript";
+    import {onMount} from "svelte";
+    import {apiData} from "../stores/store.ts";
 
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
 
-    let selectedCompaniesId;
+    let selectedCompanyId;
 
-    let companies = getCompanies();
 
-    getCompanies();
-
-    async function getCompanies() {
-        return await loadCompanies();
-
-    }
-
+    onMount(loadCompanies);
 
     const editCompany = () => {
 
     }
     const deleteCompany = async () => {
-        await removeCompany(selectedCompaniesId)
+        await removeCompany(selectedCompanyId)
         showDeletePopup = false;
-        companies = getCompanies();
-
+       await loadCompanies();
     }
     const addCompany = () => {
 
     }
 
-
     function deleteClicked(user_id) {
-        selectedCompaniesId = user_id;
+        selectedCompanyId = user_id;
         showDeletePopup = true;
     }
+
 </script>
 <NavigationBar/>
 
@@ -157,17 +151,17 @@
             </tr>
             </thead>
             <tbody>
-            {#await companies}
+            {#await $apiData }}
                 <p>Loading companies...</p>
             {:then companies}
-                {#each companies as company (company.user_id)}
+                { #each $apiData as Company}
                     <tr>
-                        <th scope="row">{company.username}</th>
-                        <td>{company.phone_number}</td>
-                        <td>{company.email}</td>
+                        <th scope="row">{Company.username}</th>
+                        <td>{Company.phone_number}</td>
+                        <td>{Company.email}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
-                                    on:click={ () =>deleteClicked(company.user_id)}></button>
+                                    on:click={ () =>deleteClicked(Company.user_id)}></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
                         </td>
                     </tr>
