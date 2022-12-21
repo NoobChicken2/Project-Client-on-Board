@@ -2,29 +2,36 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {loadCompanies} from "../scripts/companyScript";
+    import {loadCompanies, removeCompany} from "../scripts/companyScript";
+    import {onMount} from "svelte";
+    import {apiData} from "../stores/store.ts";
 
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
-    getCompanies();
 
-    async function getCompanies() {
-        let companies = await loadCompanies();
-        console.log(companies)
-        return companies;
-    }
+    let selectedCompanyId;
 
+
+    onMount(loadCompanies);
 
     const editCompany = () => {
 
     }
-    const deleteCompany = () => {
-
+    const deleteCompany = async () => {
+        await removeCompany(selectedCompanyId)
+        showDeletePopup = false;
+       await loadCompanies();
     }
     const addCompany = () => {
 
     }
+
+    function deleteClicked(user_id) {
+        selectedCompanyId = user_id;
+        showDeletePopup = true;
+    }
+
 </script>
 <NavigationBar/>
 
@@ -144,17 +151,17 @@
             </tr>
             </thead>
             <tbody>
-            {#await getCompanies()}
+            {#await $apiData }}
                 <p>Loading companies...</p>
             {:then companies}
-                {#each companies as company (company.user_id)}
+                { #each $apiData as Company}
                     <tr>
-                        <th scope="row">{company.username}</th>
-                        <td>{company.phone_number}</td>
-                        <td>{company.email}</td>
+                        <th scope="row">{Company.username}</th>
+                        <td>{Company.phone_number}</td>
+                        <td>{Company.email}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
-                                    on:click={ () => showDeletePopup = true}></button>
+                                    on:click={ () =>deleteClicked(Company.user_id)}></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
                         </td>
                     </tr>
