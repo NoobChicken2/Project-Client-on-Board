@@ -17,10 +17,10 @@
 
         if (navActive) {
 
-            home.style.backgroundPositionX = "6%"
-            customer.style.backgroundPositionX = "6%"
-            converter.style.backgroundPositionX = "6%"
-            signOut.style.backgroundPositionX = "6%"
+            home.style.backgroundPositionX = "9%"
+            customer.style.backgroundPositionX = "9%"
+            converter.style.backgroundPositionX = "9%"
+            signOut.style.backgroundPositionX = "9%"
 
             home.style.width = "80%";
             customer.style.width = "80%";
@@ -49,10 +49,10 @@
             converterText.style.color = "transparent";
             signOutText.style.color = "transparent";
 
-            home.style.width = "30px";
-            customer.style.width = "30px";
-            converter.style.width = "30px";
-            signOut.style.width = "30px";
+            home.style.width = "45px";
+            customer.style.width = "45px";
+            converter.style.width = "45px";
+            signOut.style.width = "45px";
 
             home.style.background = "";
             customer.style.background = "";
@@ -62,7 +62,7 @@
     };
 
     //Will be used in the future
-    let navOptions = [
+    export let navOptions = [
         {
             optionName: 'Home',
             listId: 'home',
@@ -83,7 +83,7 @@
             optionName: 'Converters',
             listId: 'converters',
             listClass: 'menu_converters__Link',
-            link: 'http://127.0.0.1:3030/converters',
+            link: 'http://127.0.0.1:3030/customers',
             headingId: 'converterText',
             headingClass: 'converterHeading'
         },
@@ -102,19 +102,27 @@
 <main>
     <nav class="menu" class:active="{ navActive }">
         <button class="menu__Toggle" on:click="{ () => toggleNav() }">{ navActive ? 'X' : '≡'}</button>
+<!--        <button class:active={active} on:click="{() => active = !active}">foo</button>-->
         <section class="menu__List">
             <ul class="menu__List">
-                <li class="menu__Item"><a id="home" class="menu_home__Link" href="#"><h1 class="homeHeading" id="homeText">
-                    Home</h1></a>
+                <li class="menu__Item">
+                    <a id="home" class="menu_home__Link" href="#">
+                        <h1 class="homeHeading" id="homeText">
+                            Home</h1></a>
                 </li>
-                <li class="menu__Item"><a id="customer" class="menu_customers_Link" href="http://127.0.0.1:3030/customers"><h1 class="customerHeading"
-                                                                                                 id="customerText">
-                    Customer</h1></a></li>
-                <li class="menu__Item"><a id="converters" class="menu_converters__Link" href="http://127.0.0.1:3030/converters"><h1
-                        class="converterHeading" id="converterText">Converters</h1></a>
+                <li class="menu__Item">
+                    <a id="customer" class="menu_customers_Link" href="/customers">
+                        <h1 class="customerHeading" id="customerText">
+                            Customer</h1></a></li>
+                <li class="menu__Item">
+                    <a id="converters" class="menu_converters__Link" href="/companies">
+                        <h1 class="converterHeading" id="converterText">
+                            Converters</h1></a>
                 </li>
-                <li class="menu__Item"><a id="signOut" class="menu__Link" href="#"><h1 class="signOutHeading"
-                                                                                       id="signOutText">Sign out</h1></a>
+                <li class="menu__Item">
+                    <a id="signOut" class="menu__Link" href="#">
+                        <h1 class="signOutHeading" id="signOutText">
+                            Sign out</h1></a>
                 </li>
             </ul>
 <!--            <ul class="menu__List">-->
@@ -129,6 +137,7 @@
     </div>
 </main>
 
+
 <style>
     main {
         font-family: sans-serif;
@@ -137,8 +146,8 @@
     .homeHeading {
         color: transparent;
         position: fixed;
-        top: 6.4rem;
-        left: 5rem;
+        top: 123px;
+        left: 4rem;
         font-size: 20px;
         transition: 1000ms;
         font-family: Arial,serif ;
@@ -147,8 +156,8 @@
     .customerHeading {
         color: transparent;
         position: fixed;
-        top: 9.8rem;
-        left: 5rem;
+        top: 183px;
+        left: 4rem;
         font-size: 20px;
         text-indent: 0;
         transition: 1000ms;
@@ -158,8 +167,8 @@
     .converterHeading {
         color: transparent;
         position: fixed;
-        top: 13.3rem;;
-        left: 5rem;
+        top: 243px;
+        left: 4rem;
         font-size: 20px;
         text-indent: 0;
         transition: 1000ms;
@@ -169,8 +178,8 @@
     .signOutHeading {
         color: transparent;
         position: fixed;
-        top: 16.7rem;
-        left: 5rem;
+        top: 303px;
+        left: 4rem;
         font-size: 20px;
         text-indent: 0;
         transition: 1000ms;
@@ -179,7 +188,7 @@
 
     .menu {
         position: fixed;
-        background: #151515;
+        background: black;
         left: 0;
         top: 0;
         bottom: 0;
@@ -190,6 +199,7 @@
 
     .menu.active {
         width: 250px;
+        color: red;
     }
 
     .menu.active .menu__Link {
@@ -230,8 +240,8 @@
     .menu__Link::before {
         content: attr(title);
         display: inline-block;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         line-height: 40px;
         text-align: center;
         margin-right: 20px;
@@ -241,20 +251,20 @@
     .menu__Link {
         background: white url("bootstrap-icons/icons/box-arrow-left.svg") no-repeat 50% 50%;
         display: block;
-        height: 30px;
+        height: 45px;
         text-indent: -99999em;
-        width: 30px;
+        width: 45px;
         overflow: hidden;
     }
 
     .menu__Toggle {
         all: unset;
-        font-size: 14px;
-        color: #e7e7e7;
+        font-size: 25px;
+        color: white;
         padding: 15px;
         font-weight: bold;
-        background: #333;
-        margin: 20px;
+        background: #373b3e;
+        margin: 15px;
         cursor: pointer;
     }
 
@@ -291,8 +301,8 @@
     .menu_home__Link::before {
         content: attr(title);
         display: inline-block;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         line-height: 40px;
         text-align: center;
         margin-right: 20px;
@@ -302,9 +312,9 @@
     .menu_home__Link {
         background: white url("bootstrap-icons/icons/house-door.svg") no-repeat 50% 50%;
         display: block;
-        height: 30px;
+        height: 45px;
         /*text-indent: -99999em;*/
-        width: 30px;
+        width: 45px;
         overflow: hidden;
     }
 
@@ -330,8 +340,8 @@
     .menu_customers_Link::before {
         content: attr(title);
         display: inline-block;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         line-height: 40px;
         text-align: center;
         margin-right: 20px;
@@ -341,9 +351,9 @@
     .menu_customers_Link {
         background: white url("bootstrap-icons/icons/people.svg") no-repeat 50% 50%;
         display: block;
-        height: 30px;
+        height: 45px;
         text-indent: -99999em;
-        width: 30px;
+        width: 45px;
         overflow: hidden;
     }
 
@@ -370,8 +380,8 @@
     .menu_converters__Link::before {
         content: attr(title);
         display: inline-block;
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         line-height: 40px;
         text-align: center;
         margin-right: 20px;
@@ -381,9 +391,9 @@
     .menu_converters__Link {
         background: white url("bootstrap-icons/icons/motherboard.svg") no-repeat 50% 50%;
         display: block;
-        height: 30px;
+        height: 45px;
         text-indent: -99999em;
-        width: 30px;
+        width: 45px;
         overflow: hidden;
     }
 </style>

@@ -17,9 +17,9 @@
     <div class="p-5 my-4 bg-light rounded-3 container">
 
         <!-- Page Header -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <header class="navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Customer List</a>
-        </nav>
+        </header>
 
         <!-- Table of customers -->
         <table style="text-align: left" class="table table-hover" id="table__customers">
