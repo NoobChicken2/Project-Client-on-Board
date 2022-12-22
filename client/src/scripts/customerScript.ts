@@ -9,7 +9,7 @@ export async function loadCustomers() {
         return customers;
     });
 }
-export async function logIn(username,password){
+export async function  logIn(username,password){
     try{
 
 
