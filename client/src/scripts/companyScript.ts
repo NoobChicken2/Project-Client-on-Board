@@ -1,13 +1,16 @@
+import {apiData} from "../stores/store";
+let companies;
+export async function loadCompanies() {
+    const resp = await fetch('http://localhost:3000/companies');
+    companies = await resp.json();
 
-export async function loadCompanies(){
-    let companies:string[];
-    companies = await getCompanies();
-    return companies;
+    apiData.update((oldValue) => {
+        return companies;
+    });
 }
 
-
-export async function getCompanies() {
-    return await fetch('http://localhost:3000/companies')
+export async function removeCompany(id) {
+    return await fetch(`http://localhost:3000/companies/${id}`, {method: 'DELETE'})
         .then((response) => response.json())
         .then((data) => {
             return data;
