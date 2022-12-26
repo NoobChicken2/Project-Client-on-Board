@@ -10,6 +10,18 @@ client.test(
 %}
 
 ###
+GET localhost:3000/converters/installers
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
+
+###
 POST localhost:3000/token
 Content-Type: application/json
 Accept: application/json
@@ -18,3 +30,7 @@ Accept: application/json
   "username": "LukeMitch",
   "password": "password123"
 }
+
+> {%
+client.global.set("token", response.body.token);
+%}
