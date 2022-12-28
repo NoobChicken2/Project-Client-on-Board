@@ -22,16 +22,7 @@ router.get('/:id',async (req,resp) => {
 
 })
 
-// router.get('/?username={:username}',async(req,resp,) => {
-//     let username = req.query.username;
-//     pool.query(`SELECT * FROM users WHERE username = $1`,[username],(err:any,result:{rows:any;}) =>{
-//         if (err){
-//             throw err
-//             return resp.status(400).json({error:"Server side issue(GET)"});
-//         }
-//         return resp.status(200).json(result)
-//     });
-// });
+
 
 
 router.post('/',async(req,resp) => {
@@ -71,7 +62,10 @@ router.post('/',async(req,resp) => {
 
 
 router.patch('/:id',async(req,resp) => {
+    let foundBody;
     let user_id = req.params.id
+    let updateBody = req.body;
+
     ///choose what can be PACTHED
     let n_username = req.body.username;
     let n_password = req.body.password;
@@ -80,13 +74,31 @@ router.patch('/:id',async(req,resp) => {
     let n_email = req.body.email;
     let n_phone_number = req.body.phone_number;
 
-    pool.query(`UPDATE users SET username = '${n_username}',password = '${n_password}',first_name ='${n_first_name}',last_name ='${n_last_name}',email = '${n_email}',phone_number = '${n_phone_number}' WHERE user_id = ${user_id}`,(err:any,result:{rows:any}) => {
+    pool.query(`SELECT * FROM users WHERE user_id = ${user_id}`,(err:any,result:{rows:any}) => {
         if(err){
-            return resp.status(400).json({error:"Server side issue (PATCH)"})
+            return resp.status(400).json({error:"Server side issue (GET)"})
         }
-        return resp.status(200).json("COMPLETE");
+          foundBody = resp.json(result.rows);
+        const newBody = Object.assign(foundBody,updateBody)
+        return resp.json( JSON.stringify(newBody));
+
+
     })
+
+
+
+    // pool.query(`UPDATE users SET username = '${updateBody.username}',password = '${updateBody.password}',first_name ='${updateBody.first_name}',last_name ='${updateBody.last_name}',email = '${updateBody.email}',phone_number = '${updateBody.phone_number}' WHERE user_id = ${user_id}`,(err:any,result:{rows:any}) => {
+    //     if(err){
+    //         return resp.status(400).json({error:"Server side issue (PATCH)"})
+    //     }
+    //     return resp.status(200).json("COMPLETE");
+    // })
+
 });
+
+
+
+
 
 router.delete('/:id',async(req,resp) => {
     let user_id = req.params.id;
