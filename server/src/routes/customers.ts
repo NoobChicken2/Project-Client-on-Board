@@ -3,7 +3,7 @@ import pool from "../database/databaseConnection";
 import bcrypt from "bcrypt";
 const router = express.Router();
 
-router.get('/',async (req,res) => {
+router.get('/', (req,res) => {
     pool.query(`SELECT * FROM users WHERE role = 'Client'`,(err:any,result: { rows:any;})  => {
         if (err){
             throw err
