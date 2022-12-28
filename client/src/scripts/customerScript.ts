@@ -12,7 +12,6 @@ export async function loadCustomers() {
 export async function  logIn(username,password){
     try{
 
-
         let body = {
             username:username,
             password:password
