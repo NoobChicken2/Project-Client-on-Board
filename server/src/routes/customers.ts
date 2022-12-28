@@ -69,7 +69,6 @@ router.patch('/:id', async (req, res) => {
         .map(([key, value]) => `${key}='${value}'`)
         .join(', ');
 
-    console.log(`UPDATE users SET ${updatesString} WHERE user_id = ${id}`);
 
     pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
         if (error) {
