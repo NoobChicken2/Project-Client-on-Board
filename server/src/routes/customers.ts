@@ -1,6 +1,7 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
 import bcrypt from "bcrypt";
+import {log} from "util";
 const router = express.Router();
 
 router.get('/', (req,res) => {
@@ -65,6 +66,7 @@ router.patch('/:id',async(req,resp) => {
     let foundBody;
     let user_id = req.params.id
     let updateBody = req.body;
+    let newBody;
 
     ///choose what can be PACTHED
     let n_username = req.body.username;
@@ -78,22 +80,23 @@ router.patch('/:id',async(req,resp) => {
         if(err){
             return resp.status(400).json({error:"Server side issue (GET)"})
         }
-          foundBody = resp.json(result.rows);
-        const newBody = Object.assign(foundBody,updateBody)
-        return resp.json( JSON.stringify(newBody));
-
-
+        console.log("1")
+          foundBody = result.rows;
+         newBody = Object.assign({},foundBody,updateBody)
+        console.log("2")
+        console.log(newBody);
     })
 
 
 
-    // pool.query(`UPDATE users SET username = '${updateBody.username}',password = '${updateBody.password}',first_name ='${updateBody.first_name}',last_name ='${updateBody.last_name}',email = '${updateBody.email}',phone_number = '${updateBody.phone_number}' WHERE user_id = ${user_id}`,(err:any,result:{rows:any}) => {
-    //     if(err){
-    //         return resp.status(400).json({error:"Server side issue (PATCH)"})
-    //     }
-    //     return resp.status(200).json("COMPLETE");
-    // })
-
+//     pool.query(`UPDATE users SET username = '${updateBody.username}',password = '${updateBody.password}',first_name ='${updateBody.first_name}',last_name ='${updateBody.last_name}',email = '${updateBody.email}',phone_number = '${updateBody.phone_number}' WHERE user_id = ${user_id}`,(err:any,result:{rows:any}) => {
+//         if(err){
+//            throw err
+//         }
+//          resp.status(200).json("COMPLETE");
+//     })
+//     console.log("3")
+//
 });
 
 
