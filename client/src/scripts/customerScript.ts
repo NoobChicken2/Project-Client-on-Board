@@ -50,7 +50,7 @@ export async function addCustomer(data) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            company_id: null,
+            company_id: data.company_id,
             role: "Client",
             username: data.username,
             password: data.password,

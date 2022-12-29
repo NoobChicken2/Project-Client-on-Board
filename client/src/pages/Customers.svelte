@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte";
     import {onMount} from "svelte";
@@ -19,22 +19,21 @@
 
     }
 
+    function getValueById(id: string): string {
+        return (document.getElementById(id) as HTMLInputElement).value;
+    }
+
     const addNewCustomer = async () => {
-        let data = {};
 
-        data.username = null;
+        const data = {};
 
-        console.log(document.getElementById("username").value)
+        const fields = ['username', 'first_name', 'last_name', 'email', 'password', 'repeat_password', 'phone_number'];
 
-        data.username = document.getElementById("username").value;
-        data.first_name = document.getElementById("first_name").value;
-        data.last_name = document.getElementById("last_name").value;
-        data.email = document.getElementById("email").value;
-        data.password = document.getElementById("password").value;
-        data.repeat_password = document.getElementById("repeat_password").value;
-        data.phone_number = document.getElementById("phone_number").value;
+        for (const field of fields) {
+            data[field] = getValueById(field);
+        }
 
-        if (data.password === data.repeat_password) {
+        if (data[4] === data[5]) {
             await addCustomer(data)
             showAddPopup = false;
             await loadCustomers();
