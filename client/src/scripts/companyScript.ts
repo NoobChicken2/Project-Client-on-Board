@@ -1,5 +1,7 @@
 import {apiData} from "../stores/store";
+
 let companies;
+
 export async function loadCompanies() {
     const resp = await fetch('http://localhost:3000/companies');
     companies = await resp.json();
@@ -15,5 +17,17 @@ export async function removeCompany(id) {
         .then((data) => {
             return data;
         });
+}
+
+export async function addCompany(data) {
+    fetch(`http://localhost:3000/companies`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: `'company_name': ${data}`
+    }).then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
 }
 

@@ -2,7 +2,7 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {loadCompanies, removeCompany} from "../scripts/companyScript";
+    import {addCompany, loadCompanies, removeCompany} from "../scripts/companyScript";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
 
@@ -12,25 +12,38 @@
 
     let selectedCompanyId;
 
+    let newCompanyName ;
+
 
     onMount(loadCompanies);
 
     const editCompany = () => {
 
     }
+
     const deleteCompany = async () => {
         await removeCompany(selectedCompanyId)
         showDeletePopup = false;
        await loadCompanies();
     }
-    const addCompany = () => {
 
+
+    async function addNewCompany(name) {
+        console.log(name)
+        newCompanyName = name;
+        await addCompany(name)
+        showAddPopup = false;
+    }
+
+    function addCompanyClicked() {
+        showAddPopup = true;
     }
 
     function deleteClicked(user_id) {
         selectedCompanyId = user_id;
         showDeletePopup = true;
     }
+
 
 </script>
 <NavigationBar/>
@@ -71,27 +84,15 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required/>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required>
+                    <label>Company Name</label>
+                    <input id = "companyName" type="text" class="form-control" required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showAddPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-success" on:click={() => addCompany()}>Add</button>
+                <button type="button" class="btn btn-success" on:click={() => addNewCompany(document.getElementById("companyName").value)}>Add</button>
             </div>
         </form>
     </Modal>
@@ -138,7 +139,7 @@
 <div class="container">
     <div class="table-wrapper">
         <div class="col-md-6">
-            <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a company
+            <button class=" btn btn-success" type="button" on:click={ () => addCompanyClicked()}>Add new a company
             </button>
         </div>
         <table class="table table-hover ; table table-striped">
@@ -146,7 +147,6 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">####</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -156,9 +156,8 @@
             {:then companies}
                 { #each $apiData as Company}
                     <tr>
-                        <th scope="row">{Company.username}</th>
-                        <td>{Company.phone_number}</td>
-                        <td>{Company.email}</td>
+                        <th scope="row">{Company.company_id}</th>
+                        <td>{Company.company_name}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                     on:click={ () =>deleteClicked(Company.user_id)}></button>
