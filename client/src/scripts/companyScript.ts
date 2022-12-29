@@ -30,4 +30,3 @@ export async function addCompany(data) {
         .then(data => console.log(data))
         .catch(error => console.error(error));
 }
-
