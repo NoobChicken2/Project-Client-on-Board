@@ -20,12 +20,12 @@ export async function removeCompany(id) {
 }
 
 export async function addCompany(data) {
-    fetch(`http://localhost:3000/companies`, {
+   await fetch(`http://localhost:3000/companies`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: `'company_name': ${data}`
+        body: JSON.stringify({company_name: data})
     }).then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error(error));

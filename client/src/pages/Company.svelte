@@ -12,7 +12,7 @@
 
     let selectedCompanyId;
 
-    let newCompanyName ;
+    let newCompanyName;
 
 
     onMount(loadCompanies);
@@ -24,23 +24,21 @@
     const deleteCompany = async () => {
         await removeCompany(selectedCompanyId)
         showDeletePopup = false;
-       await loadCompanies();
+        await loadCompanies();
     }
 
 
-    async function addNewCompany(name) {
+  const addNewCompany = async (name) => {
         console.log(name)
         newCompanyName = name;
         await addCompany(name)
         showAddPopup = false;
+        await loadCompanies();
     }
 
-    function addCompanyClicked() {
-        showAddPopup = true;
-    }
 
-    function deleteClicked(user_id) {
-        selectedCompanyId = user_id;
+    function deleteClicked(company_id) {
+        selectedCompanyId = company_id;
         showDeletePopup = true;
     }
 
@@ -85,14 +83,16 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Company Name</label>
-                    <input id = "companyName" type="text" class="form-control" required>
+                    <input id="companyName" type="text" class="form-control" required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showAddPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-success" on:click={() => addNewCompany(document.getElementById("companyName").value)}>Add</button>
+                <button type="button" class="btn btn-success"
+                        on:click={() => addNewCompany(document.getElementById("companyName").value)}>Add
+                </button>
             </div>
         </form>
     </Modal>
@@ -139,7 +139,7 @@
 <div class="container">
     <div class="table-wrapper">
         <div class="col-md-6">
-            <button class=" btn btn-success" type="button" on:click={ () => addCompanyClicked()}>Add new a company
+            <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a company
             </button>
         </div>
         <table class="table table-hover ; table table-striped">
@@ -160,7 +160,7 @@
                         <td>{Company.company_name}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
-                                    on:click={ () =>deleteClicked(Company.user_id)}></button>
+                                    on:click={ () =>deleteClicked(Company.company_id)}></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
                         </td>
                     </tr>
