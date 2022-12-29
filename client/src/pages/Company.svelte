@@ -9,15 +9,28 @@
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
-
     let selectedCompanyId;
-
     let newCompanyName;
-
+    let data = {
+        user_id: "",
+        role: "",
+        username: "",
+        phone_number: "",
+        email: "",
+    }
 
     onMount(loadCompanies);
 
-    const editCompany = () => {
+    let isEdit = (item) => {
+        showEditPopup = true;
+        data = item;
+    }
+    const editCompany = async (id) => {
+        let dataToUpdate = {
+            username: data.username,
+            email: data.email,
+            phone_number: data.phone_number
+        }
 
     }
 
