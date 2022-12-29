@@ -65,18 +65,25 @@ router.patch('/:id', async (req, res) => {
     const id = req.params.id;
     const updates = req.body;
 
-    const updatesString = Object.entries(updates)
-        .map(([key, value]) => `${key}='${value}'`)
-        .join(', ');
+    if(req.body.password !== undefined){
+        bcrypt.hash(req.body.password, 10, function (err, hash){
+            if (err){
+                throw err
+            }
+            updates.password = hash;
+            const updatesString = Object.entries(updates)
+                .map(([key, value]) => `${key}='${value}'`)
+                .join(', ');
 
 
-    pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
-        if (error) {
-            res.status(500).json({error});
-        }
-        res.status(200).json(results);
-    });
-
+            pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
+                if (error) {
+                    res.status(500).json({error});
+                }
+                res.status(200).json(results);
+            });
+        });
+    }
 });
 
 

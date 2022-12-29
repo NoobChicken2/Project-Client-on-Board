@@ -34,6 +34,7 @@ export async function logIn(username, password) {
 }
 export async function patchCustomer(id,updateBody) {
     try {
+
         response = await fetch('http://localhost:3000/customers/'+id,{
             method:'PATCH',
             headers:{
