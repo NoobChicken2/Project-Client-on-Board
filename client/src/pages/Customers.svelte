@@ -1,16 +1,17 @@
-<script>
+<script lang="ts">
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
-    import {loadCustomers, removeCustomer} from "../scripts/customerScript.ts";
+    import {addCustomer, loadCustomers, removeCustomer} from "../scripts/customerScript.ts";
 
     const myInput = document.getElementById('myInput');
     let showDeletePopup = false;
+    let showAddPopup = false;
 
     onMount(loadCustomers);
 
-    let selectedCompanyId;
+    let selectedCustomerId;
 
     onMount(loadCustomers);
 
@@ -18,14 +19,38 @@
 
     }
 
+    function getValueById(id: string): string {
+        return (document.getElementById(id) as HTMLInputElement).value;
+    }
+
+    const addNewCustomer = async () => {
+
+        const data = {};
+
+        const fields = ['username', 'first_name', 'last_name', 'email', 'password', 'repeat_password', 'phone_number'];
+
+        for (const field of fields) {
+            data[field] = getValueById(field);
+        }
+
+        if (data[4] === data[5]) {
+            await addCustomer(data)
+            showAddPopup = false;
+            await loadCustomers();
+        } else {
+            alert("Passwords do not match")
+        }
+    }
+
+
     const deleteCustomer = async () => {
-        await removeCustomer(selectedCompanyId)
+        await removeCustomer(selectedCustomerId)
         showDeletePopup = false;
         await loadCustomers();
     }
 
     function deleteClicked(user_id) {
-        selectedCompanyId = user_id;
+        selectedCustomerId = user_id;
         showDeletePopup = true;
         deleteCustomer()
     }
@@ -42,6 +67,62 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Customer List</a>
     </nav>
+
+
+    <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
+        <form>
+            <div class="modal-header">
+                <h5 class="modal-title">Add</h5>
+                <button type="button" class="bi bi-x-circle" data-dismiss="modal"
+                        on:click={ () => showAddPopup = false}>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input id="username" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input id="password" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Repeat Password</label>
+                    <input id="repeat_password" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input id="first_name" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input id="last_name" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input id="email" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input id="phone_number" type="text" class="form-control" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        on:click={ () => showAddPopup = false}>Close
+                </button>
+                <button type="button" class="btn btn-success"
+                        on:click={() => addNewCustomer()}>Add
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
+    <div class="col-md-6">
+        <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a customer
+        </button>
+    </div>
 
     <!-- Table of customers -->
     <table style="text-align: left" class="table table-hover" id="table__customers">
@@ -78,11 +159,6 @@
         </tbody>
     </table>
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#staticBackdrop add-Modal">
-        <span class="bi bi-person-plus"></span>
-        Add new Customer
-    </button>
 
     <!-- Pagination -->
     <nav aria-label="Page navigation example">
