@@ -24,9 +24,8 @@
         customerId = Id;
         showEditPopup = true;
     }
+
     const handleEdit = async () => {
-        console.log(customerId)
-        console.log(body)
         await patchCustomer(customerId,body);
         showEditPopup = false;
         await loadCustomers();
@@ -165,7 +164,7 @@
                             on:click={ () =>deleteClicked(Customer.user_id)}></button>
                 </td>
                 <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop"></button>
+                        data-bs-target="#staticBackdrop" on:click={ () => editCustomer(Customer.user_id)}></button>
             </tr>
         {/each}
 
@@ -191,12 +190,12 @@
     </nav>
 
     <!-- Modal -->
-    <Modal class="modal fade" id="staticBackdrop add-model" data-bs-backdrop="static" data-bs-keyboard="false"
+    <Modal  open="{showEditPopup}" class="modal fade" id="staticBackdrop add-model" data-bs-backdrop="static" data-bs-keyboard="false"
            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Register Customer</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Customer</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body col-md">
@@ -211,49 +210,58 @@
                                     <option value="3">Global Admin</option>
                                 </select>
                             </div>
-                            <div class="invalid-feedback">Please choose a rol</div>
+                            <div class="invalid-feedback">Please choose a role</div>
                         </div>
                         <div class="row mb-3">
                             <label for="modal-username" class="col-sm-3 col-form-label text-start">Username:</label>
                             <div class="col-sm-9">
-                                <input type="username" class="form-control" id="modal-username">
+                                <input type="username" class="form-control" bind:value={body.username} id="modal-username">
                             </div>
                             <div class="invalid-feedback">Please enter a username</div>
                         </div>
                         <div class="row mb-3">
                             <label for="modal-password" class="col-sm-3 col-form-label text-start">Password:</label>
                             <div class="col-sm-9">
-                                <input type="password" class="form-control" id="modal-password">
+                                <input type="password" class="form-control" bind:value={body.password} id="modal-password">
                             </div>
                             <div class="invalid-feedback">Please enter a password</div>
                         </div>
                         <div class="row mb-3">
                             <label for="modal-firstname" class="col-sm-3 col-form-label text-start">Firstname:</label>
                             <div class="col-sm-9">
-                                <input type="firstname" class="form-control" id="modal-firstname">
+                                <input type="firstname" class="form-control" bind:value={body.first_name} id="modal-firstname">
                             </div>
                             <div class="invalid-feedback">Please enter the firstname</div>
                         </div>
                         <div class="row mb-3">
                             <label for="modal-lastname" class="col-sm-3 col-form-label text-start">Lastname:</label>
                             <div class="col-sm-9">
-                                <input type="lastname" class="form-control" id="modal-lastname">
+                                <input type="lastname" class="form-control" bind:value={body.last_name} id="modal-lastname">
                             </div>
                             <div class="invalid-feedback">Please enter the lastname</div>
                         </div>
                         <div class="row mb-3">
                             <label for="modal-email" class="col-sm-3 col-form-label text-start">Email:</label>
                             <div class="col-sm-9">
-                                <input type="email" class="form-control" id="modal-email"
+                                <input type="email" class="form-control" bind:value={body.email} id="modal-email"
                                        placeholder="e.g.@example.com">
                             </div>
                             <div class="invalid-feedback">Please enter a email</div>
                         </div>
+                        <div class="row mb-3">
+                            <label for="modal-email" class="col-sm-3 col-form-label text-start">Phone number:</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" bind:value={body.phone_number} id="modal-number"
+                                       placeholder="e.g.@example.com">
+                            </div>
+                            <div class="invalid-feedback">Please enter a phone number</div>
+                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Finish</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" on:click={ () => showEditPopup = false}>Close</button>
+                    <button type="button" class="btn btn-primary" on:click={ () => handleEdit()}>Finish</button>
                 </div>
             </div>
         </div>
