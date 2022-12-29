@@ -31,3 +31,4 @@ export async function addCompany(data) {
         .catch(error => console.error(error));
 }
 
+
