@@ -3,7 +3,7 @@
     import Modal from "../components/Modal.svelte";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
-    import {addCustomer, loadCustomers, removeCustomer} from "../scripts/customerScript.ts";
+    import {addCustomer, loadCustomers, patchCustomer, removeCustomer} from "../scripts/customerScript.ts";
 
     const myInput = document.getElementById('myInput');
     let showDeletePopup = false;
@@ -11,12 +11,26 @@
 
     onMount(loadCustomers);
 
-    let selectedCustomerId;
+    let selectedCompanyId;
+    let customerId;
+    let body ={};
+    let showEditPopup = false;
+    let showAddPopup = false;
 
     onMount(loadCustomers);
 
     const editCustomer = () => {
 
+    function editCustomer (Id){
+        customerId = Id;
+        showEditPopup = true;
+    }
+    const handleEdit = async () => {
+        console.log(customerId)
+        console.log(body)
+        await patchCustomer(customerId,body);
+        showEditPopup = false;
+        await loadCustomers();
     }
 
     function getValueById(id: string): string {
@@ -44,13 +58,13 @@
 
 
     const deleteCustomer = async () => {
-        await removeCustomer(selectedCustomerId)
+        await removeCustomer(selectedCompanyId)
         showDeletePopup = false;
         await loadCustomers();
     }
 
     function deleteClicked(user_id) {
-        selectedCustomerId = user_id;
+        selectedCompanyId = user_id;
         showDeletePopup = true;
         deleteCustomer()
     }

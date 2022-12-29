@@ -146,7 +146,7 @@
 <div class="container">
     <div class="table-wrapper">
         <div class="col-md-6">
-            <button class=" btn btn-success" type="button"   on:click={ () => showAddPopup = true}>Add a new converter</button>
+            <button class=" btn btn-success" type="button"  on:click={ () => showAddPopup = true}>Add a new converter</button>
         </div>
         <table class="table table-hover ; table table-striped" >
             <thead>
