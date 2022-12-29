@@ -42,6 +42,7 @@
         }
     }
 
+
     const deleteCustomer = async () => {
         await removeCustomer(selectedCustomerId)
         showDeletePopup = false;
