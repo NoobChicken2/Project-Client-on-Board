@@ -15,11 +15,10 @@
     let customerId;
     let body ={};
     let showEditPopup = false;
-    let showAddPopup = false;
 
     onMount(loadCustomers);
 
-    const editCustomer = () => {
+
 
     function editCustomer (Id){
         customerId = Id;
@@ -63,10 +62,10 @@
         await loadCustomers();
     }
 
-    function deleteClicked(user_id) {
+    function deleteClicked(user_id){
         selectedCompanyId = user_id;
         showDeletePopup = true;
-        deleteCustomer()
+        deleteCustomer();
     }
 
 
