@@ -3,7 +3,7 @@ import pool from "../database/databaseConnection";
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    pool.query(`SELECT * FROM users WHERE role = 'CompanyAdmin'` , (error: any, results: {rows: any}) => {
+    pool.query(`SELECT * FROM companies` , (error: any, results: {rows: any}) => {
         if (error) {
             throw error
         }
@@ -14,8 +14,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async(req, res) => {
     let id = req.params.id;
     pool.query(`SELECT *
-        FROM users
-        WHERE user_id = ${id}`, (err: any, results: {rows: any;}) => {
+        FROM companies
+        WHERE company_id = ${id}`, (err: any, results: {rows: any;}) => {
         if (err) {
             res.json({error: "Server side issue(GET)"})
         }
@@ -42,22 +42,21 @@ router.post('/', async(req, res) => {
     })
 });
 
-router.patch('/:id',async(req,resp) => {
-    let user_id = req.params.id
-    ///choose what can be PACTHED
-    let n_username = req.body.username;
-    let n_password = req.body.password;
-    let n_first_name = req.body.first_name;
-    let n_last_name = req.body.last_name;
-    let n_email = req.body.email;
-    let n_phone_number = req.body.phone_number;
+router.patch('/:id',async(req,res) => {
+    const id = req.params.id;
+    const updates = req.body;
 
-    pool.query(`UPDATE users SET username = '${n_username}',password = '${n_password}',first_name ='${n_first_name}',last_name ='${n_last_name}',email = '${n_email}',phone_number = '${n_phone_number}' WHERE user_id = ${user_id}`,(err:any,result:{rows:any}) => {
-        if(err){
-            return resp.status(400).json({error:"Server side issue (PATCH)"})
+    const updatesString = Object.entries(updates)
+        .map(([key, value]) => `${key}='${value}'`)
+        .join(', ');
+
+
+    pool.query(`UPDATE companies SET ${updatesString}  WHERE company_id =${id} `, (error: any, results: any) => {
+        if (error) {
+            res.status(500).json({error});
         }
-        return resp.status(200).json("COMPLETE");
-    })
+        res.status(200).json(results);
+    });
 });
 
 router.delete('/:id',async(req,resp) => {

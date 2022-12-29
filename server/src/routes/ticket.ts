@@ -37,17 +37,20 @@ router.post('/', async (req, res) => {
 });
 
 router.patch('/:id', async (req, res) => {
-    let t_id = req.params.id
-    let l_id = req.body.log_id
+    const id = req.params.id;
+    const updates = req.body;
 
-    pool.query(`UPDATE tickets
-                SET log_id = ${l_id}
-                WHERE ticket_id = ${t_id}`, (error: any, results: { rows: any; }) => {
+    const updatesString = Object.entries(updates)
+        .map(([key, value]) => `${key}='${value}'`)
+        .join(', ');
+
+
+    pool.query(`UPDATE tickets SET ${updatesString}  WHERE ticket_id =${id} `, (error: any, results: any) => {
         if (error) {
-            throw error
+            res.status(500).json({error});
         }
-        res.status(200).json(results.rows)
-    })
+        res.status(200).json(results);
+    });
 });
 
 router.delete('/:id', async (req, res) => {

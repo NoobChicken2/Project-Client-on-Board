@@ -1,5 +1,6 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
+
 const router = express.Router();
 
 // create 1 company admin
@@ -11,9 +12,10 @@ router.post('/', async (req, res) => {
     let phoneNumber = req.body.phone_number;
 
     pool.query(`INSERT INTO users (role, username, password, email, phone_number)
-                VALUES ($1, $2, $3, $4, $5)`,[role, username, password, email, phoneNumber], (error: any, results: { rows: any; }) => {
+                VALUES ($1, $2, $3, $4,
+                        $5)`, [role, username, password, email, phoneNumber], (error: any, results: { rows: any; }) => {
         if (error) {
-            return res.status(400).json({error:"Server side issue (POST)"})
+            return res.status(400).json({error: "Server side issue (POST)"})
         }
         res.status(201).json(results.rows)
     })
@@ -24,9 +26,12 @@ router.post('/', async (req, res) => {
 router.get('/:userId', async (req, res) => {
     let userId = req.params.userId;
 
-    pool.query(`SELECT * FROM users WHERE user_id = ${userId}`, (error: any, results: { rows: any; }) => {
+    pool.query(`SELECT *
+                FROM users
+                WHERE user_id = ${userId}
+                  AND role = 'CompanyAdmin'`, (error: any, results: { rows: any; }) => {
         if (error) {
-            return res.status(400).json({error:"Server side issue (GET)"})
+            return res.status(400).json({error: "Server side issue (GET)"})
         }
         res.status(200).json(results.rows)
     })
@@ -35,100 +40,48 @@ router.get('/:userId', async (req, res) => {
 
 // read all company admins (no params) or read all company admins that matches params
 router.get('/', async (req, res) => {
-    let query = "SELECT * FROM users";
-    let usernameParam = req.query.username;
-    let phoneParam = req.query.phone;
-    let emailParam = req.query.email;
-
-    if (usernameParam != undefined || phoneParam != undefined || emailParam != undefined) {
-        query += " WHERE ";
-    }
-
-    if (usernameParam != undefined) {
-        query+= "username='" + usernameParam + "'";
-    }
-
-    if (phoneParam != undefined) {
-        if (usernameParam != undefined) {
-            query += " AND "
-        }
-
-        query += "phone_number='" + phoneParam + "'";
-    }
-
-    if (emailParam != undefined) {
-        if (phoneParam != undefined) {
-            query += " AND "
-        }
-
-        query += " AND email='" + emailParam + "'";
-    }
-
-    console.log(query); // for testing, todo: remove in final product
+    let query = "SELECT * FROM users WHERE role ='CompanyAdmin'";
 
 
     pool.query(query, (error: any, results: { rows: any; }) => {
         if (error) {
-            return res.status(400).json({error:"Server side issue (GET)"})
+            return res.status(400).json({error: "Server side issue (GET)"})
         }
         res.status(200).json(results.rows)
     })
 
 });
 
-// update (patch) 1 company admin by id
-router.patch('/:userId', async (req, res) => {
-    // todo: also patch password?
-    let userId = req.params.userId;
-    let bodyUsername = req.body.username;
-    let bodyEmail = req.body.email;
-    let bodyPhone = req.body.phone_number;
+// update (patch) 1 company admin by user id
+router.patch('/:id', async (req, res) => {
+    const id = req.params.id;
+    const updates = req.body;
 
-    let query = "UPDATE users SET "
+    const updatesString = Object.entries(updates)
+        .map(([key, value]) => `${key}='${value}'`)
+        .join(', ');
 
-    if (bodyUsername != undefined) {
-        query += "username='" + bodyUsername + "'";
-    }
 
-    if (bodyEmail != undefined) {
-        if (bodyUsername != undefined) {
-            query += ", ";
-        }
-
-        query += "email='" + bodyEmail + "'";
-
-    }
-
-    if (bodyPhone != undefined) {
-        if (bodyEmail != undefined) {
-            query += ", ";
-        }
-
-        query += "phone_number='" + bodyPhone + "'";
-
-    }
-
-    query += (" WHERE user_id=" + userId);
-
-    console.log(query); // for testing
-
-    pool.query(query, (error: any, results: { rows: any; }) => {
+    pool.query(`UPDATE users
+                SET ${updatesString}
+                WHERE user_id = ${id}
+                  AND role = 'CompanyAdmin'`, (error: any, results: any) => {
         if (error) {
-            return res.status(400).json({error:"Server side issue (PATCH)"})
+            res.status(500).json({error});
         }
-        res.status(200).json(results.rows)
-    })
-
-
+        res.status(200).json(results);
+    });
 
 })
 
 // delete 1 company admin by id
-router.delete('/:id',async(req,res) => {
+router.delete('/:id', async (req, res) => {
     let user_id = req.params.id;
-    pool.query(`DELETE FROM users WHERE user_id = ${user_id}`,(error: any, results: { rows: any; }) => {
+    pool.query(`DELETE
+                FROM users
+                WHERE user_id = ${user_id}`, (error: any, results: { rows: any; }) => {
         if (error) {
-            return res.status(400).json({error:"Server side issue (DELETE)"})
+            return res.status(400).json({error: "Server side issue (DELETE)"})
         }
         res.status(200).json(results.rows)
     })
