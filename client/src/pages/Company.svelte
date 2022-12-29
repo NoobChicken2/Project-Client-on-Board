@@ -2,29 +2,46 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {loadCompanies} from "../scripts/companyScript";
+    import {addCompany, loadCompanies, removeCompany} from "../scripts/companyScript";
+    import {onMount} from "svelte";
+    import {apiData} from "../stores/store.ts";
 
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
-    getCompanies();
 
-    async function getCompanies() {
-        let companies = await loadCompanies();
-        console.log(companies)
-        return companies;
-    }
+    let selectedCompanyId;
 
+    let newCompanyName;
+
+
+    onMount(loadCompanies);
 
     const editCompany = () => {
 
     }
-    const deleteCompany = () => {
 
+    const deleteCompany = async () => {
+        await removeCompany(selectedCompanyId)
+        showDeletePopup = false;
+        await loadCompanies();
     }
-    const addCompany = () => {
 
+
+    const addNewCompany = async (name) => {
+        newCompanyName = name;
+        await addCompany(name)
+        showAddPopup = false;
+        await loadCompanies();
     }
+
+
+    function deleteClicked(company_id) {
+        selectedCompanyId = company_id;
+        showDeletePopup = true;
+    }
+
+
 </script>
 <NavigationBar/>
 
@@ -64,27 +81,17 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required/>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required>
+                    <label>Company Name</label>
+                    <input id="companyName" type="text" class="form-control" required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showAddPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-success" on:click={() => addCompany()}>Add</button>
+                <button type="button" class="btn btn-success"
+                        on:click={() => addNewCompany(document.getElementById("companyName").value)}>Add
+                </button>
             </div>
         </form>
     </Modal>
@@ -131,7 +138,7 @@
 <div class="container">
     <div class="table-wrapper">
         <div class="col-md-6">
-            <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a company
+            <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a company
             </button>
         </div>
         <table class="table table-hover ; table table-striped">
@@ -139,22 +146,20 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
-                <th scope="col">####</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
-            {#await getCompanies()}
+            {#await $apiData }}
                 <p>Loading companies...</p>
             {:then companies}
-                {#each companies as company (company.user_id)}
+                { #each $apiData as Company}
                     <tr>
-                        <th scope="row">{company.username}</th>
-                        <td>{company.phone_number}</td>
-                        <td>{company.email}</td>
+                        <th scope="row">{Company.company_id}</th>
+                        <td>{Company.company_name}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
-                                    on:click={ () => showDeletePopup = true}></button>
+                                    on:click={ () =>deleteClicked(Company.company_id)}></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
                         </td>
                     </tr>

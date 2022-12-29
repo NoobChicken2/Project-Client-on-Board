@@ -1,5 +1,7 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
+import {checkInput,compareLoginDetails} from "../middleware/converterMiddleware";
+
 const router = express.Router();
 
 
@@ -12,6 +14,7 @@ pool.query('SELECT * FROM converters',(err:any,result: { rows:any;})  => {
     res.status(200).json(result.rows);
 })
 });
+
 router.get('/:id',async (req,resp) => {
     let id = req.params.id;
     pool.query('SELECT *  FROM converters WHERE converter_id = $1',[id],(err:any,result: {rows:any;}) => {
@@ -32,9 +35,10 @@ router.get('/owner/:id',async(req,resp,) => {
         return resp.status(200).json(result.rows)
     });
 });
+
 router.get('/installer/:id',async(req,resp) => {
     let installerId = req.params.id;
-    pool.query('SELECT * FROM converters WHERE installer_id = $1',[installerId],(err:any,result:{rows:any}) => {
+    pool.query(`SELECT * FROM converters WHERE installer_id = ${installerId}`,[installerId],(err:any,result:{rows:any}) => {
         if (err){
             return resp.status(400).json({error:"Server side issue(GET)"});
         }
@@ -43,6 +47,7 @@ router.get('/installer/:id',async(req,resp) => {
 });
 
 router.post('/',async(req,resp) => {
+
     let ownerId = req.body.owner_id;
     let installerId = req.body.installer_id;
     let expected_throughput = req.body.expected_throughput;
@@ -55,16 +60,23 @@ router.post('/',async(req,resp) => {
     })
 });
 
-router.patch('/:id',async(req,resp) => {
-    let converter_id = req.params.id
-   let n_expected_throughput = req.body.expected_throughput;
+router.patch('/:id',async(req,res) => {
+    const id = req.params.id;
+    const updates = req.body;
 
-   pool.query(`UPDATE converters SET expected_throughput = ${n_expected_throughput} WHERE converter_id = ${converter_id}`,(err:any,result) => {
-       if(err){
-           return resp.status(400).json({error:"Server side issue (PATCH)"})
-       }
-            return resp.status(200).json("COMPLETE");
-   })
+    const updatesString = Object.entries(updates)
+        .map(([key, value]) => `${key}='${value}'`)
+        .join(', ');
+
+
+    pool.query(`UPDATE converters
+                SET ${updatesString}
+                WHERE converter_id = ${id}`, (error: any, results: any) => {
+        if (error) {
+            res.status(500).json({error});
+        }
+        res.status(200).json(results);
+    });
 });
 
 router.delete('/:id',async(req,resp) => {

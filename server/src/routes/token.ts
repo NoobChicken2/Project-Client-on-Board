@@ -6,12 +6,14 @@ import jwt from 'jsonwebtoken';
 
 // @ts-ignore
 router.post("/", tokenBodyDetails, compareLoginDetails, (req, res) => {
-    let payload = req.body;
-    payload.date = new Date();
-    // @ts-ignore
-    payload.roles = req.role;
+    let payload = {
+        username: req.body.username,
+        date: new Date(),
+        // @ts-ignore
+        roles: req.role
+    };
 
-    jwt.sign(payload, secret, {algorithm: 'HS256'}, (err, result) => {
+    jwt.sign(payload, secret, {algorithm: 'HS256', expiresIn: '15m'}, (err, result) => {
         if (err) {
             return res.status(500).json({error: 'Something went wrong with the token'})
         }
