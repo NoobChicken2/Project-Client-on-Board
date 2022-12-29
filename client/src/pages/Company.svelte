@@ -28,8 +28,7 @@
     }
 
 
-  const addNewCompany = async (name) => {
-        console.log(name)
+    const addNewCompany = async (name) => {
         newCompanyName = name;
         await addCompany(name)
         showAddPopup = false;
