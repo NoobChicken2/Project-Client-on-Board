@@ -2,23 +2,35 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {addCompany, loadCompanies, removeCompany} from "../scripts/companyScript";
+    import {addCompany, loadCompanies, removeCompany,editCompany} from "../scripts/companyScript";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
 
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
-
     let selectedCompanyId;
-
     let newCompanyName;
-
+    let data = {
+        company_id: "",
+        company_name: "",
+    }
 
     onMount(loadCompanies);
 
-    const editCompany = () => {
-
+    let isEdit = (item) => {
+        showEditPopup = true;
+        console.log(item)
+        data = item;
+    }
+    const updateCompany = async (id) => {
+        let dataToUpdate = {
+            company_id: data.company_id,
+            company_name: data.company_name
+        }
+        await editCompany(id, dataToUpdate)
+        showEditPopup = false;
+        await loadCompanies();
     }
 
     const deleteCompany = async () => {
@@ -110,26 +122,14 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required/>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required>
+                    <input bind:value={data.company_name} type="text" class="form-control" required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showEditPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-primary" on:click={() => editCompany()}>Save changes</button>
+                <button type="button" class="btn btn-primary" on:click={() => updateCompany(data.company_id)}>Save changes</button>
             </div>
         </form>
     </Modal>
@@ -160,43 +160,14 @@
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                     on:click={ () =>deleteClicked(Company.company_id)}></button>
-                            <i class="bi bi-pencil-square ; btn btn-primary"></i>
+                            <button class="bi bi-pencil-square ; btn btn-primary" type="button"
+                                    on:click={ () => isEdit(Company)}></button>
                         </td>
                     </tr>
-
                 {/each}
             {/await}
             </tbody>
         </table>
-        <Pagination ariaLabel="Page navigation example">
-            <PaginationItem disabled>
-                <PaginationLink first href="#"/>
-            </PaginationItem>
-            <PaginationItem disabled>
-                <PaginationLink previous href="#"/>
-            </PaginationItem>
-            <PaginationItem active>
-                <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">4</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">5</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink next href="#"/>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink last href="#"/>
-            </PaginationItem>
-        </Pagination>
     </div>
 </div>
 

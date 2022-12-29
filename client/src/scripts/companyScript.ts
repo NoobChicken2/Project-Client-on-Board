@@ -10,7 +10,15 @@ export async function loadCompanies() {
         return companies;
     });
 }
-
+export async function editCompany(id, data){
+    return await fetch(`http://localhost:3000/companies/${id}`, {
+        method: "PATCH",
+        headers: {'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(data)
+    }).then(res => res.json())
+        .catch(err => alert(err))
+}
 export async function removeCompany(id) {
     return await fetch(`http://localhost:3000/companies/${id}`, {method: 'DELETE'})
         .then((response) => response.json())
