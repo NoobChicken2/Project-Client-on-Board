@@ -1,7 +1,29 @@
 <script>
 
-    let email = '';
+    import {logIn} from "../scripts/customerScript.ts";
+
+    let username = '';
     let password = '';
+    let error;
+    let message;
+
+    function clickHandler(){
+        error = undefined
+        message = undefined
+
+        logIn(username,password).then((response) => {
+            console.log(username)
+            console.log(password)
+            if (response.error !== undefined){
+                error = response.error;
+            } else {
+                console.log(response)
+                message = "Logged in";
+            }
+        });
+
+    }
+
 
 </script>
 
@@ -11,23 +33,30 @@
     <div class="login">
         <form class="needs-validation">
             <div class="form-group was-validated">
-                <label class="form-label" for="email">Email</label>
-                <input class="form-control" type="email" id="email" required>
+                <label class="form-label" for="username">Username</label>
+                <input class="form-control" type="text" id="username"  bind:value={username} required>
                 <div class="invalid-feedback">
-                    Please enter your email
+                    Please enter your username
                 </div>
             </div>
 
             <div class="form-group was-validated">
                 <label class="form-label" for="password">Password</label>
-                <input class="form-control" type="password" id="password" required>
+                <input class="form-control" type="password" id="password" bind:value={password} required>
                 <div class="invalid-feedback" >
                     Please enter your password
                 </div>
             </div>
-            <input  class="btn btn-primary" type="submit" value="Login">
+            <input  class="btn btn-primary" value="Log In" on:click={clickHandler}>
         </form>
     </div>
+    {#if error}
+        <p>{error}</p>
+    {/if}
+
+    {#if message}
+        <p> {message} </p>
+    {/if}
 </body>
 
 <style>
