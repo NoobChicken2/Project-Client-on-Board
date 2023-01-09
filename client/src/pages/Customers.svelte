@@ -64,7 +64,6 @@
     function deleteClicked(user_id){
         selectedCompanyId = user_id;
         showDeletePopup = true;
-        deleteCustomer();
     }
 
 
@@ -129,32 +128,50 @@
             </div>
         </form>
     </Modal>
-
-
-    <div class="col-md-6">
+    <div class="container">
+        <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sampleModalLabel">Delete</h5>
+                    <button type="button" class="bi bi-x-circle" data-dismiss="modal" aria-label="Close"
+                            on:click={() => showDeletePopup = false}>
+                    </button>
+                </div>
+                <i class="bi bi-x-circle d-flex justify-content-center" style="font-size: 5rem; color: red"></i>
+                <br>
+                <h3 class="d-flex justify-content-center">Are you sure?</h3>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            on:click={() => showDeletePopup = false}>Close
+                    </button>
+                    <button type="button" class="btn btn-danger" on:click={() =>deleteCustomer()
+                }>Delete
+                    </button>
+                </div>
+            </form>
+        </Modal>
+    </div>
+<div class="container">
+    <div class="table-wrapper">
+        <div class="col-md-6">
         <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a customer
         </button>
-    </div>
-
+         </div>
     <!-- Table of customers -->
-    <table style="text-align: left" class="table table-hover" id="table__customers">
+    <table  class="table table-hover; table table-striped">
         <thead class="table-dark">
         <tr>
-            <th style="width: 50px" scope="col"></th>
-            <th style="width: 100px" scope="col">#id</th>
-            <th style="width: 200px" scope="col">Firstname</th>
-            <th style="width: 200px" scope="col">Lastname</th>
-            <th style="width: 400px" scope="col">Email</th>
-            <th style="width: 50px" scope="col"></th>
+            <th  scope="col">#id</th>
+            <th  scope="col">Firstname</th>
+            <th  scope="col">Lastname</th>
+            <th  scope="col">Email</th>
+            <th  scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
 
         {#each $apiData as Customer}
             <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                </td>
                 <th scope="row">{Customer.user_id}</th>
                 <td>{Customer.first_name}</td>
                 <td>{Customer.last_name}</td>
@@ -162,16 +179,15 @@
                 <td>
                     <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                             on:click={ () =>deleteClicked(Customer.user_id)}></button>
+                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"
+                            on:click={  () => editCustomer(Customer.user_id)}></button>
                 </td>
-                <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop" on:click={ () => editCustomer(Customer.user_id)}></button>
             </tr>
         {/each}
-
         </tbody>
     </table>
-
-
+    </div>
+</div>
     <!-- Pagination -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
