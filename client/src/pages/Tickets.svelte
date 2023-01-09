@@ -1,13 +1,19 @@
 <script>
     import NavigationBar from "../components/NavigationBar.svelte";
-    import { Popover } from 'sveltestrap';
     import {onMount} from "svelte";
     import {loadTickets} from "../scripts/ticketScript.ts";
     import {apiData} from "../stores/store.ts";
-
     const myInput = document.getElementById('myInput');
+    import Popover from '../Components/Popover.svelte';
+    let PopoverOpen = false;
+
+    let open = () =>{
+        PopoverOpen = true;
+    }
+
 
     onMount(loadTickets)
+
 
 </script>
 
@@ -44,21 +50,22 @@
                     <td>Test</td>
                     <td>{Ticket.log_id}</td>
                     <td>{Ticket.created_at}</td>
-                    <button type="button" id="ticket-popover" class="bi bi-card-text btn-outline-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop"></button>
+                    <td>
+                        <button  type="button"  class="bi bi-card-text btn-outline-dark"
+                                 id="btn" tabindex="0"
+                        on:click={()=>open()}></button>
+                    </td>
+
                 </tr>
             {/each}
-
             </tbody>
         </table>
 
-        <Popover placement="left" target="ticket-popover">
-            <div slot="title">
-                <b>Title</b>
-            </div>
-            <div>Description</div>
-            <div>Status</div>
-            <div>Date</div>
-        </Popover>
+<Popover isOpen={PopoverOpen}>
+    <div class="container">
+        Some data
+    </div>
+</Popover>
 
     </div>
 </body>

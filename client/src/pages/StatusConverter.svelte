@@ -1,10 +1,8 @@
 <script>
     import {onMount} from "svelte";
-    import {loadConverters,addConverter,removeConverter} from "../scripts/converterScript";
-    import ConverterList from "../Components/ConverterList.svelte";
+    import {loadConverters, addConverter, removeConverter, editConverter} from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
-    import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {apiData} from "../stores/store.ts";
 
     onMount(loadConverters)
@@ -21,8 +19,28 @@
     let message;
     let deleteId;
 
-    const editConverter = () => {
+    let selectedId;
 
+    let data = {
+        owner_id: "",
+        installer_id: "",
+        expected_throughput: ""
+    }
+    let isEdit =(id) => {
+        selectedId = id;
+        showEditPopup = true;
+    }
+    const updateConverter = async () => {
+        let dataToUpdate = {
+            owner_id: parseInt(data.owner_id),
+            installer_id:parseInt(data.installer_id),
+            expected_throughput: data.expected_throughput
+        }
+        console.log(dataToUpdate)
+        console.log(selectedId)
+        await editConverter(dataToUpdate,selectedId);
+        showEditPopup = false;
+        await loadConverters();
     }
     function deleteConverter(converter_id){
         deleteId = converter_id;
@@ -119,25 +137,21 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" required>
+                    <label>Owner ID</label>
+                    <input bind:value={data.owner_id} type="text" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>###</label>
-                    <input type="email" class="form-control" required>
+                    <label>Installer ID</label>
+                    <input bind:value={data.installer_id} type="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required/>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required>
+                    <label>Throughput</label>
+                    <input bind:value={data.expected_throughput} type="text" class="form-control" required/>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"  on:click={ () => showEditPopup = false}>Close</button>
-                <button type="button" class="btn btn-primary" on:click={() => editConverter()}>Save changes</button>
+                <button type="button" class="btn btn-primary" on:click={() => updateConverter()}>Save changes</button>
             </div>
         </form>
     </Modal>
@@ -154,6 +168,7 @@
                 <th scope="col">Converter_id</th>
                 <th scope="col">Owner_id</th>
                 <th scope="col">Installer_id</th>
+                <th scope="col">Throughput</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -166,7 +181,7 @@
                 <td>{Converter.expected_throughput}</td>
                 <td>
                     <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={deleteConverter(Converter.converter_id) } ></button>
-                    <i class="bi bi-pencil-square ; btn btn-primary"></i>
+                    <button  class="bi bi-pencil-square ; btn btn-primary" type="button" on:click={isEdit(Converter.converter_id)}></button>
                 </td>
             </tr>
             {/each}
@@ -191,35 +206,6 @@
 <!--            </tbody>-->
         </table>
 
-        <Pagination ariaLabel="Page navigation example">
-            <PaginationItem disabled>
-                <PaginationLink first href="#" />
-            </PaginationItem>
-            <PaginationItem disabled>
-                <PaginationLink previous href="#" />
-            </PaginationItem>
-            <PaginationItem active>
-                <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">4</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">5</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink next href="#" />
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink last href="#" />
-            </PaginationItem>
-        </Pagination>
     </div>
 </div>
 
