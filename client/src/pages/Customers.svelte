@@ -9,7 +9,6 @@
     let showDeletePopup = false;
     let showAddPopup = false;
 
-    onMount(loadCustomers);
 
     let selectedCompanyId;
     let customerId;
@@ -26,6 +25,8 @@
     }
 
     const handleEdit = async () => {
+        console.log(customerId)
+        console.log(body)
         await patchCustomer(customerId,body);
         showEditPopup = false;
         await loadCustomers();
@@ -215,7 +216,7 @@
                         <div class="row mb-3">
                             <label for="modal-username" class="col-sm-3 col-form-label text-start">Username:</label>
                             <div class="col-sm-9">
-                                <input type="username" class="form-control" bind:value={body.username} id="modal-username">
+                                <input type="text" class="form-control" bind:value={body.username} id="modal-username">
                             </div>
                             <div class="invalid-feedback">Please enter a username</div>
                         </div>
@@ -229,14 +230,14 @@
                         <div class="row mb-3">
                             <label for="modal-firstname" class="col-sm-3 col-form-label text-start">Firstname:</label>
                             <div class="col-sm-9">
-                                <input type="firstname" class="form-control" bind:value={body.first_name} id="modal-firstname">
+                                <input type="text" class="form-control" bind:value={body.first_name} id="modal-firstname">
                             </div>
                             <div class="invalid-feedback">Please enter the firstname</div>
                         </div>
                         <div class="row mb-3">
                             <label for="modal-lastname" class="col-sm-3 col-form-label text-start">Lastname:</label>
                             <div class="col-sm-9">
-                                <input type="lastname" class="form-control" bind:value={body.last_name} id="modal-lastname">
+                                <input type="text" class="form-control" bind:value={body.last_name} id="modal-lastname">
                             </div>
                             <div class="invalid-feedback">Please enter the lastname</div>
                         </div>
@@ -251,7 +252,7 @@
                         <div class="row mb-3">
                             <label for="modal-email" class="col-sm-3 col-form-label text-start">Phone number:</label>
                             <div class="col-sm-9">
-                                <input type="email" class="form-control" bind:value={body.phone_number} id="modal-number"
+                                <input type="number" class="form-control" bind:value={body.phone_number} id="modal-number"
                                        placeholder="e.g.@example.com">
                             </div>
                             <div class="invalid-feedback">Please enter a phone number</div>

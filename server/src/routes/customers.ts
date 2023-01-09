@@ -64,6 +64,7 @@ router.post('/', async (req, resp) => {
 router.patch('/:id', async (req, res) => {
     const id = req.params.id;
     const updates = req.body;
+    console.log(updates)
 
     if(req.body.password !== undefined) {
         bcrypt.hash(req.body.password, 10, function (err, hash) {
