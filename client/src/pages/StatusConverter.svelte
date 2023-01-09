@@ -20,25 +20,27 @@
     let error;
     let message;
     let deleteId;
+
+    let selectedId;
+
     let data = {
-        converter_id: "",
-        ownerId: "",
+        owner_id: "",
         installer_id: "",
         expected_throughput: ""
     }
-    let isEdit = (converter) => {
+    let isEdit =(id) => {
+        selectedId = id;
         showEditPopup = true;
-        console.log(converter);
-        data = converter;
     }
     const updateConverter = async (id) => {
         let dataToUpdate = {
-            converter_id: data.converter_id,
-            ownerId: data.ownerId,
-            installer_id: data.installer_id,
+            owner_id: parseInt(data.owner_id),
+            installer_id:parseInt(data.installer_id),
             expected_throughput: data.expected_throughput
         }
-        await editConverter(dataToUpdate,id);
+        console.log(dataToUpdate)
+        console.log(selectedId)
+        await editConverter(dataToUpdate,selectedId);
         showEditPopup = false;
         await loadConverters();
     }
@@ -138,7 +140,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Owner ID</label>
-                    <input bind:value={data.ownerId} type="text" class="form-control" required>
+                    <input bind:value={data.owner_id} type="text" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Installer ID</label>
@@ -181,7 +183,7 @@
                 <td>{Converter.expected_throughput}</td>
                 <td>
                     <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={deleteConverter(Converter.converter_id) } ></button>
-                    <button  class="bi bi-pencil-square ; btn btn-primary" type="button" on:click={() => isEdit(Converter)}></button>
+                    <button  class="bi bi-pencil-square ; btn btn-primary" type="button" on:click={isEdit(Converter.converter_id)}></button>
                 </td>
             </tr>
             {/each}
