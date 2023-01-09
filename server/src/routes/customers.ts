@@ -1,10 +1,17 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
 import bcrypt from "bcrypt";
+import {isLoggedIn} from "../middleware/authorizationMiddleware";
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+// @ts-ignore
+router.get('/',isLoggedIn, (req, res) => {
+
+
+    // @ts-ignore
+    console.log(req.user)
+
     pool.query(`SELECT *
                 FROM users
                 WHERE role = 'Client'`, (err: any, result: { rows: any; }) => {
@@ -28,7 +35,10 @@ router.get('/:id', async (req, resp) => {
 })
 
 
+// @ts-ignore
 router.post('/', async (req, resp) => {
+    // @ts-ignore
+    console.log(req.user);
 
     bcrypt.hash(req.body.password, 10, function (err, hash) {
         let role = req.body.role;
@@ -55,6 +65,7 @@ router.post('/', async (req, resp) => {
                 throw err
                 return resp.status(400).json({error: "Server side issue (POST)"})
             }
+            // @ts-ignore
             return resp.status(201).json(body);
         })
     })
