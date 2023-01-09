@@ -1,8 +1,6 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
-
 const router = express.Router();
-
 
 router.get('/', async (req, res) => {
     pool.query('SELECT * FROM tickets INNER JOIN logs ON tickets.log_id = logs.log_id', (error: any, results: { rows: any; }) => {
@@ -37,8 +35,6 @@ router.post('/', async (req, res) => {
     })
 
 });
-
-
 
 router.delete('/:id', async (req, res) => {
     let id = req.params.id
