@@ -9,7 +9,6 @@
     let showDeletePopup = false;
     let showAddPopup = false;
 
-    onMount(loadCustomers);
 
     let selectedCompanyId;
     let customerId;
@@ -26,6 +25,8 @@
     }
 
     const handleEdit = async () => {
+        console.log(customerId)
+        console.log(body)
         await patchCustomer(customerId,body);
         showEditPopup = false;
         await loadCustomers();
@@ -64,7 +65,6 @@
     function deleteClicked(user_id){
         selectedCompanyId = user_id;
         showDeletePopup = true;
-        deleteCustomer();
     }
 
 
@@ -73,12 +73,12 @@
 <NavigationBar/>
 
 <body>
-    <div class="p-5 my-4 bg-light rounded-3 container">
+<div class="p-5 my-4 bg-light rounded-3 container">
 
-        <!-- Page Header -->
-        <header class="navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Customer List</a>
-        </header>
+    <!-- Page Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Customer List</a>
+    </nav>
 
 
     <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
@@ -129,32 +129,50 @@
             </div>
         </form>
     </Modal>
-
-
-    <div class="col-md-6">
+    <div class="container">
+        <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
+            <form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sampleModalLabel">Delete</h5>
+                    <button type="button" class="bi bi-x-circle" data-dismiss="modal" aria-label="Close"
+                            on:click={() => showDeletePopup = false}>
+                    </button>
+                </div>
+                <i class="bi bi-x-circle d-flex justify-content-center" style="font-size: 5rem; color: red"></i>
+                <br>
+                <h3 class="d-flex justify-content-center">Are you sure?</h3>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            on:click={() => showDeletePopup = false}>Close
+                    </button>
+                    <button type="button" class="btn btn-danger" on:click={() =>deleteCustomer()
+                }>Delete
+                    </button>
+                </div>
+            </form>
+        </Modal>
+    </div>
+<div class="container">
+    <div class="table-wrapper">
+        <div class="col-md-6">
         <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a customer
         </button>
-    </div>
-
+         </div>
     <!-- Table of customers -->
-    <table style="text-align: left" class="table table-hover" id="table__customers">
+    <table  class="table table-hover; table table-striped">
         <thead class="table-dark">
         <tr>
-            <th style="width: 50px" scope="col"></th>
-            <th style="width: 100px" scope="col">#id</th>
-            <th style="width: 200px" scope="col">Firstname</th>
-            <th style="width: 200px" scope="col">Lastname</th>
-            <th style="width: 400px" scope="col">Email</th>
-            <th style="width: 50px" scope="col"></th>
+            <th  scope="col">#id</th>
+            <th  scope="col">Firstname</th>
+            <th  scope="col">Lastname</th>
+            <th  scope="col">Email</th>
+            <th  scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
 
         {#each $apiData as Customer}
             <tr>
-                <td>
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                </td>
                 <th scope="row">{Customer.user_id}</th>
                 <td>{Customer.first_name}</td>
                 <td>{Customer.last_name}</td>
@@ -162,21 +180,15 @@
                 <td>
                     <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                             on:click={ () =>deleteClicked(Customer.user_id)}></button>
+                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"
+                            on:click={  () => editCustomer(Customer.user_id)}></button>
                 </td>
-                <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop" on:click={ () => editCustomer(Customer.user_id)}></button>
             </tr>
         {/each}
-
         </tbody>
     </table>
-
-<!--        &lt;!&ndash; Button trigger modal &ndash;&gt;-->
-<!--        <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#staticBackdrop add-Modal">-->
-<!--            <span class = "bi bi-person-plus"></span>-->
-<!--            Add new Customer-->
-<!--        </button>-->
-
+    </div>
+</div>
     <!-- Pagination -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
@@ -220,7 +232,7 @@
                         <div class="row mb-3">
                             <label for="modal-username" class="col-sm-3 col-form-label text-start">Username:</label>
                             <div class="col-sm-9">
-                                <input type="username" class="form-control" bind:value={body.username} id="modal-username">
+                                <input type="text" class="form-control" bind:value={body.username} id="modal-username">
                             </div>
                             <div class="invalid-feedback">Please enter a username</div>
                         </div>
@@ -234,14 +246,14 @@
                         <div class="row mb-3">
                             <label for="modal-firstname" class="col-sm-3 col-form-label text-start">Firstname:</label>
                             <div class="col-sm-9">
-                                <input type="firstname" class="form-control" bind:value={body.first_name} id="modal-firstname">
+                                <input type="text" class="form-control" bind:value={body.first_name} id="modal-firstname">
                             </div>
                             <div class="invalid-feedback">Please enter the firstname</div>
                         </div>
                         <div class="row mb-3">
                             <label for="modal-lastname" class="col-sm-3 col-form-label text-start">Lastname:</label>
                             <div class="col-sm-9">
-                                <input type="lastname" class="form-control" bind:value={body.last_name} id="modal-lastname">
+                                <input type="text" class="form-control" bind:value={body.last_name} id="modal-lastname">
                             </div>
                             <div class="invalid-feedback">Please enter the lastname</div>
                         </div>
@@ -256,7 +268,7 @@
                         <div class="row mb-3">
                             <label for="modal-email" class="col-sm-3 col-form-label text-start">Phone number:</label>
                             <div class="col-sm-9">
-                                <input type="email" class="form-control" bind:value={body.phone_number} id="modal-number"
+                                <input type="number" class="form-control" bind:value={body.phone_number} id="modal-number"
                                        placeholder="e.g.@example.com">
                             </div>
                             <div class="invalid-feedback">Please enter a phone number</div>

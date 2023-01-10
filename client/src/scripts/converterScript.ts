@@ -8,6 +8,15 @@ export async function loadConverters() {
         return converters;
     });
 }
+export async function editConverter(data,id){
+    return await fetch(`http://localhost:3000/converters/${id}`, {
+        method: "PATCH",
+        headers: {'Content-Type': 'application/json',
+        },
+        body : JSON.stringify(data)
+    }).then(res => res.json())
+        .catch(err => alert(err))
+}
 export async function addConverter(ownerId,installerId,expected_throughput){
     let Converter = {
         owner_id:ownerId,
