@@ -32,7 +32,7 @@
         selectedId = id;
         showEditPopup = true;
     }
-    const updateConverter = async (id) => {
+    const updateConverter = async () => {
         let dataToUpdate = {
             owner_id: parseInt(data.owner_id),
             installer_id:parseInt(data.installer_id),
@@ -153,7 +153,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"  on:click={ () => showEditPopup = false}>Close</button>
-                <button type="button" class="btn btn-primary" on:click={() => updateConverter(data.converter_id)}>Save changes</button>
+                <button type="button" class="btn btn-primary" on:click={() => updateConverter()}>Save changes</button>
             </div>
         </form>
     </Modal>
