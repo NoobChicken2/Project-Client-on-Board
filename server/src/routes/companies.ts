@@ -20,8 +20,8 @@ router.get('/',isLoggedIn, async (req, res) => {
     }
 
 });
-
-router.get('/:id', async (req, res) => {
+// @ts-ignore
+router.get('/:id',isLoggedIn, async (req, res) => {
     // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         let id = req.params.id;
@@ -35,8 +35,8 @@ router.get('/:id', async (req, res) => {
         })
     }
 });
-
-router.post('/', async (req, res) => {
+// @ts-ignore
+router.post('/',isLoggedIn, async (req, res) => {
     // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         let company_name = req.body.company_name;
@@ -51,8 +51,8 @@ router.post('/', async (req, res) => {
     }
 
 });
-
-router.patch('/:id', async (req, res) => {
+// @ts-ignore
+router.patch('/:id',isLoggedIn, async (req, res) => {
     // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         const id = req.params.id;
@@ -73,8 +73,8 @@ router.patch('/:id', async (req, res) => {
         });
     }
 });
-
-router.delete('/:id', async (req, resp) => {
+// @ts-ignore
+router.delete('/:id',isLoggedIn, async (req, resp) => {
     // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         let company_id = req.params.id;
@@ -84,7 +84,7 @@ router.delete('/:id', async (req, resp) => {
             if (err) {
                 return resp.status(400).json({error: "Issue on the server side (DELETE)"})
             }
-            return resp.status(200).json("COMPLETE");
+            return resp.status(200);
         })
     }
 })

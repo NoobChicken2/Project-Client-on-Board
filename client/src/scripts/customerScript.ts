@@ -41,10 +41,10 @@ export async function logIn(username, password) {
 export async function patchCustomer(id,updateBody) {
     try {
 
-        response = await fetch('http://localhost:3000/customers/'+id,{
-            method:'PATCH',
-            headers:{
-                'Content-Type':'application/json',
+        response = await fetch('http://localhost:3000/customers/' + id, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
                 'Authorization':'Bearer '+ localStorage.getItem('token')
             },
             body: JSON.stringify(updateBody)
@@ -94,4 +94,124 @@ export async function addCustomer(data) {
     }).then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error(error));
+}
+
+export function isValidCustomer(customer) {
+
+    if (customer.username === undefined || null || "" || customer.username.length == 0) {
+        alert("Username cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (customer.password === undefined || null || "" || customer.password.length == 0) {
+        alert("Password cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (customer.repeat_password === undefined || null || "" || customer.repeat_password.length == 0) {
+        alert("Repeat password cannot be empty, null or undefined")
+        return false;
+    }
+    if (customer.first_name === undefined || null || "" || customer.first_name.length == 0) {
+        alert("First name cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (customer.last_name === undefined || null || "" || customer.last_name.length == 0) {
+        alert("Last name cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (customer.email === undefined || null || "" || customer.email.length == 0) {
+        alert("Email cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (customer.phone_number === undefined || null || "" || customer.phone_number.length == 0) {
+        alert("Phone number cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (customer.username.length < 3) {
+        alert("Username is too short")
+        return false;
+    }
+
+    if (customer.password.length < 8) {
+        alert("Password must be at least 8 characters")
+        return false;
+    }
+
+    if (customer.password !== customer.repeat_password) {
+        alert("Passwords do not match")
+        return false;
+    }
+
+
+    if (!validatePhoneNumber(customer.phone_number)) {
+        alert("Phone number is not valid")
+        return false;
+    }
+
+    if (!validateEmail(customer.email)) {
+        alert("Email is invalid");
+        return false;
+    }
+
+    return true;
+}
+
+export function validateCustomerUpdate(updates) {
+    if (updates.username !== undefined) {
+        if (updates.username.length < 3) {
+            alert("Username is too short")
+            return false;
+        }
+    }
+
+    if (updates.password !== undefined) {
+        if (updates.password.length < 3) {
+            alert("Username is too short")
+            return false;
+        }
+    }
+
+    if (updates.first_name !== undefined) {
+        if (updates.first_name.length == 0) {
+            alert("First name cannot be empty, null or undefined")
+            return false;
+        }
+    }
+
+    if (updates.last_name !== undefined) {
+        if (updates.last_name.length == 0) {
+            alert("First name cannot be empty, null or undefined")
+            return false;
+        }
+    }
+
+    if (updates.email !== undefined) {
+        if (!validateEmail(updates.email)) {
+            alert("Email is invalid");
+            return false;
+        }
+    }
+
+    if (updates.phone_number !== undefined) {
+        if (!validatePhoneNumber(updates.phone_number)) {
+            alert("Phone number is invalid");
+            return false;
+        }
+    }
+    return true;
+}
+
+function validateEmail(email) {
+    let re = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    return re.test(email);
+}
+
+function validatePhoneNumber(phone_number) {
+    let re = new RegExp(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im);
+    return re.test(phone_number);
 }

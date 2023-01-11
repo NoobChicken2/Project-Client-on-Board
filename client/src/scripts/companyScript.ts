@@ -10,7 +10,9 @@ export async function loadCompanies() {
             'Authorization':'Bearer '+ localStorage.getItem('token')
         }
     });
-    companies = await resp.json();
+
+    companies = await fetch('http://localhost:3000/companies').then(res => res.json())
+        .catch(err => alert(err));
 
     apiData.update((oldValue) => {
         return companies;
@@ -28,13 +30,7 @@ export async function editCompany(id, data){
         .catch(err => alert(err))
 }
 export async function removeCompany(id) {
-    return await fetch(`http://localhost:3000/companies/${id}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization':'Bearer '+ localStorage.getItem('token')
-        },
-    })
+    return await fetch(`http://localhost:3000/companies/${id}`, {method: 'DELETE'})
         .then((response) => response.json())
         .then((data) => {
             return data;
@@ -45,11 +41,26 @@ export async function addCompany(data) {
    await fetch(`http://localhost:3000/companies`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization':'Bearer '+ localStorage.getItem('token')
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({company_name: data})
     }).then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error(error));
+}
+
+
+export function isValidCompany(name) {
+
+    if (name === undefined || null || "" || name.length === 0) {
+        alert("Company name cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (name.length < 3) {
+        alert("Company name is too short")
+        return false;
+    }
+
+    return true;
 }
