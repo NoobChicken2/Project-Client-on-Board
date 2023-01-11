@@ -56,7 +56,6 @@
 
 </script>
 
-<!--<NavigationBar/>-->
 
 <body>
 <div class="container">

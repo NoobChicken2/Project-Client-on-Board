@@ -1,5 +1,7 @@
 <script lang="ts">
 
+    export let pageBody
+
     let navActive = false;
     const toggleNav = () => {
         navActive = !navActive;
@@ -115,11 +117,8 @@
         }
     ]
 
-    // export let changeBodyPos = () => {}
-
-    export let pageBody
-
 </script>
+
 
 <main>
     <nav class="menu" class:active="{ navActive }">
