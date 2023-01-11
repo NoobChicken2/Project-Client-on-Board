@@ -25,7 +25,7 @@
     }
     const updateCompany = async (id) => {
 
-        if (isValidData(data)) {
+        if (isValidData(data.company_name)) {
             let dataToUpdate = {
                 company_id: data.company_id,
                 company_name: data.company_name
@@ -44,14 +44,14 @@
     }
 
 
-    function isValidData(data) {
+    function isValidData(name) {
 
-        if (data.company_name === undefined || null || "") {
+        if (name === undefined || null || "") {
             alert("Company name cannot be empty, null or undefined")
             return false;
         }
 
-        if (data.company_name.length < 3) {
+        if (name.length < 3) {
             alert("Company name is too short")
             return false;
         }
@@ -59,14 +59,14 @@
         return true;
     }
 
-
     const addNewCompany = async (name) => {
-        newCompanyName = name;
-        await addCompany(name)
-        showAddPopup = false;
-        await loadCompanies();
+        if (isValidData(name)) {
+            newCompanyName = name;
+            await addCompany(name)
+            showAddPopup = false;
+            await loadCompanies();
+        }
     }
-
 
     function deleteClicked(company_id) {
         selectedCompanyId = company_id;
