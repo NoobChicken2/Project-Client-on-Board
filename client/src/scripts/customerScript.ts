@@ -4,7 +4,13 @@ let customers;
 let response;
 
 export async function loadCustomers() {
-    const resp = await fetch('http://localhost:3000/customers');
+    const resp = await fetch('http://localhost:3000/customers',{
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }
+    });
     customers = await resp.json();
 
     apiData.update((oldValue) => {
@@ -39,6 +45,7 @@ export async function patchCustomer(id,updateBody) {
             method:'PATCH',
             headers:{
                 'Content-Type':'application/json',
+                'Authorization':'Bearer '+ localStorage.getItem('token')
             },
             body: JSON.stringify(updateBody)
         });
@@ -53,7 +60,13 @@ export async function patchCustomer(id,updateBody) {
 
 
 export async function removeCustomer(id) {
-    return await fetch(`http://localhost:3000/customers/${id}`, {method: 'DELETE'})
+    return await fetch(`http://localhost:3000/customers/${id}`, {
+        method: 'DELETE',
+        headers:{
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        },
+    })
         .then((response) => response.json())
         .then((data) => {
             return data;
@@ -65,7 +78,8 @@ export async function addCustomer(data) {
     await fetch(`http://localhost:3000/customers`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
         },
         body: JSON.stringify({
             company_id: data.company_id,

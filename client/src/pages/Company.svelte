@@ -150,9 +150,13 @@
             </tr>
             </thead>
             <tbody>
+
             {#await $apiData }}
                 <p>Loading companies...</p>
             {:then companies}
+
+
+
                 { #each $apiData as Company}
                     <tr>
                         <th scope="row">{Company.company_id}</th>
