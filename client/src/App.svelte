@@ -6,6 +6,7 @@
   import register from './pages/Customers.svelte'
   import ticket from './pages/Tickets.svelte'
   import converter from './pages/StatusConverter.svelte'
+  import NavigationBar from "./components/NavigationBar.svelte";
 
   let page;
 
@@ -28,10 +29,11 @@
   router.start()
 </script>
 
-
 <main>
-    <svelte:component this={page} />
+    <NavigationBar pageBody = {page}/>
+<!--    <svelte:component this={page} />-->
 </main>
 
 <style>
+
 </style>

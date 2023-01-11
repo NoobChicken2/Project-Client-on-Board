@@ -72,7 +72,6 @@
 
 </script>
 
-<NavigationBar/>
 
 <body>
 <div class="p-5 my-4 bg-light rounded-3 container">
@@ -283,10 +282,7 @@
 </div>
 </body>
 
+
 <style>
-    main {
-        top: 50px;
-        left: 150px;
-        position: absolute;
-    }
+
 </style>
