@@ -3,22 +3,25 @@ import {apiData} from "../stores/store";
 let companies;
 
 export async function loadCompanies() {
-    const resp = await fetch('http://localhost:3000/companies');
-    companies = await resp.json();
+    companies = await fetch('http://localhost:3000/companies').then(res => res.json())
+        .catch(err => alert(err));
 
     apiData.update((oldValue) => {
         return companies;
     });
 }
-export async function editCompany(id, data){
+
+export async function editCompany(id, data) {
     return await fetch(`http://localhost:3000/companies/${id}`, {
         method: "PATCH",
-        headers: {'Content-Type': 'application/json',
+        headers: {
+            'Content-Type': 'application/json',
         },
-        body : JSON.stringify(data)
+        body: JSON.stringify(data)
     }).then(res => res.json())
         .catch(err => alert(err))
 }
+
 export async function removeCompany(id) {
     return await fetch(`http://localhost:3000/companies/${id}`, {method: 'DELETE'})
         .then((response) => response.json())
@@ -28,7 +31,7 @@ export async function removeCompany(id) {
 }
 
 export async function addCompany(data) {
-   await fetch(`http://localhost:3000/companies`, {
+    await fetch(`http://localhost:3000/companies`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
