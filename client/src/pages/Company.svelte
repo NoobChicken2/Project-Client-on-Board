@@ -18,10 +18,10 @@
 
     onMount(loadCompanies);
 
-    let isEdit = (item) => {
+    let isEdit = (company) => {
         showEditPopup = true;
-        console.log(item)
-        data = item;
+        console.log(company)
+        data = company;
     }
     const updateCompany = async (id) => {
         let dataToUpdate = {
@@ -59,7 +59,7 @@
 
 <body>
 <div class="container">
-    <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
+    <Modal open={showDeletePopup}>
         <form>
             <div class="modal-header">
                 <h5 class="modal-title" id="sampleModalLabel">Delete</h5>
@@ -83,7 +83,7 @@
 </div>
 
 <div class="container">
-    <Modal open={showAddPopup} on:click={ () => showEditPopup = false}>
+    <Modal open={showAddPopup}>
         <form>
             <div class="modal-header">
                 <h5 class="modal-title">Add</h5>
@@ -111,7 +111,7 @@
 
 
 <div class="container">
-    <Modal open={showEditPopup} on:click={ () => showEditPopup = false}>
+    <Modal open={showEditPopup}>
         <form>
             <div class="modal-header">
                 <h5 class="modal-title">Edit</h5>
