@@ -66,6 +66,7 @@
 
     body, div {
 
+
         background: url("../lib/svg 1.png") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
