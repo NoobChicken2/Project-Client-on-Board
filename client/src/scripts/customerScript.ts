@@ -126,12 +126,10 @@ export function isValidCustomer(customer) {
         alert("Password must be at least 8 characters")
         return false;
     }
-    if (customer.phone_number.length < 10 || isNaN(customer.phone_number)) {
+    if (!validatePhoneNumber(customer.phone_number)) {
         alert("Phone number is not valid")
         return false;
     }
-
-    console.log(customer.email)
 
     if (!validateEmail(customer.email)) {
         alert("Email is invalid");
@@ -144,4 +142,9 @@ export function isValidCustomer(customer) {
 function validateEmail(email) {
     let re = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     return re.test(email);
+}
+
+function validatePhoneNumber(phone_number) {
+    let re = new RegExp(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im);
+    return re.test(phone_number);
 }
