@@ -64,12 +64,10 @@ function validateNumberField(field, fieldName) {
 }
 
 export function isValidConverter(ownerId, installerId, expectedThroughput) {
-    if (!validateNumberField(ownerId, "Owner ID") ||
-        !validateNumberField(installerId, "Installer ID") ||
-        !validateNumberField(expectedThroughput, "Expected throughput")) {
-        return false;
-    }
-    return true;
+    return (validateNumberField(ownerId, "Owner ID") ||
+        validateNumberField(installerId, "Installer ID") ||
+        validateNumberField(expectedThroughput, "Expected throughput"));
+
 }
 
 export function validateConverterUpdate(data) {
