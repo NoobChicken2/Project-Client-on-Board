@@ -22,7 +22,7 @@
 <NavigationBar/>
 
 <body>
-    <div class="p-5 my-4 bg-light rounded-3 container">
+    <div class="p-4 my-4 bg-light rounded- container">
 
         <!-- Page Header -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -65,7 +65,7 @@
 
 <style>
 
-    * {
+    body, div {
 
         background: url("../lib/svg 1.png") no-repeat fixed center;
         -webkit-background-size: cover;
@@ -80,11 +80,11 @@
         left: 150px;
         position: absolute;
     }
-    @media screen {
-        body {
-           min-height: 1200px;
-        }
+
+    body{
+        height: 100vh;
     }
+
 
     /*.popover{*/
     /*    width: 200px;*/
