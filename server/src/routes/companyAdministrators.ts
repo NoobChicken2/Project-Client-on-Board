@@ -1,25 +1,42 @@
 import express from 'express';
+import bcrypt from "bcrypt";
 import pool from "../database/databaseConnection";
 
 const router = express.Router();
 
-// create 1 company admin
-router.post('/', async (req, res) => {
-    let role = "CompanyAdmin";
-    let username = req.body.username;
-    let password = req.body.password; // todo: currently simplified plain text hash
-    let email = req.body.email;
-    let phoneNumber = req.body.phone_number;
+// Added encryption of password
+router.post('/', async (req, resp) => {
 
-    pool.query(`INSERT INTO users (role, username, password, email, phone_number)
-                VALUES ($1, $2, $3, $4,
-                        $5)`, [role, username, password, email, phoneNumber], (error: any, results: { rows: any; }) => {
-        if (error) {
-            return res.status(400).json({error: "Server side issue (POST)"})
+
+    bcrypt.hash(req.body.password, 10, function (err, hash) {
+        let role = req.body.role;
+        let username = req.body.username;
+        let password = hash;
+        let first_name = req.body.first_name;
+        let last_name = req.body.last_name;
+        let email = req.body.email;
+        let phone_number = req.body.phone_number;
+        let body = {
+            role,
+            username,
+            password,
+            first_name,
+            last_name,
+            email,
+            phone_number
         }
-        res.status(201).json(results.rows)
-    })
 
+        pool.query(`INSERT INTO users (role, username, password, first_name, last_name, email, phone_number)
+                    VALUES ($1, $2, $3, $4, $5, $6,
+                            $7)`, [role, username, password, first_name, last_name, email, phone_number], (err: any, result: { rows: any; }) => {
+            if (err) {
+                throw err
+                return resp.status(400).json({error: "Server side issue (POST)"})
+            }
+            // @ts-ignore
+            return resp.status(201).json(body);
+        })
+    })
 });
 
 // read 1 admin (by id)

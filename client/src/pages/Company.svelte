@@ -2,7 +2,7 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {addCompany, loadCompanies, removeCompany,editCompany} from "../scripts/companyScript";
+    import {addCompany, loadCompanies, removeCompany, editCompany, isValidCompany} from "../scripts/companyScript";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
 
@@ -24,13 +24,17 @@
         data = company;
     }
     const updateCompany = async (id) => {
-        let dataToUpdate = {
-            company_id: data.company_id,
-            company_name: data.company_name
+
+        if (isValidCompany(data.company_name)) {
+            let dataToUpdate = {
+                company_id: data.company_id,
+                company_name: data.company_name
+            }
+
+            await editCompany(id, dataToUpdate)
+            showEditPopup = false;
+            await loadCompanies();
         }
-        await editCompany(id, dataToUpdate)
-        showEditPopup = false;
-        await loadCompanies();
     }
 
     const deleteCompany = async () => {
@@ -41,12 +45,13 @@
 
 
     const addNewCompany = async (name) => {
-        newCompanyName = name;
-        await addCompany(name)
-        showAddPopup = false;
-        await loadCompanies();
+        if (isValidCompany(name)) {
+            newCompanyName = name;
+            await addCompany(name)
+            showAddPopup = false;
+            await loadCompanies();
+        }
     }
-
 
     function deleteClicked(company_id) {
         selectedCompanyId = company_id;
@@ -55,7 +60,7 @@
 
 
 </script>
-<NavigationBar/>
+
 
 <body>
 <div class="container">
@@ -129,7 +134,9 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showEditPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-primary" on:click={() => updateCompany(data.company_id)}>Save changes</button>
+                <button type="button" class="btn btn-primary" on:click={() => updateCompany(data.company_id)}>Save
+                    changes
+                </button>
             </div>
         </form>
     </Modal>
@@ -150,9 +157,13 @@
             </tr>
             </thead>
             <tbody>
+
             {#await $apiData }}
                 <p>Loading companies...</p>
             {:then companies}
+
+
+
                 { #each $apiData as Company}
                     <tr>
                         <th scope="row">{Company.company_id}</th>

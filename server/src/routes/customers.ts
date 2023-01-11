@@ -1,18 +1,26 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
 import bcrypt from "bcrypt";
+import {isLoggedIn} from "../middleware/authorizationMiddleware";
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    pool.query(`SELECT *
+// @ts-ignore
+router.get('/',isLoggedIn, (req, res) => {
+    // @ts-ignore
+    console.log(req.user.role)
+    // @ts-ignore
+    if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
+        pool.query(`SELECT *
                 FROM users
                 WHERE role = 'Client'`, (err: any, result: { rows: any; }) => {
-        if (err) {
-            throw err
-        }
-        res.status(200).json(result.rows);
-    })
+            if (err) {
+                throw err
+            }
+            res.status(200).json(result.rows);
+        })
+
+    }
 });
 router.get('/:id', async (req, resp) => {
     let id = req.params.id;
@@ -28,7 +36,11 @@ router.get('/:id', async (req, resp) => {
 })
 
 
+// @ts-ignore
+///TODO leaving this blank for now without auth
 router.post('/', async (req, resp) => {
+    // @ts-ignore
+    console.log(req.user);
 
     bcrypt.hash(req.body.password, 10, function (err, hash) {
         let role = req.body.role;
@@ -55,48 +67,64 @@ router.post('/', async (req, resp) => {
                 throw err
                 return resp.status(400).json({error: "Server side issue (POST)"})
             }
+            // @ts-ignore
             return resp.status(201).json(body);
         })
     })
 });
 
 
-router.patch('/:id', async (req, res) => {
-    const id = req.params.id;
-    const updates = req.body;
+// @ts-ignore
+router.patch('/:id',isLoggedIn, async (req, res) => {
+    // @ts-ignore
+    if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
+        const id = req.params.id;
+        const updates = req.body;
+        console.log(updates)
 
-    if(req.body.password !== undefined){
-        bcrypt.hash(req.body.password, 10, function (err, hash){
-            if (err){
-                throw err
-            }
-            updates.password = hash;
-            const updatesString = Object.entries(updates)
-                .map(([key, value]) => `${key}='${value}'`)
-                .join(', ');
-
-
-            pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
-                if (error) {
-                    res.status(500).json({error});
+        if(req.body.password !== undefined) {
+            bcrypt.hash(req.body.password, 10, function (err, hash) {
+                if (err) {
+                    throw err
                 }
-                res.status(200).json(results);
+                updates.password = hash;
+
             });
+        }
+        const updatesString = Object.entries(updates)
+            .map(([key, value]) => `${key}='${value}'`)
+            .join(', ');
+
+
+        pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
+            if (error) {
+                res.status(500).json({error});
+            }
+            res.status(200).json(results);
+
         });
     }
+
+
 });
 
 
-router.delete('/:id', async (req, resp) => {
-    let user_id = req.params.id;
-    pool.query(`DELETE
+// @ts-ignore
+router.delete('/:id',isLoggedIn, async (req, resp) => {
+
+    // @ts-ignore
+    if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
+        let user_id = req.params.id;
+        pool.query(`DELETE
                 FROM users
                 WHERE user_id = ${user_id}`, (err: any, result: { rows: any; }) => {
-        if (err) {
-            return resp.status(400).json({error: "Issue on the server side (DELETE)"})
-        }
-        return resp.status(200).json("COMPLETE");
-    })
+            if (err) {
+                return resp.status(400).json({error: "Issue on the server side (DELETE)"})
+            }
+            return resp.status(200).json;
+        })
+    }
+
 })
 
 
