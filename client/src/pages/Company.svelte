@@ -2,7 +2,7 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {addCompany, loadCompanies, removeCompany,editCompany} from "../scripts/companyScript";
+    import {addCompany, loadCompanies, removeCompany, editCompany} from "../scripts/companyScript";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
 
@@ -24,19 +24,39 @@
         data = company;
     }
     const updateCompany = async (id) => {
-        let dataToUpdate = {
-            company_id: data.company_id,
-            company_name: data.company_name
+
+        if (isValidData(data)) {
+            let dataToUpdate = {
+                company_id: data.company_id,
+                company_name: data.company_name
+            }
+
+            await editCompany(id, dataToUpdate)
+            showEditPopup = false;
+            await loadCompanies();
         }
-        await editCompany(id, dataToUpdate)
-        showEditPopup = false;
-        await loadCompanies();
     }
 
     const deleteCompany = async () => {
         await removeCompany(selectedCompanyId)
         showDeletePopup = false;
         await loadCompanies();
+    }
+
+
+    function isValidData(data) {
+
+        if (data.company_name === undefined || null || "") {
+            alert("Company name cannot be empty, null or undefined")
+            return false;
+        }
+
+        if (data.company_name.length < 3) {
+            alert("Company name is too short")
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -129,7 +149,9 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showEditPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-primary" on:click={() => updateCompany(data.company_id)}>Save changes</button>
+                <button type="button" class="btn btn-primary" on:click={() => updateCompany(data.company_id)}>Save
+                    changes
+                </button>
             </div>
         </form>
     </Modal>
