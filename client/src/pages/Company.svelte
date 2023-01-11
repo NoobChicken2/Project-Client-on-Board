@@ -2,7 +2,7 @@
     import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {addCompany, loadCompanies, removeCompany, editCompany} from "../scripts/companyScript";
+    import {addCompany, loadCompanies, removeCompany, editCompany, isValidCompany} from "../scripts/companyScript";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
 
@@ -25,7 +25,7 @@
     }
     const updateCompany = async (id) => {
 
-        if (isValidData(data.company_name)) {
+        if (isValidCompany(data.company_name)) {
             let dataToUpdate = {
                 company_id: data.company_id,
                 company_name: data.company_name
@@ -44,23 +44,8 @@
     }
 
 
-    function isValidData(name) {
-
-        if (name === undefined || null || "") {
-            alert("Company name cannot be empty, null or undefined")
-            return false;
-        }
-
-        if (name.length < 3) {
-            alert("Company name is too short")
-            return false;
-        }
-
-        return true;
-    }
-
     const addNewCompany = async (name) => {
-        if (isValidData(name)) {
+        if (isValidCompany(name)) {
             newCompanyName = name;
             await addCompany(name)
             showAddPopup = false;

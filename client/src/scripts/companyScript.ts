@@ -41,3 +41,19 @@ export async function addCompany(data) {
         .then(data => console.log(data))
         .catch(error => console.error(error));
 }
+
+
+export function isValidCompany(name) {
+
+    if (name === undefined || null || "" || name.length === 0) {
+        alert("Company name cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (name.length < 3) {
+        alert("Company name is too short")
+        return false;
+    }
+
+    return true;
+}
