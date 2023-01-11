@@ -96,39 +96,23 @@ export async function addCustomer(data) {
         .catch(error => console.error(error));
 }
 
+function validateField(field, fieldName) {
+    if (field === undefined || field === null || field === "" || field.length === 0) {
+        alert(`${fieldName} cannot be empty, null or undefined`);
+        return false;
+    }
+    return true;
+}
+
 export function isValidCustomer(customer) {
 
-    if (customer.username === undefined || null || "" || customer.username.length == 0) {
-        alert("Username cannot be empty, null or undefined")
-        return false;
-    }
-
-    if (customer.password === undefined || null || "" || customer.password.length == 0) {
-        alert("Password cannot be empty, null or undefined")
-        return false;
-    }
-
-    if (customer.repeat_password === undefined || null || "" || customer.repeat_password.length == 0) {
-        alert("Repeat password cannot be empty, null or undefined")
-        return false;
-    }
-    if (customer.first_name === undefined || null || "" || customer.first_name.length == 0) {
-        alert("First name cannot be empty, null or undefined")
-        return false;
-    }
-
-    if (customer.last_name === undefined || null || "" || customer.last_name.length == 0) {
-        alert("Last name cannot be empty, null or undefined")
-        return false;
-    }
-
-    if (customer.email === undefined || null || "" || customer.email.length == 0) {
-        alert("Email cannot be empty, null or undefined")
-        return false;
-    }
-
-    if (customer.phone_number === undefined || null || "" || customer.phone_number.length == 0) {
-        alert("Phone number cannot be empty, null or undefined")
+    if (!validateField(customer.username, "Username") ||
+        !validateField(customer.password, "Password") ||
+        !validateField(customer.repeat_password, "Repeat password") ||
+        !validateField(customer.first_name, "First name") ||
+        !validateField(customer.last_name, "Last name") ||
+        !validateField(customer.email, "Email") ||
+        !validateField(customer.phone_number, "Phone number")) {
         return false;
     }
 
