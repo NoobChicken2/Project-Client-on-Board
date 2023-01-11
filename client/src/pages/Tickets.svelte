@@ -11,7 +11,6 @@
         var popoverList = popoverTriggerList.map(function(element){
             return new bootstrap.Popover(element);
         });
-        console.log("Test 1")
     });
     document.addEventListener("DOMContentLoaded", function(){
 
@@ -23,14 +22,12 @@
 <NavigationBar/>
 
 <body>
-
     <div class="p-5 my-4 bg-light rounded-3 container">
 
         <!-- Page Header -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Tickets List</a>
         </nav>
-
         <!-- Table of tickets -->
         <table style="text-align: left" class="table table-hover; table-striped" id="table__tickets">
             <thead class= "table-dark">
@@ -62,14 +59,31 @@
             {/each}
             </tbody>
         </table>
+
     </div>
 </body>
 
 <style>
+
+    * {
+
+        background: url("../lib/svg 1.png") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+
     main{
+
         top: 50px;
         left: 150px;
         position: absolute;
+    }
+    @media screen {
+        body {
+           min-height: 1200px;
+        }
     }
 
     /*.popover{*/
