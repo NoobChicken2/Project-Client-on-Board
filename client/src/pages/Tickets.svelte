@@ -17,7 +17,7 @@
 
 </script>
 
-<NavigationBar/>
+<!--<NavigationBar/>-->
 
 <body>
     <div class="p-5 my-4 bg-light rounded-3 container">
