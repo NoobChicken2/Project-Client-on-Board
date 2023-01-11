@@ -137,5 +137,5 @@ export function validateConverterUpdate(data) {
         }
     }
 
-
+    return true;
 }
