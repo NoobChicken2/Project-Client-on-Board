@@ -1,6 +1,12 @@
 <script lang="ts">
     import {onMount} from "svelte";
-    import {loadConverters, addConverter, removeConverter, editConverter} from "../scripts/converterScript";
+    import {
+        loadConverters,
+        addConverter,
+        removeConverter,
+        editConverter,
+        isValidConverter
+    } from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {apiData} from "../stores/store.ts";
@@ -65,17 +71,20 @@
     }
 
     function handleAdd() {
-        error = undefined;
-        message = undefined;
-        addConverter(ownerId, installerId, expected_throughput).then((response) => {
-            if (response.error !== undefined) {
-                error = response.error
-            } else {
-                message = "Converter added!"
-                showAddPopup = false;
-                loadConverters()
-            }
-        })
+        if (isValidConverter(ownerId,installerId,expected_throughput)) {
+            error = undefined;
+            message = undefined;
+
+            addConverter(ownerId, installerId, expected_throughput).then((response) => {
+                if (response.error !== undefined) {
+                    error = response.error
+                } else {
+                    message = "Converter added!"
+                    showAddPopup = false;
+                    loadConverters()
+                }
+            })
+        }
     }
 
 
