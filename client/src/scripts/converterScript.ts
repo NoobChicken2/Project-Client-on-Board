@@ -51,52 +51,24 @@ export async function removeConverter(converterId) {
     return resp.json;
 }
 
+function validateNumberField(field, fieldName) {
+    if (field === undefined || field === null || field === "" || isNaN(field)) {
+        alert(`${fieldName} cannot be empty, null, undefined or not a number`);
+        return false;
+    }
+    if (field <= 0) {
+        alert(`${fieldName} must be a positive number`);
+        return false;
+    }
+    return true;
+}
 
 export function isValidConverter(ownerId, installerId, expectedThroughput) {
-    if (ownerId === undefined || null || "" || ownerId.length == 0) {
-        alert("Owner ID cannot be empty, null or undefined")
+    if (!validateNumberField(ownerId, "Owner ID") ||
+        !validateNumberField(installerId, "Installer ID") ||
+        !validateNumberField(expectedThroughput, "Expected throughput")) {
         return false;
     }
-
-    if (installerId === undefined || null || "" || installerId.length == 0) {
-        alert("Installer ID cannot be empty, null or undefined")
-        return false;
-    }
-
-    if (expectedThroughput === undefined || null || "" || expectedThroughput.length == 0) {
-        alert("Expected throughput cannot be empty, null or undefined")
-        return false;
-    }
-
-    if (isNaN(ownerId)) {
-        alert("Owner ID must be a number")
-        return false;
-    }
-
-    if (isNaN(installerId)) {
-        alert("Owner ID must be a number")
-        return false;
-    }
-
-    if (isNaN(expectedThroughput)) {
-        alert("Expected throughput must be a number")
-        return false;
-    }
-
-    if (ownerId <= 0) {
-        alert("Owner ID must be a positive integer")
-        return false;
-    }
-    if (installerId <= 0) {
-        alert("Installer ID must be a positive integer")
-        return false;
-    }
-
-    if (expectedThroughput < 1) {
-        alert("Expected throughput must be greater than zero")
-        return false;
-    }
-
     return true;
 }
 
