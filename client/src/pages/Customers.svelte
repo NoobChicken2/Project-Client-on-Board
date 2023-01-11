@@ -8,7 +8,7 @@
         isValidCustomer,
         loadCustomers,
         patchCustomer,
-        removeCustomer
+        removeCustomer, validateCustomerUpdate
     } from "../scripts/customerScript.ts";
 
     const myInput = document.getElementById('myInput');
@@ -30,11 +30,11 @@
     }
 
     const handleEdit = async () => {
-        console.log(customerId)
-        console.log(body)
-        await patchCustomer(customerId, body);
-        showEditPopup = false;
-        await loadCustomers();
+        if (validateCustomerUpdate(body)) {
+            await patchCustomer(customerId, body);
+            showEditPopup = false;
+            await loadCustomers();
+        }
     }
 
     function getValueById(id: string): string {
@@ -52,9 +52,9 @@
         }
 
         if (isValidCustomer(data)) {
-                await addCustomer(data)
-                showAddPopup = false;
-                await loadCustomers();
+            await addCustomer(data)
+            showAddPopup = false;
+            await loadCustomers();
         }
     }
 
@@ -98,11 +98,11 @@
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input id="password" type="text" class="form-control" required>
+                    <input id="password" type="password" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Repeat Password</label>
-                    <input id="repeat_password" type="text" class="form-control" required>
+                    <input id="repeat_password" type="password" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>First Name</label>
@@ -220,18 +220,7 @@
                 </div>
                 <div class="modal-body col-md">
                     <form>
-                        <div class="row mb-3">
-                            <label for="modal-role" class="col-sm-3 col-form-label text-start">Role:</label>
-                            <div class="col-sm-9">
-                                <select class="form-select" id="modal-role" aria-label="Default select example">
-                                    <option selected>Select a role</option>
-                                    <option value="1">Customer</option>
-                                    <option value="2">Company</option>
-                                    <option value="3">Global Admin</option>
-                                </select>
-                            </div>
-                            <div class="invalid-feedback">Please choose a role</div>
-                        </div>
+
                         <div class="row mb-3">
                             <label for="modal-username" class="col-sm-3 col-form-label text-start">Username:</label>
                             <div class="col-sm-9">

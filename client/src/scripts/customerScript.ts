@@ -14,7 +14,6 @@ export async function loadCustomers() {
 
 export async function logIn(username, password) {
     try {
-
         let body = {
             username: username,
             password: password
@@ -47,7 +46,6 @@ export async function patchCustomer(id, updateBody) {
     } catch (e) {
         throw e
     }
-
 }
 
 
@@ -126,6 +124,13 @@ export function isValidCustomer(customer) {
         alert("Password must be at least 8 characters")
         return false;
     }
+
+    if (customer.password !== customer.repeat_password) {
+        alert("Passwords do not match")
+        return false;
+    }
+
+
     if (!validatePhoneNumber(customer.phone_number)) {
         alert("Phone number is not valid")
         return false;
@@ -136,6 +141,51 @@ export function isValidCustomer(customer) {
         return false;
     }
 
+    return true;
+}
+
+export function validateCustomerUpdate(updates) {
+    if (updates.username !== undefined) {
+        if (updates.username.length < 3) {
+            alert("Username is too short")
+            return false;
+        }
+    }
+
+    if (updates.password !== undefined) {
+        if (updates.password.length < 3) {
+            alert("Username is too short")
+            return false;
+        }
+    }
+
+    if (updates.first_name !== undefined) {
+        if (updates.first_name.length == 0) {
+            alert("First name cannot be empty, null or undefined")
+            return false;
+        }
+    }
+
+    if (updates.last_name !== undefined) {
+        if (updates.last_name.length == 0) {
+            alert("First name cannot be empty, null or undefined")
+            return false;
+        }
+    }
+
+    if (updates.email !== undefined) {
+        if (!validateEmail(updates.email)) {
+            alert("Email is invalid");
+            return false;
+        }
+    }
+
+    if (updates.phone_number !== undefined) {
+        if (!validatePhoneNumber(updates.phone_number)) {
+            alert("Phone number is invalid");
+            return false;
+        }
+    }
     return true;
 }
 
