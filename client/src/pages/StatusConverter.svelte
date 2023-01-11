@@ -5,7 +5,7 @@
         addConverter,
         removeConverter,
         editConverter,
-        isValidConverter
+        isValidConverter, validateConverterUpdate
     } from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
@@ -54,9 +54,11 @@
 
         console.log(dataToUpdate)
         console.log(selectedId)
-        await editConverter(dataToUpdate, selectedId);
-        showEditPopup = false;
-        await loadConverters();
+        if (validateConverterUpdate(dataToUpdate)) {
+            await editConverter(dataToUpdate, selectedId);
+            showEditPopup = false;
+            await loadConverters();
+        }
     }
 
     function deleteConverter(converterId: number): void {
@@ -71,7 +73,7 @@
     }
 
     function handleAdd() {
-        if (isValidConverter(ownerId,installerId,expected_throughput)) {
+        if (isValidConverter(ownerId, installerId, expected_throughput)) {
             error = undefined;
             message = undefined;
 

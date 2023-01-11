@@ -93,10 +93,49 @@ export function isValidConverter(ownerId, installerId, expectedThroughput) {
     }
 
     if (expectedThroughput < 1) {
-        alert("Expected throughput must be greater than one")
+        alert("Expected throughput must be greater than zero")
         return false;
     }
 
-
     return true;
+}
+
+export function validateConverterUpdate(data) {
+    if (data.owner_id !== undefined) {
+
+        if (isNaN(data.owner_id)) {
+            alert("Owner ID must be a number")
+            return false;
+        }
+
+        if (data.owner_id <= 0) {
+            alert("Owner ID must be a positive integer")
+            return false;
+        }
+    }
+    if (data.installer_id !== undefined) {
+
+        if (isNaN(data.installer_id)) {
+            alert("Installer ID must be a number")
+            return false;
+        }
+
+        if (data.installer_id <= 0) {
+            alert("Installer ID must be a positive integer")
+            return false;
+        }
+    }
+    if (data.expected_throughput !== undefined) {
+        if (isNaN(data.expected_throughput)) {
+            alert("Owner ID must be a number")
+            return false;
+        }
+
+        if (data.expected_throughput <= 0) {
+            alert("Expected throughput must be a positive integer")
+            return false;
+        }
+    }
+
+
 }
