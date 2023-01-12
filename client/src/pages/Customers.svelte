@@ -4,6 +4,8 @@
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
     import {addCustomer, loadCustomers, patchCustomer, removeCustomer} from "../scripts/customerScript.ts";
+    import router from "page";
+    import {getConverterByOwnerId} from "../scripts/converterScript";
 
     const myInput = document.getElementById('myInput');
     let showDeletePopup = false;
@@ -18,6 +20,10 @@
 
     onMount(loadCustomers);
 
+    function showConverters(id){
+        router('/converters/'+id)
+        getConverterByOwnerId(id)
+    }
 
 
     function editCustomer (Id){
@@ -145,7 +151,7 @@
             <th style="width: 200px" scope="col">Firstname</th>
             <th style="width: 200px" scope="col">Lastname</th>
             <th style="width: 400px" scope="col">Email</th>
-            <th style="width: 50px" scope="col"></th>
+
         </tr>
         </thead>
         <tbody>
@@ -165,6 +171,7 @@
                 </td>
                 <button type="button" class="bi bi-pencil-square btn-outline-dark" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop" on:click={ () => editCustomer(Customer.user_id)}></button>
+                <button on:click={() => showConverters(Customer.user_id)}>Converters</button>
             </tr>
         {/each}
 

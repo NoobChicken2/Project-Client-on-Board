@@ -21,9 +21,6 @@ app.use('/customers',customers);
 app.use('/token', token);
 app.use('/customers',customers);
 app.use('/companies', companies);
-
-
-
 app.get('/converters', (req, res) => {
 });
 

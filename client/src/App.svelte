@@ -6,8 +6,10 @@
   import register from './pages/Customers.svelte'
   import ticket from './pages/Tickets.svelte'
   import converter from './pages/StatusConverter.svelte'
-
+  import customerConverters from './pages/customerConverters.svelte'
+    let currentRoute;
   let page;
+  let params;
 
   router('/companies', (ctx) =>{
     page = company;
@@ -23,6 +25,11 @@
   })
   router('/converters', (ctx) => {
       page = converter;
+  })
+  router('/converters/:id', (ctx) => {
+      page = customerConverters;
+      currentRoute = ctx.pathname;
+      params = ctx.params;
   })
 
   router.start()
