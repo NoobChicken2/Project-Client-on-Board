@@ -3,6 +3,7 @@
     import {logIn} from "../scripts/customerScript.ts";
     import {token,role} from "../stores/store.ts";
     import {handleToken} from "../scripts/logInScript.ts";
+    import router from "page";
 
     let username = '';
     let password = '';
@@ -14,19 +15,15 @@
         message = undefined
 
         logIn(username,password).then((response) => {
-            console.log(username)
-            console.log(password)
             if (response.error !== undefined){
                 error = response.error;
             } else {
-                console.log(response)
+                console.log(response);
                 message = "Logged in";
-                handleToken(response)
-                console.log(role)
-                console.log(token)
+                handleToken(response);
+                router("/");
             }
         });
-
     }
 
 
@@ -83,7 +80,6 @@
     }
     .login form{
         font-size: 20px;
-
     }
     .login form .form-group{
         margin-bottom: 12px;

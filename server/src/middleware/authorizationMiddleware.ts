@@ -49,8 +49,6 @@ export function isLoggedIn (req: { get: (arg0: string) => any; token: string; us
     token = token.split(' ');
     console.log(token[1])
 
-
-
     // @ts-ignore
     jwt.verify(token[1], secret, {algorithm: 'HS256'}, (err) => {
         if (err) {

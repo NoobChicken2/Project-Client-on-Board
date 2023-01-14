@@ -1,11 +1,12 @@
 <script lang="ts">
 
-  import router from 'page'
+  import router from 'page';
   import company from './pages/Company.svelte';
-  import login from './pages/Login.svelte'
-  import register from './pages/Customers.svelte'
-  import ticket from './pages/Tickets.svelte'
-  import converter from './pages/StatusConverter.svelte'
+  import login from './pages/Login.svelte';
+  import register from './pages/Customers.svelte';
+  import ticket from './pages/Tickets.svelte';
+  import converter from './pages/StatusConverter.svelte';
+  import main from './pages/Main.svelte';
 
   let page;
 
@@ -23,6 +24,9 @@
   })
   router('/converters', (ctx) => {
       page = converter;
+  })
+  router('/', (ctx) => {
+      page = main;
   })
 
   router.start()

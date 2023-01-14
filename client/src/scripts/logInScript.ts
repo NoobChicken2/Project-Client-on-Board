@@ -3,6 +3,7 @@ export function handleToken(response){
     localStorage.setItem('token',response.token);
     let payload = jwt_decode(response.token)
     // @ts-ignore
-    localStorage.setItem('role',payload.role);
-
+    localStorage.setItem('role', payload.role);
+    // @ts-ignore
+    localStorage.setItem('username', payload.username);
 }
