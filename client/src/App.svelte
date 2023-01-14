@@ -6,6 +6,7 @@
   import register from './pages/Customers.svelte';
   import ticket from './pages/Tickets.svelte';
   import converter from './pages/StatusConverter.svelte';
+  import NavigationBar from "./components/NavigationBar.svelte";
   import main from './pages/Main.svelte';
 
   let page;
@@ -34,7 +35,8 @@
 
 
 <main>
-    <svelte:component this={page} />
+    <NavigationBar pageBody = {page}/>
+<!--    <svelte:component this={page} />-->
 </main>
 
 <style>

@@ -6,8 +6,7 @@ import {isLoggedIn} from "../middleware/authorizationMiddleware";
 const router = express.Router();
 
 // @ts-ignore
-router.get('/', (req, res) => {
-
+router.get('/',isLoggedIn, (req, res) => {
     // @ts-ignore
     console.log(req.user)
 

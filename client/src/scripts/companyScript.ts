@@ -3,8 +3,16 @@ import {apiData} from "../stores/store";
 let companies;
 
 export async function loadCompanies() {
-    const resp = await fetch('http://localhost:3000/companies');
-    companies = await resp.json();
+    const resp = await fetch('http://localhost:3000/companies',{
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }
+    });
+
+    companies = await fetch('http://localhost:3000/companies').then(res => res.json())
+        .catch(err => alert(err));
 
     apiData.update((oldValue) => {
         return companies;
@@ -13,7 +21,9 @@ export async function loadCompanies() {
 export async function editCompany(id, data){
     return await fetch(`http://localhost:3000/companies/${id}`, {
         method: "PATCH",
-        headers: {'Content-Type': 'application/json',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
         },
         body : JSON.stringify(data)
     }).then(res => res.json())
@@ -37,4 +47,20 @@ export async function addCompany(data) {
     }).then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error(error));
+}
+
+
+export function isValidCompany(name) {
+
+    if (name === undefined || null || "" || name.length === 0) {
+        alert("Company name cannot be empty, null or undefined")
+        return false;
+    }
+
+    if (name.length < 3) {
+        alert("Company name is too short")
+        return false;
+    }
+
+    return true;
 }
