@@ -19,7 +19,6 @@ app.use('/companyAdmins', companyAdmin);
 app.use('/converters',converter);
 app.use('/customers',customers);
 app.use('/token', token);
-app.use('/customers',customers);
 app.use('/companies', companies);
 app.get('/converters', () => {
 });

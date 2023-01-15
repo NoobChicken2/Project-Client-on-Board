@@ -8,6 +8,8 @@
   import converter from './pages/StatusConverter.svelte'
   import customerConverters from './pages/customerConverters.svelte'
     let currentRoute;
+  import NavigationBar from "./components/NavigationBar.svelte";
+
   let page;
   let params;
 
@@ -37,8 +39,11 @@
 
 
 <main>
-    <svelte:component this={page} {params}/>
+<!--    <svelte:component this={page}/>-->
+    <NavigationBar pageBody = {page}/>
+<!--    <svelte:component this={page} />-->
 </main>
 
 <style>
+
 </style>

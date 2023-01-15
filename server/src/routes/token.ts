@@ -10,10 +10,10 @@ router.post("/", tokenBodyDetails, compareLoginDetails, (req, res) => {
         username: req.body.username,
         date: new Date(),
         // @ts-ignore
-        roles: req.role
+        role: req.role
     };
 
-    jwt.sign(payload, secret, {algorithm: 'HS256', expiresIn: '15m'}, (err, result) => {
+    jwt.sign(payload, secret, {algorithm: 'HS256'}, (err, result) => {
         if (err) {
             return res.status(500).json({error: 'Something went wrong with the token'})
         }

@@ -5,7 +5,7 @@
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    let url = `http://localhost:3000/converters/owner/${params.id}`
+    let url = `http://localhost:3000/converters/owner/7`
      async function getConverterByOwnerId(){
          const response = await fetch(url,{
              method: 'GET',
