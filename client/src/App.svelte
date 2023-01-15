@@ -26,7 +26,7 @@
   router('/converters', (ctx) => {
       page = converter;
   })
-  router('/converters/:id', (ctx) => {
+  router('/customers/:id/converters', (ctx) => {
       page = customerConverters;
       currentRoute = ctx.pathname;
       params = ctx.params;
@@ -37,7 +37,7 @@
 
 
 <main>
-    <svelte:component this={page} />
+    <svelte:component this={page} {params}/>
 </main>
 
 <style>

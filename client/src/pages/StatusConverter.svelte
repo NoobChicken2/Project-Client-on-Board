@@ -1,7 +1,6 @@
 <script>
     import {onMount} from "svelte";
     import {loadConverters,addConverter,removeConverter} from "../scripts/converterScript";
-    import ConverterList from "../Components/ConverterList.svelte";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";

@@ -35,11 +35,3 @@ export async function removeConverter(converterId){
     });
     return resp.json;
 }
-export async function getConverterByOwnerId(url) {
-    const resp = await fetch(url);
-    let converters =  await resp.json();
-
-    apiData.update((oldValue) => {
-        return converters;
-    });
-}
