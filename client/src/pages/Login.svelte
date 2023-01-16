@@ -1,7 +1,7 @@
 <script>
 
     import {logIn} from "../scripts/customerScript.ts";
-    import {token,role} from "../stores/store.ts";
+    import {token, role} from "../stores/store.ts";
     import {handleToken} from "../scripts/logInScript.ts";
 
     let username = '';
@@ -24,6 +24,7 @@
                 handleToken(response)
                 console.log(role)
                 console.log(token)
+
             }
         });
 

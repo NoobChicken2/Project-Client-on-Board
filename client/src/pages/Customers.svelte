@@ -160,7 +160,7 @@
                 </button>
             </div>
             <!-- Table of customers -->
-            <table class="table table-hover; table table-striped">
+            <table class="table table-hover ; table table-striped">
                 <thead class="table-dark">
                 <tr>
                     <th scope="col">#id</th>
