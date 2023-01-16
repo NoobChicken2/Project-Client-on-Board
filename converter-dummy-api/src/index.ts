@@ -13,15 +13,19 @@ app.listen(port, () => {
 
 let statusMessages = ["Ok", "Off", "CommunicationFault", "Warning", "Alarm", "CommunicationMonitoringFault"];
 
+updateConverterStatuses();
 
 cron.schedule('*/5 * * * *', () => {
     console.log('running a task every 5 minutes');
+    updateConverterStatuses()
+});
 
+function updateConverterStatuses() {
     for (let i = 0; i < converters.length; i++) {
         let randomIndex = Math.floor(Math.random() * 5);
         converters[i].device.status = statusMessages[randomIndex];
     }
-});
+}
 
 
 app.get(`/v1/devices/:id/status`, async (req: any, res: any) => {
