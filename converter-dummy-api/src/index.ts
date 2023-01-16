@@ -15,7 +15,7 @@ let statusMessages = ["Ok", "Off", "CommunicationFault", "Warning", "Alarm", "Co
 
 
 cron.schedule('*/5 * * * *', () => {
-    console.log('running a task every 5 seconds');
+    console.log('running a task every 5 minutes');
 
     for (let i = 0; i < converters.length; i++) {
         let randomIndex = Math.floor(Math.random() * 5);
