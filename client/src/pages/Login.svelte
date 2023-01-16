@@ -22,7 +22,6 @@
                 console.log(response)
                 message = "Logged in";
                 handleToken(response)
-                console.log(role)
                 console.log(token)
             }
         });
