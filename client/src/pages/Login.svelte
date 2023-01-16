@@ -1,6 +1,8 @@
 <script>
 
     import {logIn} from "../scripts/customerScript.ts";
+    import {token,role} from "../stores/store.ts";
+    import {handleToken} from "../scripts/logInScript.ts";
 
     let username = '';
     let password = '';
@@ -19,6 +21,8 @@
             } else {
                 console.log(response)
                 message = "Logged in";
+                handleToken(response)
+                console.log(token)
             }
         });
 
@@ -48,15 +52,16 @@
                 </div>
             </div>
             <input  class="btn btn-primary" value="Log In" on:click={clickHandler}>
+            {#if error}
+                <p>{error}</p>
+            {/if}
+
+            {#if message}
+                <p> {message} </p>
+            {/if}
         </form>
     </div>
-    {#if error}
-        <p>{error}</p>
-    {/if}
 
-    {#if message}
-        <p> {message} </p>
-    {/if}
 </body>
 
 <style>
