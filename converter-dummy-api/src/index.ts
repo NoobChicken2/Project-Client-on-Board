@@ -1,39 +1,50 @@
+import converters from "./dummyConverters";
+
 let express = require('express');
 const app = express();
 const port = 3060;
+
+const cron = require("node-cron")
+
 
 app.listen(port, () => {
     console.log(`Converter API listening on port ${port}`)
 });
 
-let converter: { plant: { timezone: string; name: string; plantId: string; description: string; } | { plantId: string; name: string; description: string; timezone: string; }; device: { product: string; operationStatus: string; productId: number; timezone: string; deactivatedAt: string; type: string; isActive: boolean; deviceId: string; generatorPower: number; serial: string; vendor: string; name: string; isSmartConnectedReady: boolean; status: string; } | { deviceId: string; name: string; timezone: string; type: string; product: string; productId: number; serial: string; vendor: string; generatorPower: number; isActive: boolean; deactivatedAt: string; status: string; operationStatus: string; isSmartConnectedReady: boolean; }; };
+let statusMessages = ["Ok", "Off", "CommunicationFault", "Warning", "Alarm", "CommunicationMonitoringFault"];
 
-converter = {
-    "plant": {
-        "plantId": "25056",
-        "name": "Niestetal Plant",
-        "description": "One of the biggest solar plants.",
-        "timezone": "Europe/Berlin"
-    },
-    "device": {
-        "deviceId": "302453",
-        "name": "SB 3000TL-30",
-        "timezone": "Europe/Berlin",
-        "type": "Solar Inverters",
-        "product": "SB4.0-1AV-41",
-        "productId": 9403,
-        "serial": "2005890720",
-        "vendor": "SMA Solar Technology AG",
-        "generatorPower": 4000,
-        "isActive": false,
-        "deactivatedAt": "2019-04-07T12:30:02",
-        "status": "Ok",
-        "operationStatus": "Auto",
-        "isSmartConnectedReady": true
+
+cron.schedule('*/5 * * * *', () => {
+    console.log('running a task every 5 seconds');
+
+    for (let i = 0; i < converters.length; i++) {
+        let randomIndex = Math.floor(Math.random() * 5);
+        converters[i].device.status = statusMessages[randomIndex];
     }
-};
-
-app.get(`/v1/devices/:id/status`, (req: any, res: { json: (arg0: { plant: { timezone: string; name: string; plantId: string; description: string }; device: { product: string; operationStatus: string; productId: number; timezone: string; deactivatedAt: string; type: string; isActive: boolean; deviceId: string; generatorPower: number; serial: string; vendor: string; name: string; isSmartConnectedReady: boolean; status: string } }) => void; }, next: any) => {
-    res.json(converter);
 });
+
+
+app.get(`/v1/devices/:id/status`, async (req: any, res: any) => {
+    let converter;
+
+    for (let i = 0; i < converters.length; i++) {
+        if (converters[i].device.deviceId === req.params.id) {
+            converter = converters[i];
+            break;
+        }
+    }
+
+    if (converter != undefined) {
+        if (statusMessages.indexOf(converter.device.status) === -1) {
+            return res.status(200).json("Unknown");
+        } else {
+            return res.status(200).json(converter);
+        }
+    } else {
+        return res.status(400).json({error: "Server side issue(GET)"});
+    }
+});
+
+
+
 
