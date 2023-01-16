@@ -5,7 +5,6 @@ export function handleToken(response){
     // @ts-ignore
     localStorage.setItem('role',payload.role);
     // @ts-ignore
-    console.log(payload.user_id);
-    console.log(payload)
+   localStorage.setItem('id',payload.user_id);
 
 }
