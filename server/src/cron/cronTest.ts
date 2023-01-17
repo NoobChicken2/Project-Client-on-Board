@@ -6,13 +6,17 @@ const express = require("express")
 
 export function runCronJob() {
     cron.schedule('*/5 * * * * *', async () => {
-        const result = await pool.query('SELECT api_deviceId FROM converter_details');
-
-        for (let i = 0; i < result.rows.length; i++) {
-            fetchConverterData(result.rows[i].api_deviceid);
-            console.log(result.rows[i].api_deviceid)
-        }
+       await fetchConverters();
     });
+}
+
+async function fetchConverters(){
+    const result = await pool.query('SELECT api_deviceId FROM converter_details');
+
+    for (let i = 0; i < result.rows.length; i++) {
+        fetchConverterData(result.rows[i].api_deviceid);
+        console.log(result.rows[i].api_deviceid)
+    }
 }
 
 
