@@ -7,6 +7,7 @@ import converter from'./routes/converters'
 import customers from "./routes/customers";
 import companies from "./routes/companies"
 import token from './routes/token';
+import {runCronJob} from "./cron/cronTest";
 
 const app = express();
 const port = 3000;
@@ -27,5 +28,7 @@ app.get('/converters', () => {
 app.listen(port, () => {
     console.log(`Backend API listening on port ${port}`)
 });
+
+runCronJob();
 
 
