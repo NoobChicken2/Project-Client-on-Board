@@ -7,9 +7,9 @@ import {validateUser, validateUserPatch} from "../middleware/dataValidationMiddl
 const router = express.Router();
 
 // Added encryption of password
-// @ts-ignore
-router.post('/',isLoggedIn,validateUser, async (req, resp) => {
-// @ts-ignore
+
+router.post('/',isLoggedIn,validateUser, async (req:any, resp:any) => {
+
     if (req.user.role === 'GlobalAdmin'){
     bcrypt.hash(req.body.password, 10, function (err, hash) {
         let companyId = Number(req.body.company_id);
@@ -55,14 +55,13 @@ router.post('/',isLoggedIn,validateUser, async (req, resp) => {
 
 });
 
-// read 1 admin (by id)
-// @ts-ignore
-router.get('/:userId',isLoggedIn, async (req, res) => {
+
+router.get('/:userId',isLoggedIn, async (req:any, res:any) => {
     let userId = Number(req.params.userId);
     if (isNaN(userId)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
-    // @ts-ignore
+
     if (req.user.role === 'GlobalAdmin') {
         pool.query(`SELECT *
                 FROM users
@@ -80,10 +79,8 @@ router.get('/:userId',isLoggedIn, async (req, res) => {
     }
 });
 
-// read all company admins (no params) or read all company admins that matches params
-// @ts-ignore
-router.get('/', isLoggedIn,async (req, res) => {
 
+router.get('/', isLoggedIn,async (req, res) => {
     let query = "SELECT * FROM users WHERE role ='CompanyAdmin'";
     pool.query(query, (error: any, results: { rows: any; }) => {
         if (error) {
@@ -94,24 +91,21 @@ router.get('/', isLoggedIn,async (req, res) => {
 
 });
 
-// update (patch) 1 company admin by user id
-// @ts-ignore
-router.patch('/:id',isLoggedIn,validateUserPatch, async (req, res) => {
+
+router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
     const id = Number(req.params.id);
     let updates = req.body;
     if (isNaN(id)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
-    // @ts-ignore
-    if (req.user.role === 'GlobalAdmin') {
 
+    if (req.user.role === 'GlobalAdmin') {
         if(req.body.password !== undefined) {
             bcrypt.hash(req.body.password, 10, function (err, hash) {
                 if (err) {
                     throw err
                 }
                 updates.password = hash;
-
             });
         }
         const updatesString = Object.entries(updates)
@@ -137,14 +131,12 @@ router.patch('/:id',isLoggedIn,validateUserPatch, async (req, res) => {
     }
 })
 
-// delete 1 company admin by id
-// @ts-ignore
-router.delete('/:id',isLoggedIn, async (req, res) => {
+router.delete('/:id',isLoggedIn, async (req:any, res:any) => {
     let user_id = Number(req.params.id);
     if (isNaN(user_id)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
-    // @ts-ignore
+
     if (req.user.role === 'GlobalAdmin') {
         pool.query(`DELETE
                 FROM users

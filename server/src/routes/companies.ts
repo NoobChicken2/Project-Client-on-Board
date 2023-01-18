@@ -4,11 +4,9 @@ import {isLoggedIn} from "../middleware/authorizationMiddleware";
 
 const router = express.Router();
 
-// @ts-ignore
-router.get('/',isLoggedIn, async (req, res) => {
-    // @ts-ignore
-    console.log(req.user.role)
-    // @ts-ignore
+
+router.get('/',isLoggedIn, async (req:any, res:any) => {
+
     if ( req.user.role === 'GlobalAdmin'){
         pool.query(`SELECT *
                 FROM companies`, (error: any, results: { rows: any }) => {
@@ -22,13 +20,13 @@ router.get('/',isLoggedIn, async (req, res) => {
     }
 
 });
-// @ts-ignore
-router.get('/:id',isLoggedIn, async (req, res) => {
+
+router.get('/:id',isLoggedIn, async (req:any, res:any) => {
     let id = Number(req.params.id);
     if (isNaN(id)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
-    // @ts-ignore
+
     if ( req.user.role === 'GlobalAdmin'){
         let id = req.params.id;
         pool.query(`SELECT *
@@ -47,9 +45,9 @@ router.get('/:id',isLoggedIn, async (req, res) => {
         res.status(401).json({error:"Unauthorized access"})
     }
 });
-// @ts-ignore
-router.post('/',isLoggedIn, async (req, res) => {
-    // @ts-ignore
+
+router.post('/',isLoggedIn, async (req:any, res:any) => {
+
     if ( req.user.role === 'GlobalAdmin') {
         let company_name = req.body.company_name;
         for (let property in req.body) {
@@ -78,9 +76,8 @@ router.post('/',isLoggedIn, async (req, res) => {
     }
 })
 
-// @ts-ignore
-router.patch('/:id',isLoggedIn, async (req, res) => {
-    // @ts-ignore
+
+router.patch('/:id',isLoggedIn, async (req:any, res:any) => {
     if ( req.user.role === 'GlobalAdmin'){
         const id = req.params.id;
         const updates = req.body;
@@ -109,15 +106,13 @@ router.patch('/:id',isLoggedIn, async (req, res) => {
         res.status(401).json({error:"Unauthorized access"})
     }
 });
-// @ts-ignore
-router.delete('/:id',isLoggedIn, async (req, resp) => {
-    let company_id = Number(req.params.id);
 
+router.delete('/:id',isLoggedIn, async (req:any, resp:any) => {
+    let company_id = Number(req.params.id);
     if (isNaN(company_id)) {
         return resp.status(400).json({error:"Bad ID format!"});
     }
 
-    // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         let company_id = req.params.id;
         pool.query(`DELETE

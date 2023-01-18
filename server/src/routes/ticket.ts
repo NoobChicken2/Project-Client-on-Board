@@ -20,13 +20,13 @@ router.get('/',isLoggedIn, async (req:any, res:any) => {
     
 });
 
-// @ts-ignore
-router.get('/:id',isLoggedIn, async (req, res) => {
+
+router.get('/:id',isLoggedIn, async (req:any, res:any) => {
     let id = Number(req.params.id);
     if (isNaN(id)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
-    // @ts-ignore
+
     if (req.user.role === 'GlobalAdmin' || req.user.role === 'CompanyAdmin'){
         pool.query(`SELECT *
                 FROM tickets
@@ -43,7 +43,7 @@ router.get('/:id',isLoggedIn, async (req, res) => {
 
 });
 
-// @ts-ignore
+
 router.post('/', isLoggedIn,async (req, res) => {
     let id = Number(req.body.log_id);
     if (!Number.isInteger(id)) {
@@ -70,13 +70,13 @@ router.post('/', isLoggedIn,async (req, res) => {
 
 });
 
-// @ts-ignore
-router.delete('/:id',isLoggedIn, async (req, res) => {
+
+router.delete('/:id',isLoggedIn, async (req:any, res:any) => {
     let id = Number(req.body.log_id);
     if (!Number.isInteger(id)) {
         return res.status(400).json({error:"Id must be an integer!"});
     }
-    // @ts-ignore
+
     if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
         pool.query(`DELETE
                 FROM tickets
