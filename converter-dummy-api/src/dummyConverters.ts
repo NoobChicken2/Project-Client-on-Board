@@ -1,4 +1,5 @@
 let converters = [{
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -44,6 +45,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -89,6 +91,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -134,6 +137,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -179,6 +183,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -224,6 +229,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -268,7 +274,7 @@ let converters = [{
                 true
 
         }
-}, {
+}, {"pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -314,6 +320,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -359,6 +366,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -404,6 +412,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -449,6 +458,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -494,6 +504,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -539,6 +550,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -584,6 +596,7 @@ let converters = [{
 
         }
 }];
+
 
 
 export default converters;
