@@ -35,18 +35,32 @@ function updateConverterStatuses() {
 
 
 function updateConverterThroughOutPuts() {
-
     for (let i = 0; i < converters.length; i++) {
-        converters[i].pvGeneration = 0;
-
-        for (let j = 1; j < 24; j++) {
-            let random = Math.floor(Math.random() * 10);
-            if (Math.sin(j)>0) {
-                converters[i].pvGeneration += Math.sin(j) * random;
-            }
-        }
+        converters[i].pvGeneration = simulateSolarPanelDailyThroughput();
         console.log(converters[i].pvGeneration);
     }
+}
+
+function simulateSolarPanelDailyThroughput(): number {
+    let throughputs = [];
+
+    for (let i = 0; i < 24; i++) {
+        let randomFactor = (Math.random() * 2)  ;
+
+        const minutes = i * 60;
+
+        const sine = Math.sin(minutes / 1440 * 2 * Math.PI);
+
+        const throughput = ((sine + 1) / 2) * randomFactor;
+
+        throughputs.push(throughput);
+    }
+
+    return addNumbers(throughputs);
+}
+
+function addNumbers(numbers: number[]): number {
+    return numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 }
 
 
@@ -83,7 +97,6 @@ app.get(`/v1/devices/:id/measurements/sets/EnergyAndPowerBattery/Day`, async (re
     }
 
     if (throughOutPut != undefined || isNaN(throughOutPut)) {
-
         return res.status(200).json(throughOutPut);
 
     } else {

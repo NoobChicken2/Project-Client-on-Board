@@ -31,5 +31,4 @@ app.listen(port, () => {
 });
 
 runUpdateStatusCronJob();
-
 runUpdateThroughputCronJob()
