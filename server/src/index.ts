@@ -20,15 +20,12 @@ app.use('/converters',converter);
 app.use('/customers',customers);
 app.use('/token', token);
 app.use('/companies', companies);
-
-
-
-app.get('/converters', (req, res) => {
+app.get('/converters', () => {
 });
 
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Backend API listening on port ${port}`)
 });
 
 

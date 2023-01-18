@@ -9,6 +9,7 @@
         patchCustomer,
         removeCustomer, validateCustomerUpdate
     } from "../scripts/customerScript.ts";
+    import router from "page";
 
     const myInput = document.getElementById('myInput');
     let showDeletePopup = false;
@@ -22,6 +23,9 @@
 
     onMount(loadCustomers);
 
+    function converterByOwnerId(id){
+        router('/customers/'+ id + '/converters')
+    }
 
     function editCustomer(Id) {
         customerId = Id;
@@ -183,6 +187,7 @@
                             <button class="bi bi-pencil-square ; btn btn-primary" type="button"
                                     on:click={  () => editCustomer(Customer.user_id)}></button>
                         </td>
+                        <button on:click|preventDefault={converterByOwnerId(Customer.user_id)}>Converters</button>
                     </tr>
                 {/each}
                 </tbody>
@@ -260,8 +265,7 @@
                         <div class="row mb-3">
                             <label for="modal-email" class="col-sm-3 col-form-label text-start">Phone number:</label>
                             <div class="col-sm-9">
-                                <input type="number" class="form-control" bind:value={body.phone_number}
-                                       id="modal-number"
+                                <input type="email" class="form-control" bind:value={body.phone_number} id="modal-number"
                                        placeholder="e.g.@example.com">
                             </div>
                             <div class="invalid-feedback">Please enter a phone number</div>
@@ -270,9 +274,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            on:click={ () => showEditPopup = false}>Close
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" on:click={ () => showEditPopup = false}>Close</button>
                     <button type="button" class="btn btn-primary" on:click={ () => handleEdit()}>Finish</button>
                 </div>
             </div>
@@ -281,7 +283,10 @@
 </div>
 </body>
 
-
 <style>
-
+    main {
+        top: 50px;
+        left: 150px;
+        position: absolute;
+    }
 </style>

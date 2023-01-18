@@ -1,19 +1,33 @@
-<script lang="ts">
+<script>
+    import jwt_decode from "jwt-decode";
+
+    export let params;
     import {onMount} from "svelte";
-    import {
-        loadConverters,
-        addConverter,
-        removeConverter,
-        editConverter,
-        isValidConverter, validateConverterUpdate
-    } from "../scripts/converterScript";
+    import {loadConverters, addConverter, removeConverter} from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
-    import {apiData} from "../stores/store.ts";
+
+    let token = atob(localStorage.getItem('token').split('.')[1]);
+    const decoded = JSON.parse(token);
+    let id = decoded.user_id;
+    console.log(id)
+    let url = `http://localhost:3000/converters/owner/${id}`
+
+
+    async function getConverterByOwnerId() {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const json = await response.json();
+        console.log(json)
+        return json;
+    }
 
     onMount(loadConverters)
-
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
@@ -24,75 +38,40 @@
 
     let error;
     let message;
-    let selectedId;
+    let deleteId;
 
-    let data = {
-        owner_id: "",
-        installer_id: "",
-        expected_throughput: ""
+    const editConverter = () => {
+
     }
 
-    function isEdit(converterId: number): void {
-        selectedId = converterId;
-        showEditPopup = true;
-    }
-
-    const updateConverter = async () => {
-        type Data = {
-            owner_id: string;
-            installer_id: string;
-            expected_throughput: string;
-        };
-
-        const fieldsToUpdate: Array<keyof Data> = ['owner_id', 'installer_id', 'expected_throughput'];
-        const dataToUpdate: Partial<Data> = {};
-
-        fieldsToUpdate.forEach((field) => {
-            if (data[field] && data[field] !== '') {
-                dataToUpdate[field] = data[field];
-            }
-        });
-
-        console.log(dataToUpdate)
-        console.log(selectedId)
-        if (validateConverterUpdate(dataToUpdate)) {
-            await editConverter(dataToUpdate, selectedId);
-            showEditPopup = false;
-            await loadConverters();
-        }
-    }
-
-    function deleteConverter(converterId: number): void {
-        selectedId = converterId;
+    function deleteConverter(converter_id) {
+        deleteId = converter_id;
         showDeletePopup = true;
     }
 
     const execute = async () => {
-        await removeConverter(selectedId);
+        await removeConverter(deleteId);
         showDeletePopup = false;
         await loadConverters();
     }
 
     function handleAdd() {
-        if (isValidConverter(ownerId, installerId, expected_throughput)) {
-            error = undefined;
-            message = undefined;
-
-            addConverter(ownerId, installerId, expected_throughput).then((response) => {
-                if (response.error !== undefined) {
-                    error = response.error
-                } else {
-                    message = "Converter added!"
-                    showAddPopup = false;
-                    loadConverters()
-                }
-            })
-        }
+        error = undefined;
+        message = undefined;
+        addConverter(ownerId, installerId, expected_throughput).then((response) => {
+            if (response.error !== undefined) {
+                error = response.error
+            } else {
+                message = "Converter added!"
+                showAddPopup = false;
+                loadConverters()
+            }
+        })
     }
 
 
 </script>
-
+<NavigationBar/>
 
 <body>
 
@@ -167,23 +146,27 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Owner ID</label>
-                    <input bind:value={data.owner_id} type="text" class="form-control" required>
+                    <label>Name</label>
+                    <input type="text" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>Installer ID</label>
-                    <input bind:value={data.installer_id} type="email" class="form-control" required>
+                    <label>###</label>
+                    <input type="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>Throughput</label>
-                    <input bind:value={data.expected_throughput} type="text" class="form-control" required/>
+                    <label>###</label>
+                    <input type="text" class="form-control" required/>
+                </div>
+                <div class="form-group">
+                    <label>###</label>
+                    <input type="text" class="form-control" required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showEditPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-primary" on:click={() => updateConverter()}>Save changes</button>
+                <button type="button" class="btn btn-primary" on:click={() => editConverter()}>Save changes</button>
             </div>
         </form>
     </Modal>
@@ -201,25 +184,26 @@
                 <th scope="col">Converter_id</th>
                 <th scope="col">Owner_id</th>
                 <th scope="col">Installer_id</th>
-                <th scope="col">Throughput</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
-            {#each $apiData as Converter}
-                <tr>
-                    <th scope="row">{Converter.converter_id}</th>
-                    <td>{Converter.owner_id}</td>
-                    <td>{Converter.installer_id}</td>
-                    <td>{Converter.expected_throughput}</td>
-                    <td>
-                        <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
-                                on:click={() => deleteConverter(Converter.converter_id)}></button>
-                        <button class="bi bi-pencil-square ; btn btn-primary" type="button"
-                                on:click={() =>isEdit(Converter.converter_id)}></button>
-                    </td>
-                </tr>
-            {/each}
+            {#await getConverterByOwnerId()}
+            {:then converters}
+                {#each converters as Converter}
+                    <tr>
+                        <th scope="row">{Converter.converter_id}</th>
+                        <td>{Converter.owner_id}</td>
+                        <td>{Converter.installer_id}</td>
+                        <td>{Converter.expected_throughput}</td>
+                        <td>
+                            <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
+                                    on:click={deleteConverter(Converter.converter_id) }></button>
+                            <i class="bi bi-pencil-square ; btn btn-primary"></i>
+                        </td>
+                    </tr>
+                {/each}
+            {/await}
             <!--            <tr>-->
             <!--                <th scope="row">2</th>-->
             <!--                <td>Converter</td>-->
@@ -241,6 +225,35 @@
             <!--            </tbody>-->
         </table>
 
+        <Pagination ariaLabel="Page navigation example">
+            <PaginationItem disabled>
+                <PaginationLink first href="#"/>
+            </PaginationItem>
+            <PaginationItem disabled>
+                <PaginationLink previous href="#"/>
+            </PaginationItem>
+            <PaginationItem active>
+                <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+                <PaginationLink href="#">2</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+                <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+                <PaginationLink href="#">4</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+                <PaginationLink href="#">5</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+                <PaginationLink next href="#"/>
+            </PaginationItem>
+            <PaginationItem>
+                <PaginationLink last href="#"/>
+            </PaginationItem>
+        </Pagination>
     </div>
 </div>
 

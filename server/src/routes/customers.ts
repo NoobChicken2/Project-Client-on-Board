@@ -31,6 +31,18 @@ router.get('/:id', async (req, resp) => {
     })
 
 })
+router.get('/company/:id', async (req, resp) => {
+    let id = req.params.id;
+    pool.query(`SELECT *
+                FROM users
+                WHERE company_id = ${id}`, (err: any, result: { rows: any; }) => {
+        if (err) {
+            resp.json({error: "Server side issue(GET)"})
+        }
+        resp.status(200).json(result.rows);
+    })
+
+})
 
 
 // @ts-ignore
