@@ -4,8 +4,6 @@ import {checkInput,compareLoginDetails} from "../middleware/converterMiddleware"
 
 const router = express.Router();
 
-
-
 router.get('/',async (req,res) => {
 pool.query('SELECT * FROM converters',(err:any,result: { rows:any;})  => {
     if (err){
@@ -39,6 +37,16 @@ router.get('/owner/:id',async(req,resp,) => {
 router.get('/installer/:id',async(req,resp) => {
     let installerId = req.params.id;
     pool.query(`SELECT * FROM converters WHERE installer_id = ${installerId}`,[installerId],(err:any,result:{rows:any}) => {
+        if (err){
+            return resp.status(400).json({error:"Server side issue(GET)"});
+        }
+        return resp.status(200).json(result.rows);
+    });
+});
+
+router.get('/:id/logs' , async(req, resp) => {
+    let converterId = req.params.id;
+    pool.query(`SELECT * FROM logs WHERE converter_id = $1`, [converterId] , (err, result) =>  {
         if (err){
             return resp.status(400).json({error:"Server side issue(GET)"});
         }

@@ -10,7 +10,7 @@ client.test(
 %}
 
 ###
-GET localhost:3000/converters/installers
+GET localhost:3000/converters/1/logs
 
 > {%
 client.test(

@@ -1,5 +1,4 @@
 <script>
-    import NavigationBar from "../components/NavigationBar.svelte";
     import {afterUpdate, onMount} from "svelte";
     import {loadTickets} from "../scripts/ticketScript.ts";
     import {apiData} from "../stores/store.ts";
