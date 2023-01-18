@@ -7,7 +7,7 @@ const express = require("express")
 
 export function runUpdateStatusCronJob() {
     cron.schedule('*/5 * * * *', async () => {
-        console.log("status")
+        console.log("status CRON job running every 5 minutes")
         await fetchConverters();
     });
 }

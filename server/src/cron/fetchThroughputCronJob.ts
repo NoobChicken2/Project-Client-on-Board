@@ -11,7 +11,7 @@ const LOW_THROUGHPUT_MULTIPLIER = 0.7;
 
 export async function runUpdateThroughputCronJob() {
     cron.schedule('*/5 * * * *', async () => {
-        console.log("throughput cron")
+        console.log("throughput CRON job running every 5 minutes")
         await fetchConvertersThroughputs()
     });
 }
