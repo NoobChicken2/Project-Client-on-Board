@@ -7,7 +7,7 @@ import converter from'./routes/converters'
 import customers from "./routes/customers";
 import companies from "./routes/companies"
 import token from './routes/token';
-import {runCronJob} from "./cron/cronTest";
+import {runCronJob} from "./cron/CronJob";
 
 const app = express();
 const port = 3000;
