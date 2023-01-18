@@ -127,7 +127,7 @@
         <section class="menu__List">
             <ul class="menu__List">
                 <li class="menu__Item">
-                    <a id="home" class="menu_home__Link" href="#">
+                    <a id="home" class="menu_home__Link" href="/">
                         <h1 class="homeHeading" id="homeText">
                             Home</h1></a>
                 </li>

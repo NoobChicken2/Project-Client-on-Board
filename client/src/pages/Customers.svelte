@@ -1,5 +1,4 @@
 <script lang="ts">
-    import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
