@@ -42,24 +42,20 @@ function createTicket() {
 
 // @ts-ignore
 async function fetchStatus(converterId){
-    let statusUpdate;
-    let foreignConverter:any;
+
 
     const result =await pool.query(`SELECT api_deviceid FROM converters INNER JOIN converter_details cd on converters.converter_id = cd.converter_id WHERE converters.converter_id = ${converterId}`);
 
     let deviceId = result.rows[0].api_deviceid;
-    let status =  await fetchConverterData2(deviceId)
-    console.log(status)
+    let status =  await fetchConverterData2(deviceId);
+    console.log(status);
 
-
-
-
-    // pool.query(`UPDATE converter_status SET status = ${status} WHERE converter_id = ${converterId}`,(err:any, result:{rows:any}) => {
-        //     if (err){
-        //         throw err
-        //     }
-        //     return result.rows;
-        // })
+    pool.query(`UPDATE converter_status SET status = ${status} WHERE converter_id = ${converterId}`,(err:any, result:{rows:any}) => {
+            if (err){
+                throw err
+            }
+            return result.rows;
+        })
     }
 async function fetchConverterData2(deviceId: QueryResult<any>): Promise<any> {
     return new Promise((resolve, reject) => {
