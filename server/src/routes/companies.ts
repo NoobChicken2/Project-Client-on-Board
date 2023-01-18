@@ -7,6 +7,8 @@ const router = express.Router();
 // @ts-ignore
 router.get('/',isLoggedIn, async (req, res) => {
     // @ts-ignore
+    console.log(req.user.role)
+    // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         pool.query(`SELECT *
                 FROM companies`, (error: any, results: { rows: any }) => {
@@ -22,6 +24,10 @@ router.get('/',isLoggedIn, async (req, res) => {
 });
 // @ts-ignore
 router.get('/:id',isLoggedIn, async (req, res) => {
+    let id = Number(req.params.id);
+    if (isNaN(id)) {
+        return res.status(400).json({error:"Bad ID format!"});
+    }
     // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         let id = req.params.id;
@@ -29,28 +35,49 @@ router.get('/:id',isLoggedIn, async (req, res) => {
                 FROM companies
                 WHERE company_id = ${id}`, (err: any, results: { rows: any; }) => {
             if (err) {
-                res.json({error: "Server side issue(GET)"})
+                res.status(500).json({error: "Server side issue(GET)"})
             }
+            if (results.rows.length !== 1) {
+                return res.status(404).json({error:"Company with ID " + id + " does not exist!"});
+            }
+
             res.status(200).json(results.rows);
         })
+    } else {
+        res.status(401).json({error:"Unauthorized access"})
     }
 });
 // @ts-ignore
 router.post('/',isLoggedIn, async (req, res) => {
     // @ts-ignore
-    if ( req.user.role === 'GlobalAdmin'){
+    if ( req.user.role === 'GlobalAdmin') {
         let company_name = req.body.company_name;
+        for (let property in req.body) {
 
-        pool.query(`INSERT INTO companies (company_name)
-                VALUES ($1)`, [company_name], (err: any, result: { rows: any; }) => {
-            if (err) {
-                return res.status(400).json({error: "Server side issue (POST)"})
+            if (company_name == null || company_name === "") {
+                return res.status(400).json({error: "Company name must be provided!"});
             }
-            return res.status(201).json(req.body);
-        })
-    }
 
-});
+            if (company_name.length > 25) {
+                return res.status(400).json({error: "Company name too long!"});
+            }
+
+            pool.query(`INSERT INTO companies (company_name)
+                        VALUES ($1)`, [company_name], (err: any, result: { rows: any; }) => {
+                if (err) {
+                    return res.status(400).json({error: "Server side issue (POST)"})
+                } else {
+                    return res.status(201).json(result.rows[0]);
+                }
+
+
+            })
+        }
+    }else {
+        res.status(401).json({error:"Unauthorized access"})
+    }
+})
+
 // @ts-ignore
 router.patch('/:id',isLoggedIn, async (req, res) => {
     // @ts-ignore
@@ -67,25 +94,43 @@ router.patch('/:id',isLoggedIn, async (req, res) => {
                 SET ${updatesString}
                 WHERE company_id = ${id} `, (error: any, results: any) => {
             if (error) {
+                if (error.code == 42703) {
+                    return res.status(400).json({error:"Cannot PATCH: One or more fields does not exist!"});
+                }
                 res.status(500).json({error});
             }
-            res.status(200).json(results);
+            if (results.rows.length === 0) {
+                return res.status(404).json({error:"Cannot PATCH: Company with ID " + id + " not found!"});
+            } else {
+                return res.status(200).json(results.rows);
+            }
         });
+    } else {
+        res.status(401).json({error:"Unauthorized access"})
     }
 });
 // @ts-ignore
 router.delete('/:id',isLoggedIn, async (req, resp) => {
+    let company_id = Number(req.params.id);
+
+    if (isNaN(company_id)) {
+        return resp.status(400).json({error:"Bad ID format!"});
+    }
+
     // @ts-ignore
     if ( req.user.role === 'GlobalAdmin'){
         let company_id = req.params.id;
         pool.query(`DELETE
                 FROM companies
-                WHERE company_id = ${company_id}`, (err, result: { rows: any; }) => {
+                WHERE company_id = ${company_id}`, (err, results: { rows: any; }) => {
             if (err) {
                 return resp.status(400).json({error: "Issue on the server side (DELETE)"})
             }
-            return resp.status(200);
+
+            return resp.status(200).json(results.rows);
         })
+    } else {
+        resp.status(401).json({error:"Unauthorized access"})
     }
 })
 
