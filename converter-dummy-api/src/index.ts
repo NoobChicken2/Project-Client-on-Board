@@ -6,14 +6,14 @@ const port = 3060;
 
 const cron = require("node-cron")
 
-
-app.listen(port, () => {
+ app.listen(port, () => {
     console.log(`Converter API listening on port ${port}`)
 });
 
 let statusMessages = ["Ok", "Off", "CommunicationFault", "Warning", "Alarm", "CommunicationMonitoringFault"];
 
 updateConverterStatuses();
+updateConverterThroughOutPuts();
 
 cron.schedule('*/5 * * * *', () => {
     console.log('running a task every 5 minutes');
@@ -21,8 +21,7 @@ cron.schedule('*/5 * * * *', () => {
 });
 
 
-cron.schedule('*/2 * * * * *', () => {
-    console.log('running a task every 2 seconds');
+cron.schedule('*/5 * * * *', () => {
     updateConverterThroughOutPuts();
 });
 
@@ -87,18 +86,19 @@ app.get(`/v1/devices/:id/status`, async (req: any, res: any) => {
 
 
 app.get(`/v1/devices/:id/measurements/sets/EnergyAndPowerBattery/Day`, async (req: any, res: any) => {
-    let throughOutPut: number = 0;
+    let converter : any;
 
     for (let i = 0; i < converters.length; i++) {
         if (converters[i].device.deviceId === req.params.id) {
-            throughOutPut = converters[i].pvGeneration;
+            converter = converters[i];
             break;
         }
     }
 
-    if (throughOutPut != undefined || isNaN(throughOutPut)) {
-        return res.status(200).json(throughOutPut);
+    let throughOutPut: number = converter.pvGeneration;
 
+    if (throughOutPut != undefined || isNaN(throughOutPut)) {
+        return res.status(200).json(converter);
     } else {
         return res.status(400).json({error: "Server side issue(GET)"});
     }
