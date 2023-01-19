@@ -20,7 +20,6 @@
             break;
     }
 
-
 </script>
 
 <Header username={username}/>

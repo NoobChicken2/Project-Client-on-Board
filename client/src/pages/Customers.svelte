@@ -186,8 +186,8 @@
                                     on:click={ () =>deleteClicked(Customer.user_id)}></button>
                             <button class="bi bi-pencil-square ; btn btn-primary" type="button"
                                     on:click={  () => editCustomer(Customer.user_id)}></button>
+                            <button class="bi bi-motherboard ; btn btn-secondary"on:click={converterByOwnerId(Customer.user_id)}></button>
                         </td>
-                        <button on:click|preventDefault={converterByOwnerId(Customer.user_id)}>Converters</button>
                     </tr>
                 {/each}
                 </tbody>
