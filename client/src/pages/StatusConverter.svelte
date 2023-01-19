@@ -220,6 +220,25 @@
                     </td>
                 </tr>
             {/each}
+            <!--            <tr>-->
+            <!--                <th scope="row">2</th>-->
+            <!--                <td>Converter</td>-->
+            <!--                <td>Working</td>-->
+            <!--                <td>-->
+            <!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
+            <!--                    <i class="bi bi-pencil-square ; btn btn-primary"></i>-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            <!--            <tr>-->
+            <!--                <th scope="row">3</th>-->
+            <!--                <td>Converter</td>-->
+            <!--                <td>Working</td>-->
+            <!--                <td>-->
+            <!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
+            <!--                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"  on:click={ () => showEditPopup = true}></button>-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            <!--            </tbody>-->
         </table>
 
     </div>

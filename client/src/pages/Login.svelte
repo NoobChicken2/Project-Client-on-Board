@@ -37,6 +37,9 @@
 <body class="login-body">
 
     <div class="login">
+           <div class="image">
+
+           </div>
         <form class="needs-validation">
             <div class="form-group was-validated">
                 <label class="form-label" for="username">Username</label>
@@ -67,7 +70,11 @@
 </body>
 
 <style>
+    .image{
+        background: url("../lib/Image 5.svg")no-repeat  center;
+        height: 350px;
 
+    }
     .login-body{
         height: 100vh;
         display: flex;
@@ -76,11 +83,12 @@
         background-color: cadetblue;
     }
     .login{
-        width: 360px;
+        width: 400px;
         height: min-content;
         padding: 20px;
         border-radius: 12px;
         background-color: white;
+
     }
     .login form{
         font-size: 20px;
@@ -92,5 +100,14 @@
     .login form input[type="submit"]{
         font-size: 20px;
         margin-top: 15px;
+    }
+    body{
+        background: url("../lib/Image 4.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-x: hidden;
+        height: 100vh;
     }
 </style>
