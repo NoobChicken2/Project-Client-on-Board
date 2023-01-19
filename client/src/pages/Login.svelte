@@ -18,10 +18,10 @@
             if (response.error !== undefined){
                 error = response.error;
             } else {
-                console.log(response)
+
                 message = "Logged in";
                 handleToken(response)
-                console.log(token)
+
             }
         });
 
