@@ -8,6 +8,7 @@ const router = express.Router();
 
 
 router.get('/',isLoggedIn, (req:any, res:any) => {
+
     if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
         pool.query(`SELECT *
                 FROM users

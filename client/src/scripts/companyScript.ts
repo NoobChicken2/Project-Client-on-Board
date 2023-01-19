@@ -41,7 +41,9 @@ export async function addCompany(data) {
    await fetch(`http://localhost:3000/companies`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+
         },
         body: JSON.stringify({company_name: data})
     }).then(response => response.json())
