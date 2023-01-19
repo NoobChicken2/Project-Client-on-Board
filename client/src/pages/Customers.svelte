@@ -79,13 +79,6 @@
 
 <body>
 <div class="p-5 my-4 bg-light rounded-3 container">
-
-    <!-- Page Header -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Customer List</a>
-    </nav>
-
-
     <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
         <form>
             <div class="modal-header">
@@ -164,7 +157,7 @@
                 </button>
             </div>
             <!-- Table of customers -->
-            <table class="table table-hover ; table table-striped">
+            <table class="table table-hover">
                 <thead class="table-dark">
                 <tr>
                     <th scope="col">#id</th>
@@ -187,31 +180,14 @@
                                     on:click={ () =>deleteClicked(Customer.user_id)}></button>
                             <button class="bi bi-pencil-square ; btn btn-primary" type="button"
                                     on:click={  () => editCustomer(Customer.user_id)}></button>
+                            <button on:click|preventDefault={converterByOwnerId(Customer.user_id)}>Converters</button>
                         </td>
-                        <button on:click|preventDefault={converterByOwnerId(Customer.user_id)}>Converters</button>
                     </tr>
                 {/each}
                 </tbody>
             </table>
         </div>
     </div>
-    <!-- Pagination -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-end">
-            <li class="page-item disabled">
-                <a class="page-link">Previous</a>
-            </li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
-
     <!-- Modal -->
     <Modal open="{showEditPopup}" class="modal fade" id="staticBackdrop add-model" data-bs-backdrop="static"
            data-bs-keyboard="false"
@@ -289,5 +265,20 @@
         top: 50px;
         left: 150px;
         position: absolute;
+    }
+    div, body {
+
+        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-x: hidden;
+    }
+    table{
+        color: azure;
+    }
+    body{
+        height: 100vh;
     }
 </style>
