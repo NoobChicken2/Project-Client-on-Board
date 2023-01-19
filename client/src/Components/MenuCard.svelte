@@ -1,12 +1,12 @@
 <script>
-    export let img, cardTitle, cardText, link;
+    export let img, cardTitle, link;
 </script>
 
 <div class="card text-center">
     <img class="card-img-top" src={img} alt="Card image cap">
     <div class="card-body">
         <h5 class="card-title">{cardTitle}</h5>
-        <p class="card-text">{cardText}</p>
+<!--        <p class="card-text">{cardText}</p>-->
         <a href={link} class="stretched-link"></a>
     </div>
 </div>

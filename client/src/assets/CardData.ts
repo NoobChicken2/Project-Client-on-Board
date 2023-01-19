@@ -1,56 +1,65 @@
+import {id} from "../stores/store";
+
 export const clientCards = [
     {
-        cardTitle: "Client Test1",
-        cardText: "Client TestText",
+        cardTitle: "Converters",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
+        link: `http://127.0.0.1:3030/customers/${id}/converters`
+    },
+    {
+        cardTitle: "Tickets",
+        img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
+        link: `http://127.0.0.1:3030/customers/tickets`
+    },
+    {
+        cardTitle: "Logs",
+        img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
+        link: `http://127.0.0.1:3030/customers/logs`
     }
 ]
 
-export const companyAdminsCards = [
+export const companyAdminCards = [
     {
-        cardTitle: "Company Admin Test1",
-        cardText: "Company Admin TestText",
+        cardTitle: "Customers",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
+        link: `http://127.0.0.1:3030/customers/customers`
     },
     {
-        cardTitle: "Company Admin Test1",
-        cardText: "Company Admin TestText",
+        cardTitle: "Converters",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
+        link: `http://127.0.0.1:3030/customers/converters`
+    },
+    {
+        cardTitle: "Tickets",
+        img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
+        link: `http://127.0.0.1:3030/customers/tickets`
+    },
+    {
+        cardTitle: "Logs",
+        img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
+        link: `http://127.0.0.1:3030/customers/logs`
     }
 ]
 
-export const globalAdminsCards = [
+export const globalAdminCards = [
     {
-        cardTitle: "Global Admin Test1",
-        cardText: "Global Admin TestText",
+        cardTitle: "Customers",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
+        link: `http://127.0.0.1:3030/customers/customers`
     },
     {
-        cardTitle: "Global Admin Test1",
-        cardText: "Global Admin TestText",
+        cardTitle: "Converters",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
+        link: `http://127.0.0.1:3030/customers/converters`
     },
     {
-        cardTitle: "Global Admin Test1",
-        cardText: "Global Admin TestText",
+        cardTitle: "Tickets",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
+        link: `http://127.0.0.1:3030/customers/tickets`
     },
     {
-        cardTitle: "Global Admin Test1",
-        cardText: "Global Admin TestText",
+        cardTitle: "Logs",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
-    },
-    {
-        cardTitle: "Global Admin Test1",
-        cardText: "Global Admin TestText",
-        img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: "#"
+        link: `http://127.0.0.1:3030/customers/logs`
     }
 ]

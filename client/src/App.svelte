@@ -7,10 +7,10 @@
   import ticket from './pages/Tickets.svelte'
   import converter from './pages/StatusConverter.svelte'
   import customerConverters from './pages/customerConverters.svelte'
-    let currentRoute;
   import NavigationBar from "./components/NavigationBar.svelte";
   import main from './pages/Main.svelte';
 
+  let currentRoute;
   let page;
   let params;
 
@@ -43,8 +43,11 @@
 
 
 <main>
-    <NavigationBar pageBody = {page}/>
-<!--    <svelte:component this={page} />-->
+    {#if page === login}
+        <svelte:component this={page} />
+    {:else}
+        <NavigationBar pageBody = {page}/>
+    {/if}
 </main>
 
 <style>

@@ -1,7 +1,7 @@
 <script>
     import Header from "../components/Header.svelte";
     import MenuCard from "../components/MenuCard.svelte";
-    import {clientCards, globalAdminsCards, companyAdminsCards} from "../assets/CardData.ts";
+    import {clientCards, companyAdminCards, globalAdminCards} from "../assets/CardData.ts";
 
     let username = localStorage.getItem('username');
     let role = localStorage.getItem('role');
@@ -13,10 +13,10 @@
             currentCards = clientCards;
             break;
         case "CompanyAdmin":
-            currentCards = companyAdminsCards;
+            currentCards = companyAdminCards;
             break;
         case "GlobalAdmin":
-            currentCards = globalAdminsCards;
+            currentCards = globalAdminCards;
             break;
     }
 
@@ -27,7 +27,7 @@
         <div class="row row-cols-1 row-cols-md-4">
             {#each currentCards as card}
                 <div class="col mt-5 d-flex justify-content-center mx-auto">
-                    <MenuCard img={card.img} cardTitle={card.cardTitle} cardText={card.cardText} link={card.link}/>
+                    <MenuCard img={card.img} cardTitle={card.cardTitle} link={card.link}/>
                 </div>
             {/each}
         </div>
