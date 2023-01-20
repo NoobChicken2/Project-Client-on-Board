@@ -7,10 +7,13 @@
   import ticket from './pages/Tickets.svelte'
   import converter from './pages/StatusConverter.svelte'
   import customerConverters from './pages/customerConverters.svelte'
-    let currentRoute;
   import NavigationBar from "./components/NavigationBar.svelte";
-
+  import OwnersConverters from "./pages/OwnersConverters.svelte";
+  let currentRoute;
   let page;
+    router('/converter/owner', (ctx) => {
+        page = OwnersConverters;
+    })
   let params;
 
   router('/companies', (ctx) =>{
