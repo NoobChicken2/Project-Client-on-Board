@@ -128,7 +128,6 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <div class="form-group">
                     <label>Owner ID</label>
                     <input type="number" class="form-control" bind:value={ownerId} required>
@@ -226,12 +225,18 @@
 </body>
 
 <style>
-    body, div {
+    body{
         background: url("../lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
-        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+    body {
+        height: 100vh;
+    }
+    table {
+        color: azure;
     }
 </style>

@@ -78,7 +78,7 @@
 
 
 <body>
-<div class="p-5 my-4 bg-light rounded-3 container">
+<div class="container">
     <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
         <form>
             <div class="modal-header">
@@ -127,7 +127,7 @@
             </div>
         </form>
     </Modal>
-    <div class="container">
+
         <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
             <form>
                 <div class="modal-header">
@@ -149,7 +149,6 @@
                 </div>
             </form>
         </Modal>
-    </div>
     <div class="container">
         <div class="table-wrapper">
             <div class="col-md-6">
@@ -189,17 +188,17 @@
         </div>
     </div>
     <!-- Modal -->
+    <div class="container">
     <Modal open="{showEditPopup}" class="modal fade" id="staticBackdrop add-model" data-bs-backdrop="static"
            data-bs-keyboard="false"
            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <form>
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Customer</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body col-md">
-                    <form>
+
 
                         <div class="row mb-3">
                             <label for="modal-username" class="col-sm-3 col-form-label text-start">Username:</label>
@@ -248,15 +247,14 @@
                             <div class="invalid-feedback">Please enter a phone number</div>
                         </div>
 
-                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" on:click={ () => showEditPopup = false}>Close</button>
                     <button type="button" class="btn btn-primary" on:click={ () => handleEdit()}>Finish</button>
                 </div>
-            </div>
-        </div>
-    </Modal>
+        </form>
+    </Modal></div>
 </div>
 </body>
 
@@ -266,7 +264,7 @@
         left: 150px;
         position: absolute;
     }
-    div, body {
+    table, body {
 
         background: url("../lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
