@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import pool from '../database/databaseConnection';
-import express from "express";
+import express, {NextFunction} from "express";
 
 export let secret = 'ClientOnBoardSecret';
 
@@ -44,14 +44,14 @@ export function tokenBodyDetails (req: { body: any; }, res: { status: (arg0: num
     return next();
 }
 
-export function isLoggedIn (req: { get: (arg0: string) => any; token: string; user: (jwt.Jwt & jwt.JwtPayload & (string | jwt.JwtPayload)) | null; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: string; }): any; new(): any; }; }; }, next: () => any) {
+export function isLoggedIn (req:any,res:any,next:NextFunction) {
     let token = req.get('Authorization');
     console.log(token)
     token = token.split(' ');
     console.log(token[1])
 
     // @ts-ignore
-    jwt.verify(token[1], secret, {algorithm: 'HS256'}, (err) => {
+    jwt.verify(token[1], secret, {algorithm: 'HS256'}, (err:any) => {
         if (err) {
             return res.status(401).json({error: err})
         } else {

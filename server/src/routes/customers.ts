@@ -2,53 +2,73 @@ import express from 'express';
 import pool from "../database/databaseConnection";
 import bcrypt from "bcrypt";
 import {isLoggedIn} from "../middleware/authorizationMiddleware";
+import {validateUser, validateUserPatch} from "../middleware/dataValidationMiddleware";
 
 const router = express.Router();
 
-// @ts-ignore
-router.get('/',isLoggedIn, (req, res) => {
-    // @ts-ignore
-    console.log(req.user)
 
-    pool.query(`SELECT *
+router.get('/',isLoggedIn, (req:any, res:any) => {
+    if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
+        pool.query(`SELECT *
                 FROM users
                 WHERE role = 'Client'`, (err: any, result: { rows: any; }) => {
-        if (err) {
-            throw err
-        }
-        res.status(200).json(result.rows);
-    })
+            if (err) {
+                throw err
+            }
+            res.status(200).json(result.rows);
+        })
+
+    }
 });
-router.get('/:id', async (req, resp) => {
-    let id = req.params.id;
-    pool.query(`SELECT *
+
+router.get('/:id',isLoggedIn, async (req:any, resp:any) => {
+    let id = Number(req.params.id);
+    if (isNaN(id)) {
+        return resp.status(400).json({error:"Bad ID format!"});
+    }
+    if (req.user.role === 'CompanyAdmin'){
+        pool.query(`SELECT *
                 FROM users
                 WHERE user_id = ${id}`, (err: any, result: { rows: any; }) => {
-        if (err) {
-            resp.json({error: "Server side issue(GET)"})
-        }
-        resp.status(200).json(result.rows);
-    })
-
+            if (err) {
+                resp.json({error: "Server side issue(GET)"})
+            }
+            if (result.rows.length !== 1) {
+                resp.status(404).json({error:"Customer with ID " + id + " does not exist!"});
+            } else {
+                resp.status(200).json(result.rows);
+            }
+        })
+    } else {
+        return resp.status(401).json({error:"Unauthorised access"})
+    }
 })
-router.get('/company/:id', async (req, resp) => {
-    let id = req.params.id;
+
+
+router.get('/company/:id',isLoggedIn, async (req, resp) => {
+    let id = Number(req.params.id);
+    if (isNaN(id)) {
+        return resp.status(400).json({error:"Bad ID format!"});
+    }
     pool.query(`SELECT *
                 FROM users
                 WHERE company_id = ${id}`, (err: any, result: { rows: any; }) => {
         if (err) {
             resp.json({error: "Server side issue(GET)"})
         }
-        resp.status(200).json(result.rows);
+        if (result.rows.length !== 1) {
+            resp.status(404).json({error:"Customer with ID " + id + " does not exist!"});
+        } else {
+            resp.status(200).json(result.rows);
+        }
+
     })
 
 })
 
 
-// @ts-ignore
-router.post('/', async (req, resp) => {
-    // @ts-ignore
-    console.log(req.user);
+
+router.post('/',isLoggedIn,validateUser, async (req, resp) => {
 
     bcrypt.hash(req.body.password, 10, function (err, hash) {
         let role = req.body.role;
@@ -67,38 +87,49 @@ router.post('/', async (req, resp) => {
             email,
             phone_number
         }
-
+        // condition checks
+        if (role !== "Client") {
+            return resp.status(400).json({error:"Role is not Client!"});
+        }
         pool.query(`INSERT INTO users (role, username, password, first_name, last_name, email, phone_number)
                     VALUES ($1, $2, $3, $4, $5, $6,
-                            $7)`, [role, username, password, first_name, last_name, email, phone_number], (err: any, result: { rows: any; }) => {
+                            $7)`, [role, username, password, first_name, last_name, email, phone_number], (err: any, results: { rows: any; }) => {
             if (err) {
-                throw err
-                return resp.status(400).json({error: "Server side issue (POST)"})
+                if (err.code == 23505) {
+                    return resp.status(409).json(err.detail);
+                } else if (err.code == 23514 && err.constraint === "users_email_check") {
+                    return resp.status(400).json({error:"Bad email format!"});
+                } else {
+                    return resp.status(500).json(err);
+                }
             }
-            // @ts-ignore
-            return resp.status(201).json(body);
+            return resp.status(201).json(results.rows);
         })
     })
 });
 
 
-router.patch('/:id', async (req, res) => {
-    const id = req.params.id;
+
+router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
+    const id = Number(req.params.id);
     const updates = req.body;
-    console.log(updates)
-
-    if(req.body.password !== undefined) {
-        bcrypt.hash(req.body.password, 10, function (err, hash) {
-            if (err) {
-                throw err
-            }
-            updates.password = hash;
-
-        });
+    if (isNaN(id)) {
+        return res.status(400).json({error:"Bad ID format!"});
     }
-            const updatesString = Object.entries(updates)
-                .map(([key, value]) => `${key}='${value}'`)
-                .join(', ');
+
+    if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
+        if(req.body.password !== undefined) {
+            bcrypt.hash(req.body.password, 10, function (err, hash) {
+                if (err) {
+                    throw err
+                }
+                updates.password = hash;
+            });
+        }
+
+        const updatesString = Object.entries(updates)
+            .map(([key, value]) => `${key}='${value}'`)
+            .join(', ');
 
 
             pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
@@ -108,20 +139,30 @@ router.patch('/:id', async (req, res) => {
                 res.status(200).json(results);
 
         });
+    }
+
 
 });
 
 
-router.delete('/:id', async (req, resp) => {
-    let user_id = req.params.id;
-    pool.query(`DELETE
+
+router.delete('/:id',isLoggedIn, async (req:any, resp:any) => {
+
+
+    if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
+        let user_id = req.params.id;
+        pool.query(`DELETE
                 FROM users
-                WHERE user_id = ${user_id}`, (err: any, result: { rows: any; }) => {
-        if (err) {
-            return resp.status(400).json({error: "Issue on the server side (DELETE)"})
-        }
-        return resp.status(200).json("COMPLETE");
-    })
+                WHERE user_id = ${user_id}`, (err: any, results: { rows: any; }) => {
+            if (err) {
+                return resp.status(400).json({error: "Issue on the server side (DELETE)"})
+            }
+                return resp.status(200).json(results.rows);
+
+
+        })
+    }
+
 })
 
 

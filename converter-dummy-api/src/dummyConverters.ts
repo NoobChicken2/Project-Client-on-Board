@@ -1,4 +1,5 @@
 let converters = [{
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -16,7 +17,7 @@ let converters = [{
             "deviceId":
                 "1",
             "name":
-                "SB 3000TL-30",
+                "SB 2000TL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -44,6 +45,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -61,7 +63,7 @@ let converters = [{
             "deviceId":
                 "2",
             "name":
-                "SB 3000TL-30",
+                "SB 1000TL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -89,6 +91,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -106,7 +109,7 @@ let converters = [{
             "deviceId":
                 "3",
             "name":
-                "SB 3000TL-30",
+                "SB 2200TL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -134,6 +137,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -151,7 +155,7 @@ let converters = [{
             "deviceId":
                 "4",
             "name":
-                "SB 3000TL-30",
+                "SB 4000TL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -179,6 +183,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -196,7 +201,7 @@ let converters = [{
             "deviceId":
                 "5",
             "name":
-                "SB 3000TL-30",
+                "SB 2200ST-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -224,6 +229,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -241,7 +247,7 @@ let converters = [{
             "deviceId":
                 "6",
             "name":
-                "SB 3000TL-30",
+                "SB 2100FS-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -268,7 +274,7 @@ let converters = [{
                 true
 
         }
-}, {
+}, {"pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -286,7 +292,7 @@ let converters = [{
             "deviceId":
                 "7",
             "name":
-                "SB 3000TL-30",
+                "SB 2200AS-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -314,6 +320,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -331,7 +338,7 @@ let converters = [{
             "deviceId":
                 "8",
             "name":
-                "SB 3000TL-30",
+                "SB 1000FL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -359,6 +366,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -376,7 +384,7 @@ let converters = [{
             "deviceId":
                 "9",
             "name":
-                "SB 3000TL-30",
+                "SB 2000BL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -404,6 +412,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -421,7 +430,7 @@ let converters = [{
             "deviceId":
                 "10",
             "name":
-                "SB 3000TL-30",
+                "SB 4000LL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -449,6 +458,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -466,7 +476,7 @@ let converters = [{
             "deviceId":
                 "11",
             "name":
-                "SB 3000TL-30",
+                "SB 2000QL-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -494,6 +504,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -511,7 +522,7 @@ let converters = [{
             "deviceId":
                 "12",
             "name":
-                "SB 3000TL-30",
+                "SB 1000KF-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -539,6 +550,7 @@ let converters = [{
 
         }
 }, {
+    "pvGeneration": 20,
     "plant":
         {
             "plantId":
@@ -556,7 +568,7 @@ let converters = [{
             "deviceId":
                 "13",
             "name":
-                "SB 3000TL-30",
+                "SB 3000VB-30",
             "timezone":
                 "Europe/Berlin",
             "type":
@@ -584,6 +596,7 @@ let converters = [{
 
         }
 }];
+
 
 
 export default converters;
