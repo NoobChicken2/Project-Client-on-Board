@@ -37,4 +37,12 @@
     #cardContainer {
         height: 590px;
     }
+    body {
+        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-x: hidden;
+    }
 </style>

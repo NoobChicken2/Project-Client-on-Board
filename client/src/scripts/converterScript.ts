@@ -3,7 +3,11 @@ import {apiData} from "../stores/store";
 let converters;
 
 export async function loadConverters() {
-    const resp = await fetch('http://localhost:3000/converters');
+    const resp = await fetch('http://localhost:3000/converters',{
+        headers:{
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }
+    });
     converters = await resp.json();
 
     apiData.update((oldValue) => {
@@ -16,6 +20,7 @@ export async function editConverter(data, id) {
         method: "PATCH",
         headers: {
             'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
         },
         body: JSON.stringify(data)
     }).then(res => res.json())
@@ -33,6 +38,8 @@ export async function addConverter(ownerId, installerId, expected_throughput) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+
         },
         body: JSON.stringify(Converter)
 
@@ -45,6 +52,7 @@ export async function removeConverter(converterId) {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
         },
 
     });
@@ -106,6 +114,5 @@ export function validateConverterUpdate(data) {
             return false;
         }
     }
-
     return true;
 }

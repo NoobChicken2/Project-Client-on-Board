@@ -12,7 +12,9 @@ export function compareLoginDetails (req: any, res: { status: (arg0: number) => 
             return res.json({error:"Token issue"});
         }
         //Loops through all the users and checks if the username and the password match
-        result.rows.forEach((item: {user_id:number; role: string; password: string; username: string; }) => {
+        result.rows.forEach((item: {
+            company_id: number;
+            user_id:number; role: string; password: string; username: string; }) => {
             if (item.username === req.body.username) {
                 isUsernameFound = true;
                 bcrypt.compare(req.body.password, item.password, (err, result) => {
@@ -25,6 +27,7 @@ export function compareLoginDetails (req: any, res: { status: (arg0: number) => 
                         return res.status(404).json({error: 'The password does not match!'});
                     }
                 });
+                req.company_id = item.company_id;
                 req.role = item.role;
                 req.user_id = item.user_id;
             }

@@ -8,12 +8,16 @@
   import converter from './pages/StatusConverter.svelte'
   import customerConverters from './pages/customerConverters.svelte'
   import NavigationBar from "./components/NavigationBar.svelte";
+  import OwnersConverters from "./pages/OwnersConverters.svelte";
   import main from './pages/Main.svelte';
 
   let currentRoute;
   let page;
   let params;
 
+  router('/converter/owner', (ctx) => {
+      page = OwnersConverters;
+  })
   router('/companies', (ctx) =>{
     page = company;
   })
