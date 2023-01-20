@@ -1,12 +1,9 @@
 <script>
-    import jwt_decode from "jwt-decode";
-
     export let params;
-    import {onMount} from "svelte";
+    import {afterUpdate, onMount} from "svelte";
     import {loadConverters, addConverter, removeConverter} from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
-    import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
 
     let token = atob(localStorage.getItem('token').split('.')[1]);
     const decoded = JSON.parse(token);
@@ -68,14 +65,31 @@
             }
         })
     }
+    afterUpdate(() => {
+        window.onload = () => {
+            let myAlert = document.querySelector('.toast')
+            let bsAlert = new bootstrap.Toast(myAlert)
+            bsAlert.show()
+        }
+    })
 
 
 </script>
 <NavigationBar/>
-
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
+         <div class="toast-header">
+        <i class="bi bi-exclamation-triangle d-flex" style="font-size: 2rem; color: red"></i>
+        <strong class="me-auto">Alert</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+         </div>
+        <div class="toast-body">
+        we can put here a way to solve the alert
+        </div>
+    </div>
+</div>
 <body>
 
-<div class="container">
     <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
         <form>
             <div class="modal-header">
@@ -95,7 +109,6 @@
             </div>
         </form>
     </Modal>
-</div>
 
 <div class="container">
     <Modal open={showAddPopup} on:click={ () => showEditPopup = false}>
@@ -184,6 +197,7 @@
                 <th scope="col">Converter_id</th>
                 <th scope="col">Owner_id</th>
                 <th scope="col">Installer_id</th>
+                <th scope="col">Throughput</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -198,7 +212,7 @@
                         <td>{Converter.expected_throughput}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
-                                    on:click={deleteConverter(Converter.converter_id) }></button>
+                                    on:click={() => deleteConverter(Converter.converter_id) }></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
                         </td>
                     </tr>
@@ -224,36 +238,6 @@
             <!--            </tr>-->
             <!--            </tbody>-->
         </table>
-
-        <Pagination ariaLabel="Page navigation example">
-            <PaginationItem disabled>
-                <PaginationLink first href="#"/>
-            </PaginationItem>
-            <PaginationItem disabled>
-                <PaginationLink previous href="#"/>
-            </PaginationItem>
-            <PaginationItem active>
-                <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">2</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">4</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink href="#">5</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink next href="#"/>
-            </PaginationItem>
-            <PaginationItem>
-                <PaginationLink last href="#"/>
-            </PaginationItem>
-        </Pagination>
     </div>
 </div>
 

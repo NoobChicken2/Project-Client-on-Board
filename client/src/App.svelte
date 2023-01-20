@@ -8,11 +8,11 @@
   import converter from './pages/StatusConverter.svelte'
   import customerConverters from './pages/customerConverters.svelte'
   import NavigationBar from "./components/NavigationBar.svelte";
-  import OwnersConverters from "./pages/OwnersConverters.svelte";
+  import customerTickets from "./pages/customerTickets.svelte";
   let currentRoute;
   let page;
-    router('/converter/owner', (ctx) => {
-        page = OwnersConverters;
+    router('/customer/:id', (ctx) => {
+        page = customerTickets;
     })
   let params;
 
@@ -31,7 +31,7 @@
   router('/converters', (ctx) => {
       page = converter;
   })
-  router('/customers/:id/converters', (ctx) => {
+  router('/customers/converters', (ctx) => {
       page = customerConverters;
       currentRoute = ctx.pathname;
       params = ctx.params;

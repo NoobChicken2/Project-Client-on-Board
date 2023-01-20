@@ -13,5 +13,4 @@ export async function loadTickets() {
     apiData.update((oldValue) => {
         return tickets;
     });
-
 }
