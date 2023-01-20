@@ -44,29 +44,29 @@
                     </div>
                 </div>
                 <!-- Avatar (WILL BE CHANGED)-->
-                <div class="dropdown">
-                    <a
-                            class="dropdown-toggle d-flex align-items-center"
-                            href="#"
-                            id="navbarDropdownMenuAvatar"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
-                        <img
-                                src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                                class="rounded-circle"
-                                height="25"
-                                alt="Black and White Portrait of a Man"
-                                loading="lazy"
-                        />
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end mt-3 ms-4" aria-labelledby="navbarDropdownMenuAvatar">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <a class="dropdown-item" href="#">Smth</a>
-                    </div>
-                </div>
+<!--                <div class="dropdown">-->
+<!--                    <a-->
+<!--                            class="dropdown-toggle d-flex align-items-center"-->
+<!--                            href="#"-->
+<!--                            id="navbarDropdownMenuAvatar"-->
+<!--                            data-bs-toggle="dropdown"-->
+<!--                            aria-expanded="false"-->
+<!--                    >-->
+<!--                        <img-->
+<!--                                src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"-->
+<!--                                class="rounded-circle"-->
+<!--                                height="25"-->
+<!--                                alt="Black and White Portrait of a Man"-->
+<!--                                loading="lazy"-->
+<!--                        />-->
+<!--                    </a>-->
+<!--                    <div class="dropdown-menu dropdown-menu-end mt-3 ms-4" aria-labelledby="navbarDropdownMenuAvatar">-->
+<!--                        <a class="dropdown-item" href="#">Action</a>-->
+<!--                        <a class="dropdown-item" href="#">Another action</a>-->
+<!--                        <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                        <a class="dropdown-item" href="#">Smth</a>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <!-- Avatar -->
             </div>
             <!-- Right elements -->

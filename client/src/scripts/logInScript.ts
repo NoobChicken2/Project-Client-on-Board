@@ -10,5 +10,4 @@ export function handleToken(response){
    localStorage.setItem('id',payload.user_id);
    // @ts-ignore
     localStorage.setItem('companyId', payload.company_id);
-
 }

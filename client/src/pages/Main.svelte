@@ -22,8 +22,9 @@
 
 </script>
 
-<Header username={username}/>
-<div class="container bg-light mt-4 px-5" id="cardContainer">
+<body>
+    <Header username={username}/>
+    <div class="container mt-4 px-5" id="cardContainer">
         <div class="row row-cols-1 row-cols-md-4">
             {#each currentCards as card}
                 <div class="col mt-5 d-flex justify-content-center mx-auto">
@@ -31,7 +32,8 @@
                 </div>
             {/each}
         </div>
-</div>
+    </div>
+</body>
 
 <style>
     #cardContainer {
