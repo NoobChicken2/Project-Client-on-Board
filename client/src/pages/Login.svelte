@@ -14,16 +14,13 @@
         message = undefined
 
         logIn(username,password).then((response) => {
-            console.log(username)
-            console.log(password)
+
             if (response.error !== undefined){
                 error = response.error;
             } else {
-                console.log(response)
+
                 message = "Logged in";
                 handleToken(response)
-                console.log(role)
-                console.log(token)
 
             }
         });

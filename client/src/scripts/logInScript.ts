@@ -4,5 +4,7 @@ export function handleToken(response){
     let payload = jwt_decode(response.token)
     // @ts-ignore
     localStorage.setItem('role',payload.role);
+    // @ts-ignore
+   localStorage.setItem('id',payload.user_id);
 
 }
