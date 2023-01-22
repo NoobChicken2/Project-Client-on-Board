@@ -1,4 +1,7 @@
 import converters from "./dummyConverters";
+import token from "./token";
+import {isLoggedIn} from "./authorizationMiddleware";
+
 
 let express = require('express');
 const app = express();
@@ -6,6 +9,7 @@ const port = 3060;
 
 const cron = require("node-cron")
 
+app.use('/token', token);
 
 app.listen(port, () => {
     console.log(`Converter API listening on port ${port}`)
@@ -28,7 +32,7 @@ function updateConverterStatuses() {
 }
 
 
-app.get(`/v1/devices/:id/status`, async (req: any, res: any) => {
+app.get(`/v1/devices/:id/status`, isLoggedIn, async (req: any, res: any) => {
     let converter;
 
     for (let i = 0; i < converters.length; i++) {
