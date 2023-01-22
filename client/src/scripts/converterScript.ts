@@ -9,6 +9,7 @@ export async function loadConverters() {
         }
     });
     converters = await resp.json();
+    console.log(converters)
 
     apiData.update((oldValue) => {
         return converters;

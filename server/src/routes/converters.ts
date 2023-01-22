@@ -5,7 +5,7 @@ import {checkInput,compareLoginDetails} from "../middleware/converterMiddleware"
 const router = express.Router();
 
 router.get('/',async (req,res) => {
-    pool.query(`SELECT cd.converter_name, cs.status FROM converters INNER JOIN converter_details cd on converters.converter_id = cd.converter_id 
+    pool.query(`SELECT * FROM converters INNER JOIN converter_details cd on converters.converter_id = cd.converter_id 
                                                         INNER JOIN converter_status cs on converters.converter_id = cs.converter_id
                                                         `,(err:any,result:{rows:any}) =>{
 

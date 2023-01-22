@@ -5,11 +5,12 @@
     import {
         addCustomer,
         isValidCustomer,
-        loadCustomers,
+        loadCustomers, loadSelectCustomers,
         patchCustomer,
         removeCustomer, validateCustomerUpdate
     } from "../scripts/customerScript.ts";
     import router from "page";
+    import {sineOut} from "svelte/easing";
 
     const myInput = document.getElementById('myInput');
     let showDeletePopup = false;
@@ -21,7 +22,14 @@
     let body = {};
     let showEditPopup = false;
 
-    onMount(loadCustomers);
+    onMount(() => {
+        if(localStorage.getItem('role') === 'CompanyAdmin'){
+            console.log("hit Company")
+            loadSelectCustomers(localStorage.getItem('company_id'))
+        } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+            loadCustomers()
+        }
+    })
 
     function converterByOwnerId(id){
         router('/customers/'+ id + '/converters')

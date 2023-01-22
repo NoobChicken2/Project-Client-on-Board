@@ -198,19 +198,23 @@
             <thead class="table-dark">
             <tr>
                 <th scope="col">Converter_id</th>
-                <th scope="col">Owner_id</th>
-                <th scope="col">Installer_id</th>
-                <th scope="col">Throughput</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Converter Name</th>
+                <th scope="col">Expected throughput</th>
+                <th scope="col">Actual throughput</th>
+                <th scope="col">Converter Status</th>
+
             </tr>
             </thead>
             <tbody>
             {#each $apiData as Converter}
                 <tr>
                     <th scope="row">{Converter.converter_id}</th>
-                    <td>{Converter.owner_id}</td>
-                    <td>{Converter.installer_id}</td>
+                    <td>{Converter.converter_name}</td>
                     <td>{Converter.expected_throughput}</td>
+                    <td>{Converter.throughput}</td>
+
+                    <td>{Converter.status}</td>
+
                     <td>
                         <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                 on:click={() => deleteConverter(Converter.converter_id)}></button>
