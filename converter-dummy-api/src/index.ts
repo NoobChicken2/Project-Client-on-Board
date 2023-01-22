@@ -18,10 +18,16 @@ app.listen(port, () => {
 let statusMessages = ["Ok", "Off", "CommunicationFault", "Warning", "Alarm", "CommunicationMonitoringFault"];
 
 updateConverterStatuses();
+updateConverterThroughOutPuts();
 
 cron.schedule('*/5 * * * *', () => {
     console.log('running a task every 5 minutes');
     updateConverterStatuses()
+});
+
+
+cron.schedule('*/5 * * * *', () => {
+    updateConverterThroughOutPuts();
 });
 
 function updateConverterStatuses() {
@@ -31,6 +37,34 @@ function updateConverterStatuses() {
     }
 }
 
+function updateConverterThroughOutPuts() {
+    for (let i = 0; i < converters.length; i++) {
+        converters[i].pvGeneration = simulateSolarPanelDailyThroughput();
+        console.log(converters[i].pvGeneration);
+    }
+}
+
+function simulateSolarPanelDailyThroughput(): number {
+    let throughputs = [];
+
+    for (let i = 0; i < 24; i++) {
+        let randomFactor = (Math.random() * 2)  ;
+
+        const minutes = i * 60;
+
+        const sine = Math.sin(minutes / 1440 * 2 * Math.PI);
+
+        const throughput = ((sine + 1) / 2) * randomFactor;
+
+        throughputs.push(throughput);
+    }
+
+    return addNumbers(throughputs);
+}
+
+function addNumbers(numbers: number[]): number {
+    return numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+}
 
 app.get(`/v1/devices/:id/status`, isLoggedIn, async (req: any, res: any) => {
     let converter;
@@ -48,6 +82,26 @@ app.get(`/v1/devices/:id/status`, isLoggedIn, async (req: any, res: any) => {
         } else {
             return res.status(200).json(converter);
         }
+    } else {
+        return res.status(400).json({error: "Server side issue(GET)"});
+    }
+});
+
+
+app.get(`/v1/devices/:id/measurements/sets/EnergyAndPowerBattery/Day`, async (req: any, res: any) => {
+    let converter : any;
+
+    for (let i = 0; i < converters.length; i++) {
+        if (converters[i].device.deviceId === req.params.id) {
+            converter = converters[i];
+            break;
+        }
+    }
+
+    let throughOutPut: number = converter.pvGeneration;
+
+    if (throughOutPut != undefined || isNaN(throughOutPut)) {
+        return res.status(200).json(converter);
     } else {
         return res.status(400).json({error: "Server side issue(GET)"});
     }

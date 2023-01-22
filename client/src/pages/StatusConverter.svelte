@@ -128,7 +128,6 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <div class="form-group">
                     <label>Owner ID</label>
                     <input type="number" class="form-control" bind:value={ownerId} required>
@@ -195,8 +194,8 @@
             <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add a new converter
             </button>
         </div>
-        <table class="table table-hover ; table table-striped">
-            <thead>
+        <table class="table table-hover">
+            <thead class="table-dark">
             <tr>
                 <th scope="col">Converter_id</th>
                 <th scope="col">Owner_id</th>
@@ -220,33 +219,24 @@
                     </td>
                 </tr>
             {/each}
-            <!--            <tr>-->
-            <!--                <th scope="row">2</th>-->
-            <!--                <td>Converter</td>-->
-            <!--                <td>Working</td>-->
-            <!--                <td>-->
-            <!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
-            <!--                    <i class="bi bi-pencil-square ; btn btn-primary"></i>-->
-            <!--                </td>-->
-            <!--            </tr>-->
-            <!--            <tr>-->
-            <!--                <th scope="row">3</th>-->
-            <!--                <td>Converter</td>-->
-            <!--                <td>Working</td>-->
-            <!--                <td>-->
-            <!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
-            <!--                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"  on:click={ () => showEditPopup = true}></button>-->
-            <!--                </td>-->
-            <!--            </tr>-->
-            <!--            </tbody>-->
         </table>
-
     </div>
 </div>
-
-
 </body>
 
 <style>
-
+    body{
+        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-y: hidden;
+    }
+    body {
+        height: 100vh;
+    }
+    table {
+        color: azure;
+    }
 </style>

@@ -10,7 +10,7 @@ client.test(
 %}
 
 ###
-GET localhost:3000/converters/installers
+GET localhost:3000/converters/1/logs
 
 > {%
 client.test(
@@ -33,4 +33,29 @@ Accept: application/json
 
 > {%
 client.global.set("token", response.body.token);
+%}
+
+
+###
+POST localhost:3000/customers
+Content-Type: application/json
+Accept: application/json
+
+{
+  "role" : "Client",
+  "username": "Klaus",
+  "password": "12345678",
+  "first_name": "Klaus",
+  "last_name": "Kazazi",
+  "email": "lucaklaus921@gmail.com",
+  "phone_number": "698317572"
+}
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
 %}
