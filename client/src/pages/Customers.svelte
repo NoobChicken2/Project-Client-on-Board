@@ -24,7 +24,6 @@
 
     onMount(() => {
         if(localStorage.getItem('role') === 'CompanyAdmin'){
-            console.log("hit Company")
             loadSelectCustomers(localStorage.getItem('company_id'))
         } else if (localStorage.getItem('role') === 'GlobalAdmin'){
             loadCustomers()
