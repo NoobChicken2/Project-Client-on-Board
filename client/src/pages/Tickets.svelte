@@ -39,7 +39,7 @@
             {#each $apiData as Ticket}
                 <tr>
                     <th scope="row">{Ticket.ticket_id}</th>
-                    <td>Test</td>
+                    <td>{Ticket.log_event}</td>
                     <td>{Ticket.log_id}</td>
                     <td>{Ticket.created_at}</td>
                     <td>

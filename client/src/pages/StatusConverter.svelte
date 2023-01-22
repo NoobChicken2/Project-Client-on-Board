@@ -5,14 +5,25 @@
         addConverter,
         removeConverter,
         editConverter,
-        isValidConverter, validateConverterUpdate
+        isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters
     } from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {apiData} from "../stores/store.ts";
+    import {loadCustomers, loadSelectCustomers} from "../scripts/customerScript";
 
-    onMount(loadConverters)
+    onMount(()=> {
+        if(localStorage.getItem('role') === 'CompanyAdmin'){
+            loadSelectConverters(localStorage.getItem('company_id'))
+
+        } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+            loadConverters()
+        }
+        else if (localStorage.getItem('role') === 'Client'){
+            loadClientConverters(localStorage.getItem('id'));
+        }
+    })
 
     let showEditPopup = false;
     let showAddPopup = false;
