@@ -88,7 +88,7 @@ app.get(`/v1/devices/:id/status`, isLoggedIn, async (req: any, res: any) => {
 });
 
 
-app.get(`/v1/devices/:id/measurements/sets/EnergyAndPowerBattery/Day`, async (req: any, res: any) => {
+app.get(`/v1/devices/:id/measurements/sets/EnergyAndPowerBattery/Day`, isLoggedIn, async (req: any, res: any) => {
     let converter : any;
 
     for (let i = 0; i < converters.length; i++) {
