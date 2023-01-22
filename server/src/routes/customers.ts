@@ -132,11 +132,11 @@ router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
             .join(', ');
 
 
-        pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
-            if (error) {
-                res.status(500).json({error});
-            }
-            res.status(200).json(results);
+            pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
+                if (error) {
+                    res.status(500).json({error});
+                }
+                res.status(200).json(results);
 
         });
     }

@@ -11,6 +11,7 @@
     "start": "npm run build && npm run preview"
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^2.4.2",
     "@sveltejs/vite-plugin-svelte": "^1.1.0",
     "@tsconfig/svelte": "^3.0.0",
     "@types/page": "^1.11.5",
