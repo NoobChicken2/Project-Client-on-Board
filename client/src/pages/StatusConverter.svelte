@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {onMount} from "svelte";
+    import {createEventDispatcher, onMount, setContext} from "svelte";
     import {
         loadConverters,
         addConverter,
@@ -7,11 +7,20 @@
         editConverter,
         isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters
     } from "../scripts/converterScript";
-    import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {apiData} from "../stores/store.ts";
     import {loadCustomers, loadSelectCustomers} from "../scripts/customerScript";
+
+    const dispatch = createEventDispatcher();
+
+    let loading = false;
+    let page = 0;
+    let pageIndex = 0;
+    let pageSize = 10;
+    let responsive = true;
+    let rows = [];
+    let serverSide = false;
 
     onMount(()=> {
         if(localStorage.getItem('role') === 'CompanyAdmin'){
@@ -99,6 +108,37 @@
                 }
             })
         }
+    }
+
+    rows = new Array($apiData.length);
+
+    let buttons = [-2, -1, 0, 1, 2];
+    let pageCount = 0;
+
+    $: filteredRows = rows;
+    $: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
+
+    setContext("state", {
+        getState: () => ({
+            page,
+            pageIndex,
+            pageSize,
+            rows,
+            filteredRows
+        }),
+        setPage: (_page, _pageIndex) => {
+            page = _page;
+            pageIndex = _pageIndex;
+        },
+        setRows: _rows => (filteredRows = _rows)
+    });
+
+    function onPageChange(event) {
+        dispatch("pageChange", event.detail);
+    }
+
+    function onSearch(event) {
+        dispatch("search", event.detail);
     }
 
 
@@ -207,17 +247,19 @@
         </div>
         <table class="table table-hover">
             <thead class="table-dark">
-            <tr>
-                <th scope="col">Converter_id</th>
-                <th scope="col">Converter Name</th>
-                <th scope="col">Expected throughput</th>
-                <th scope="col">Actual throughput</th>
-                <th scope="col">Converter Status</th>
+                <tr>
+                    <th scope="col">Converter_id</th>
+                    <th scope="col">Converter Name</th>
+                    <th scope="col">Expected throughput</th>
+                    <th scope="col">Actual throughput</th>
+                    <th scope="col">Converter Status</th>
 
-            </tr>
+                </tr>
             </thead>
+
             <tbody>
-            {#each $apiData as Converter}
+            {#each $apiData as Converter, index}
+                {#if page * pageSize <= index && index < (page + 1) * pageSize}
                 <tr>
                     <th scope="row">{Converter.converter_id}</th>
                     <td>{Converter.converter_name}</td>
@@ -233,13 +275,29 @@
                                 on:click={() =>isEdit(Converter.converter_id)}></button>
                     </td>
                 </tr>
+                {/if}
             {/each}
+            </tbody>
         </table>
     </div>
-</div>
+
+    <slot name="bottom">
+        <div class="slot-bottom">
+            <svelte:component
+                    this={Pagination}
+                    {page}
+                    {pageSize}
+                    {serverSide}
+                    count={filteredRows.length - 1}
+                    on:pageChange={onPageChange} />
+        </div>
+    </slot>
+
+    </div>
 </body>
 
 <style>
+
     body{
         background: url("../lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
@@ -254,4 +312,5 @@
     table {
         color: azure;
     }
+
 </style>

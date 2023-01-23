@@ -1,15 +1,12 @@
 <script>
-    import jwt_decode from "jwt-decode";
-
     export let params;
     import {onMount} from "svelte";
-    import Modal from "../Components/Modal.svelte";
     import {apiData} from "../stores/store.ts";
     import Pagination from "../components/Pagination.svelte";
     import {loadSelectConvertersLogs} from "../scripts/converterLogScript";
     import { createEventDispatcher, setContext } from "svelte";
-    const dispatch = createEventDispatcher();
 
+    const dispatch = createEventDispatcher();
 
     let loading = false;
     let page = 0;
@@ -19,15 +16,9 @@
     let rows = [];
     let serverSide = false;
 
-
     onMount(() => {
         loadSelectConvertersLogs(localStorage.getItem('converterId'))
     })
-
-    // $apiData.forEach(function(log) {
-    //     let row = [log.log_id, log.log_event, log.created_at];
-    //     rows.push(row);
-    // });
 
     rows = new Array($apiData.length);
 

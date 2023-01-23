@@ -2,14 +2,23 @@
     import {apiData} from "../stores/store.ts";
 
     export let params;
-    import {afterUpdate, onMount} from "svelte";
+    import {afterUpdate, createEventDispatcher, onMount, setContext} from "svelte";
     import {loadConverters, addConverter, removeConverter} from "../scripts/converterScript";
-    import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import router from "page";
-
+    import Pagination from "../components/Pagination.svelte";
 
     let url = `http://localhost:3000/converters/owner/`+6
+
+    const dispatch = createEventDispatcher();
+
+    let loading = false;
+    let page = 0;
+    let pageIndex = 0;
+    let pageSize = 10;
+    let responsive = true;
+    let rows = [];
+    let serverSide = false;
 
 
     async function getConverterByOwnerId() {
@@ -76,6 +85,37 @@
     function converterLogs(id) {
         router('/converters/' + id + '/logs');
         localStorage.setItem("converterId", id);
+    }
+
+    rows = new Array($apiData.length);
+
+    let buttons = [-2, -1, 0, 1, 2];
+    let pageCount = 0;
+
+    $: filteredRows = rows;
+    $: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
+
+    setContext("state", {
+        getState: () => ({
+            page,
+            pageIndex,
+            pageSize,
+            rows,
+            filteredRows
+        }),
+        setPage: (_page, _pageIndex) => {
+            page = _page;
+            pageIndex = _pageIndex;
+        },
+        setRows: _rows => (filteredRows = _rows)
+    });
+
+    function onPageChange(event) {
+        dispatch("pageChange", event.detail);
+    }
+
+    function onSearch(event) {
+        dispatch("search", event.detail);
     }
 
 
@@ -207,7 +247,8 @@
             <tbody>
 
 
-                {#each $apiData as Converter}
+                {#each $apiData as Converter, index}
+                    {#if page * pageSize <= index && index < (page + 1) * pageSize}
                     <tr>
                         <th scope="row">{Converter.converter_id}</th>
                         <td>{Converter.converter_name}</td>
@@ -221,6 +262,7 @@
                                     on:click|preventDefault={converterLogs(Converter.converter_id)}></button>
                         </td>
                     </tr>
+                    {/if}
                 {/each}
 
             <!--            <tr>-->
@@ -244,19 +286,32 @@
             <!--            </tbody>-->
         </table>
     </div>
-</div>
 
+    <slot name="bottom">
+        <div class="slot-bottom">
+            <svelte:component
+                    this={Pagination}
+                    {page}
+                    {pageSize}
+                    {serverSide}
+                    count={filteredRows.length - 1}
+                    on:pageChange={onPageChange} />
+        </div>
+    </slot>
+
+</div>
 
 </body>
 
+
 <style>
+
     main {
         top: 50px;
         left: 150px;
         position: absolute;
     }
     table, body {
-
         background: url("../lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
@@ -270,4 +325,5 @@
     body{
         height: 100vh;
     }
+
 </style>
