@@ -65,7 +65,7 @@ router.post('/',isLoggedIn, async (req:any, res:any) => {
                 if (err) {
                     return res.status(400).json({error: "Server side issue (POST)"})
                 } else {
-                    return res.status(201).json(result.rows[0]);
+                    return res.status(201).json({ success: 'Company added successfully' });
                 }
 
 

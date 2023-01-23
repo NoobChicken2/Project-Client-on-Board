@@ -47,7 +47,6 @@ export async function addCompany(data) {
         headers: {
             'Content-Type': 'application/json',
             'Authorization':'Bearer '+ localStorage.getItem('token')
-
         },
         body: JSON.stringify({company_name: data})
     }).then(response => response.json())
