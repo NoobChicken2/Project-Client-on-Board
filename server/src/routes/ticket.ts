@@ -40,9 +40,11 @@ router.get('/:id',isLoggedIn, async (req:any, res:any) => {
     } else {
         return res.status(401).json({error:"Unauthorized Access"})
     }
-
 });
 
+router.get('/:userId', isLoggedIn, async (req, res) => {
+
+});
 
 router.post('/', isLoggedIn,async (req, res) => {
     let id = Number(req.body.log_id);
