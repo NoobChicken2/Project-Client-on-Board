@@ -258,7 +258,7 @@
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                     on:click={() => deleteConverter(Converter.converter_id) }></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
-                            <button class="bi bi-motherboard ; btn btn-secondary"
+                            <button class="bi bi-journal ; btn btn-secondary"
                                     on:click|preventDefault={converterLogs(Converter.converter_id)}></button>
                         </td>
                     </tr>
