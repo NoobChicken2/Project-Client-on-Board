@@ -29,7 +29,12 @@ export async function editCompany(id, data){
         .catch(err => alert(err))
 }
 export async function removeCompany(id) {
-    return await fetch(`http://localhost:3000/companies/${id}`, {method: 'DELETE'})
+    return await fetch(`http://localhost:3000/companies/`+id, {
+        method: 'DELETE',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }})
         .then((response) => response.json())
         .then((data) => {
             return data;

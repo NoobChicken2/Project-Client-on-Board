@@ -95,9 +95,6 @@ router.patch('/:id',isLoggedIn, async (req:any, res:any) => {
                     return res.status(400).json({error:"Cannot PATCH: One or more fields does not exist!"});
                 }
                 res.status(500).json({error});
-            }
-            if (results.rows.length === 0) {
-                return res.status(404).json({error:"Cannot PATCH: Company with ID " + id + " not found!"});
             } else {
                 return res.status(200).json(results.rows);
             }
