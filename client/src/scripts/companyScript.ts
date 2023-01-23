@@ -11,8 +11,7 @@ export async function loadCompanies() {
         }
     });
 
-    companies = await fetch('http://localhost:3000/companies').then(res => res.json())
-        .catch(err => alert(err));
+    companies = await resp.json();
 
     apiData.update((oldValue) => {
         return companies;
