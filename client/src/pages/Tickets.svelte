@@ -27,7 +27,7 @@
                 <tr>
                     <th style="width: 100px" scope="col">Converter ID</th>
                     <th style="width: 100px" scope="col">Ticket ID</th>
-                    <th style="width: 300px" scope="col">Title</th>
+                    <th style="width: 300px" scope="col">Issue</th>
                     <th style="width: 150px" scope="col">LogID</th>
                     <th style="width: 200px" scope="col">Date</th>
                     <th style="width: 50px" scope="col"></th>
@@ -37,7 +37,7 @@
 
             {#each $apiData as Ticket}
                 <tr>
-                    <td>{Ticket.converter_id}</td>
+                    <th>{Ticket.converter_id}</th>
                     <th scope="row">{Ticket.ticket_id}</th>
                     <td>{Ticket.log_event}</td>
                     <td>{Ticket.log_id}</td>
@@ -45,7 +45,6 @@
                     <td>
                         <button  type="button"  class="bi bi-card-text btn-outline-dark"
                                  data-bs-toggle="popover" data-bs-placement="left"
-
                                  title="Popover title" data-bs-content="Popover on left."
                         ></button>
                     </td>

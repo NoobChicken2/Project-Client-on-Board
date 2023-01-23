@@ -28,7 +28,7 @@
             <p class="navbar-brand mb-0">Welcome, {username}!</p>
             <!-- Right elements -->
             <div class="d-flex align-items-center">
-                <!-- Notifications  (NEEDS TO BE CHANGED AFTER WE HAVE A WAY TO GET TICKETS) -->
+                <!-- Notifications -->
                 {#if localStorage.getItem('role') ==='CompanyAdmin' || localStorage.getItem('role') ==='Client'}
                 <div class="dropdown">
                     <a
@@ -42,9 +42,10 @@
                         <span class="badge rounded-pill badge-notification bg-danger">22</span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-
+                        <th style="width: 100px" class = "notification-column" scope="col">Converter ID</th>
+                        <th style="width: 100px" class = "notification-column" scope="col">Issue</th>
                         {#each $apiData as Ticket}
-                            <a class="dropdown-item" href="#">{Ticket.log_event} {Ticket.created_at}</a>
+                            <a class="dropdown-item" href="/tickets">{Ticket.converter_id}     {Ticket.log_event}</a>
                         {/each}
 
                     </div>
@@ -85,5 +86,10 @@
 <style>
     .dropdown-toggle::after {
         content: none;
+        width: 1111px;
+    }
+
+    .notification-column{
+        padding: 10px;
     }
 </style>
