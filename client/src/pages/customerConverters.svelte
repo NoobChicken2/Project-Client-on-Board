@@ -1,15 +1,14 @@
 <script>
+    import {apiData} from "../stores/store.ts";
+
     export let params;
     import {afterUpdate, onMount} from "svelte";
     import {loadConverters, addConverter, removeConverter} from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
 
-    let token = atob(localStorage.getItem('token').split('.')[1]);
-    const decoded = JSON.parse(token);
-    let id = decoded.user_id;
-    console.log(id)
-    let url = `http://localhost:3000/converters/owner/${id}`
+
+    let url = `http://localhost:3000/converters/owner/`+6
 
 
     async function getConverterByOwnerId() {
@@ -20,7 +19,7 @@
             }
         })
         const json = await response.json();
-        console.log(json)
+        console.log(url)
         return json;
     }
 
@@ -195,20 +194,18 @@
             <thead>
             <tr>
                 <th scope="col">Converter_id</th>
-                <th scope="col">Owner_id</th>
-                <th scope="col">Installer_id</th>
-                <th scope="col">Throughput</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Converter Name</th>
+                <th scope="col">Status</th>
             </tr>
             </thead>
             <tbody>
-            {#await getConverterByOwnerId()}
-            {:then converters}
-                {#each converters as Converter}
+
+
+                {#each $apiData as Converter}
                     <tr>
                         <th scope="row">{Converter.converter_id}</th>
-                        <td>{Converter.owner_id}</td>
-                        <td>{Converter.installer_id}</td>
+                        <td>{Converter.converter_name}</td>
+                        <td>{Converter.status}</td>
                         <td>{Converter.expected_throughput}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
@@ -217,7 +214,7 @@
                         </td>
                     </tr>
                 {/each}
-            {/await}
+
             <!--            <tr>-->
             <!--                <th scope="row">2</th>-->
             <!--                <td>Converter</td>-->

@@ -5,15 +5,17 @@
     import {
         addCustomer,
         isValidCustomer,
-        loadCustomers,
+        loadCustomers, loadSelectCustomers,
         patchCustomer,
         removeCustomer, validateCustomerUpdate
     } from "../scripts/customerScript.ts";
     import router from "page";
+    import {addCompanyAdmin} from "../scripts/companyAdminScript";
 
     const myInput = document.getElementById('myInput');
     let showDeletePopup = false;
     let showAddPopup = false;
+    let showAddPopupAdmin = false;
 
 
     let selectedCompanyId;
@@ -21,7 +23,15 @@
     let body = {};
     let showEditPopup = false;
 
-    onMount(loadCustomers);
+    let adminBody={};
+
+    onMount(() => {
+        if(localStorage.getItem('role') === 'CompanyAdmin'){
+            loadSelectCustomers(localStorage.getItem('company_id'))
+        } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+            loadCustomers()
+        }
+    })
 
     function converterByOwnerId(id){
         router('/customers/'+ id + '/converters')
@@ -61,6 +71,22 @@
         }
     }
 
+    const addNewAdmin = async () => {
+        const data = {};
+
+        const fields = ['admin_company_id','admin_username', 'admin_first_name', 'admin_last_name', 'admin_email', 'admin_password', 'admin_repeat_password', 'admin_phone_number'];
+
+        for (const field of fields) {
+            data[field] = getValueById(field);
+        }
+
+        if (isValidCustomer(data)) {
+            await addCompanyAdmin(data)
+            showAddPopup = false;
+            await loadCustomers();
+        }
+    }
+
     const deleteCustomer = async () => {
         await removeCustomer(selectedCompanyId)
         showDeletePopup = false;
@@ -78,7 +104,7 @@
 
 <body>
 <div class="container">
-    <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
+       <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
         <form>
             <div class="modal-header">
                 <h5 class="modal-title">Add</h5>
@@ -87,6 +113,7 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <div class="form-group">
                     <label>Username</label>
                     <input id="username" type="text" class="form-control" required>
@@ -126,8 +153,62 @@
             </div>
         </form>
     </Modal>
+    <Modal open={showAddPopupAdmin} on:click={ () => showDeletePopup = false}>
+        <form>
+            <div class="modal-header">
+                <h5 class="modal-title">Add</h5>
+                <button type="button" class="bi bi-x-circle" data-dismiss="modal"
+                        on:click={ () => showAddPopup = false}>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>CompanyID</label>
+                    <input id="admin_company_id"  type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input id="admin_username"  type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input id="admin_password"  type="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Repeat Password</label>
+                    <input id="admin_repeat_password" type="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input id="admin_first_name" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input id="admin_last_name" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input id="admin_email" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input id="admin_phone_number" type="text" class="form-control" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        on:click={ () => showAddPopupAdmin = false}>Close
+                </button>
+                <button type="button" class="btn btn-success"
+                        on:click={() => addNewAdmin() }>Add
+                </button>
+            </div>
+        </form>
+    </Modal>
 
-        <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
+
+
+    <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
             <form>
                 <div class="modal-header">
                     <h5 class="modal-title" id="sampleModalLabel">Delete</h5>
@@ -151,8 +232,13 @@
     <div class="container">
         <div class="table-wrapper">
             <div class="col-md-6">
-                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a customer
+                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a customer
                 </button>
+                {#if localStorage.getItem('role') === 'GlobalAdmin'}
+                    <button class=" btn btn-success" type="button" on:click={ () => showAddPopupAdmin = true}>Add new a CompanyAdmin
+                    </button>
+                {/if}
+
             </div>
             <!-- Table of customers -->
             <table class="table table-hover">

@@ -9,11 +9,39 @@ export async function loadConverters() {
         }
     });
     converters = await resp.json();
+    console.log(converters)
 
     apiData.update((oldValue) => {
         return converters;
     });
 }
+export async function loadSelectConverters(installerId) {
+    const resp = await fetch('http://localhost:3000/converters/installer/'+installerId,{
+        headers:{
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }
+    });
+    converters = await resp.json();
+    console.log(converters)
+
+    apiData.update((oldValue) => {
+        return converters;
+    });
+}
+export async function loadClientConverters(ownerId) {
+    const resp = await fetch('http://localhost:3000/converters/owner/'+ownerId,{
+        headers:{
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }
+    });
+    converters = await resp.json();
+    console.log(converters)
+
+    apiData.update((oldValue) => {
+        return converters;
+    });
+}
+
 
 export async function editConverter(data, id) {
     return await fetch(`http://localhost:3000/converters/${id}`, {

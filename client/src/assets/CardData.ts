@@ -4,17 +4,17 @@ export const clientCards = [
     {
         cardTitle: "Converters",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/${id}/converters`
+        link: `http://localhost:3030/customers/${id}/converters`
     },
     {
         cardTitle: "Tickets",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/tickets`
+        link: `http://localhost:3030/tickets`
     },
     {
         cardTitle: "Logs",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/logs`
+        link: `http://localhost:3030/logs`
     }
 ]
 
@@ -22,22 +22,22 @@ export const companyAdminCards = [
     {
         cardTitle: "Customers",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/customers`
+        link: `http://localhost:3030/customers`
     },
     {
         cardTitle: "Converters",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/converters`
+        link: `http://localhost:3030/converters`
     },
     {
         cardTitle: "Tickets",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/tickets`
+        link: `http://localhost:3030/tickets`
     },
     {
         cardTitle: "Logs",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/logs`
+        link: `http://localhost:3030/logs`
     }
 ]
 
@@ -45,21 +45,21 @@ export const globalAdminCards = [
     {
         cardTitle: "Customers",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/customers`
+        link: `http://localhost:3030/customers`
     },
     {
         cardTitle: "Converters",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/converters`
+        link: `http://localhost:3030/converters`
     },
     {
         cardTitle: "Tickets",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/tickets`
+        link: `http://localhost:3030/tickets`
     },
     {
         cardTitle: "Logs",
         img: "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-        link: `http://127.0.0.1:3030/customers/logs`
+        link: `http://localhost:3030/logs`
     }
 ]

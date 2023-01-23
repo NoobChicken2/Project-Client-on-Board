@@ -9,5 +9,5 @@ export function handleToken(response){
     // @ts-ignore
    localStorage.setItem('id',payload.user_id);
    // @ts-ignore
-    localStorage.setItem('companyId', payload.company_id);
+    localStorage.setItem('company_id', payload.company_id);
 }

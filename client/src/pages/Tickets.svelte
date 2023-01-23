@@ -14,8 +14,7 @@
     document.addEventListener("DOMContentLoaded", function(){
 
     });
-
-
+    $: console.log($apiData);
 </script>
 
 
@@ -39,7 +38,7 @@
             {#each $apiData as Ticket}
                 <tr>
                     <th scope="row">{Ticket.ticket_id}</th>
-                    <td>Test</td>
+                    <td>{Ticket.log_event}</td>
                     <td>{Ticket.log_id}</td>
                     <td>{Ticket.created_at}</td>
                     <td>
@@ -60,18 +59,16 @@
 <style>
 
     body, div {
-
-
         background: url("../lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
         overflow-x: hidden;
+        height: 100vh;
     }
 
     main{
-
         top: 50px;
         left: 150px;
         position: absolute;
