@@ -6,8 +6,9 @@ import jwt from 'jsonwebtoken';
 
 // @ts-ignore
 router.post("/", tokenBodyDetails, compareLoginDetails, (req, res) => {
-
     let payload = {
+        // @ts-ignore
+        company_id:req.company_id,
         // @ts-ignore
         user_id: req.user_id,
         username: req.body.username,

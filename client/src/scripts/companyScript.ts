@@ -11,8 +11,7 @@ export async function loadCompanies() {
         }
     });
 
-    companies = await fetch('http://localhost:3000/companies').then(res => res.json())
-        .catch(err => alert(err));
+    companies = await resp.json();
 
     apiData.update((oldValue) => {
         return companies;
@@ -41,7 +40,9 @@ export async function addCompany(data) {
    await fetch(`http://localhost:3000/companies`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+
         },
         body: JSON.stringify({company_name: data})
     }).then(response => response.json())

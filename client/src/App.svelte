@@ -1,47 +1,61 @@
 <script lang="ts">
+    import router from 'page'
 
-  import router from 'page'
-  import company from './pages/Company.svelte';
-  import login from './pages/Login.svelte'
-  import register from './pages/Customers.svelte'
-  import ticket from './pages/Tickets.svelte'
-  import converter from './pages/StatusConverter.svelte'
-  import customerConverters from './pages/customerConverters.svelte'
+    import company from './pages/Company.svelte';
+    import login from './pages/Login.svelte'
+    import customers from './pages/Customers.svelte'
+    import ticket from './pages/Tickets.svelte'
+    import converter from './pages/StatusConverter.svelte'
+    import customerConverters from './pages/customerConverters.svelte'
+    import NavigationBar from "./components/NavigationBar.svelte";
+    import customerTickets from "./pages/customerTickets.svelte";
+    import converterLog from "./pages/ConverterLog.svelte";
+    import main from './pages/Main.svelte';
+
     let currentRoute;
-  import NavigationBar from "./components/NavigationBar.svelte";
+    let page;
+    let params;
 
-  let page;
-  let params;
+    router('/customer/:id', (ctx) => {
+        page = customerTickets;
+    })
+    router('/companies', (ctx) =>{
+        page = company;
+    })
+    router('/login', (ctx) => {
+        page = login;
+    })
+    router('/customers', (ctx) =>{
+        page = customers;
+    })
+    router('/tickets', (ctx) =>{
+        page = ticket;
+    })
+    router('/converters', (ctx) => {
+        page = converter;
+    })
+    router('/customers/:id/converters', (ctx) => {
+        page = customerConverters;
+        currentRoute = ctx.pathname;
+        params = ctx.params;
 
-  router('/companies', (ctx) =>{
-    page = company;
-  })
-  router('/login', (ctx) => {
-    page = login;
-  })
-  router('/customers', (ctx) =>{
-      page = register;
-  })
-  router('/tickets', (ctx) =>{
-      page = ticket;
-  })
-  router('/converters', (ctx) => {
-      page = converter;
-  })
-  router('/customers/:id/converters', (ctx) => {
-      page = customerConverters;
-      currentRoute = ctx.pathname;
-      params = ctx.params;
-  })
+    })
+    router('/converters/:id/logs', (ctx) => {
+        page = converterLog;
+    })
+    router('/', (ctx) => {
+        page = main;
+    })
 
-  router.start()
+    router.start();
 </script>
 
-
 <main>
-<!--    <svelte:component this={page}/>-->
-    <NavigationBar pageBody = {page}/>
-<!--    <svelte:component this={page} />-->
+    {#if page === login}
+        <svelte:component this={page} />
+    {:else}
+        <NavigationBar pageBody = {page}/>
+    {/if}
 </main>
 
 <style>

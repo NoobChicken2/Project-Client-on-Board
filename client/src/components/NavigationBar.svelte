@@ -1,6 +1,14 @@
 <script lang="ts">
 
     export let pageBody
+    let role = localStorage.getItem('role');
+
+    function checkSignOut() {
+        localStorage.setItem("token", "");
+        localStorage.setItem("role", "");
+        localStorage.setItem("id", "");
+        localStorage.setItem("username", "");
+    }
 
     let navActive = false;
     const toggleNav = () => {
@@ -18,137 +26,111 @@
         let ticketText = document.getElementById("ticketText");
         let signOutText = document.getElementById("signOutText");
 
+        if (role === "Client"){
+            homeText.style.top = "123px"
+            converterText.style.top = "183px";
+            ticketText.style.top = "243px";
+            signOutText.style.top = "303px";
+        } else {
+            homeText.style.top = "123px";
+            customerText.style.top = "183px";
+            converterText.style.top = "243px";
+            ticketText.style.top = "303px";
+            signOutText.style.top = "363px";
+        }
 
         if (navActive) {
+            if (customer !== null && customerText !== null) {
+                customer.style.backgroundPositionX = "9%"
+                customer.style.width = "80%";
+                customerText.style.color = "black";
+                customerText.style.transition = "1000ms";
+            }
 
             home.style.backgroundPositionX = "9%"
-            customer.style.backgroundPositionX = "9%"
             converter.style.backgroundPositionX = "9%"
             ticket.style.backgroundPositionX = "9%"
             signOut.style.backgroundPositionX = "9%"
 
             home.style.width = "80%";
-            customer.style.width = "80%";
             converter.style.width = "80%";
             ticket.style.width = "80%";
             signOut.style.width = "80%";
 
             homeText.style.color = "black";
-            customerText.style.color = "black";
             converterText.style.color = "black";
             ticketText.style.color = "black";
             signOutText.style.color = "black";
 
             homeText.style.transition = "1000ms";
-            customerText.style.transition = "1000ms";
             converterText.style.transition = "1000ms";
             ticketText.style.transition = "1000ms";
             signOutText.style.transition = "1000ms";
 
         } else {
+            if (customer !== null && customerText !== null) {
+                customerText.style.transition = "200ms";
+                customerText.style.color = "transparent";
+                customer.style.width = "45px";
+                customer.style.background = "";
+            }
 
             homeText.style.transition = "200ms";
-            customerText.style.transition = "200ms";
             converterText.style.transition = "200ms";
             ticketText.style.transition = "200ms";
             signOutText.style.transition = "200ms";
 
             homeText.style.color = "transparent";
-            customerText.style.color = "transparent";
             converterText.style.color = "transparent";
             ticketText.style.color = "transparent";
             signOutText.style.color = "transparent";
 
             home.style.width = "45px";
-            customer.style.width = "45px";
             converter.style.width = "45px";
             ticket.style.width = "45px";
             signOut.style.width = "45px";
 
             home.style.background = "";
-            customer.style.background = "";
             converter.style.background = "";
             ticket.style.background = "";
             signOut.style.background = "";
         }
     };
-
-    //Will be used in the future
-    export let navOptions = [
-        {
-            optionName: 'Home',
-            listId: 'home',
-            listClass: 'menu_home__Link',
-            link: '#',
-            headingId: 'homeText',
-            headingClass: 'homeHeading'
-        },
-        {
-            optionName: 'Customer',
-            listId: 'customer',
-            listClass: 'menu_customer__Link',
-            link: 'http://127.0.0.1:3030/customers',
-            headingId: 'customerText',
-            headingClass: 'customerHeading'
-        },
-        {
-            optionName: 'Converters',
-            listId: 'converters',
-            listClass: 'menu_converters__Link',
-            link: 'http://127.0.0.1:3030/converters',
-            headingId: 'converterText',
-            headingClass: 'converterHeading'
-        },
-        {
-            optionName: 'Tickets',
-            listId: 'tickets',
-            listClass: 'menu_tickets__Link',
-            link: 'http://127.0.0.1:3030/tickets',
-            headingId: 'ticketText',
-            headingClass: 'ticketHeading'
-        },
-        {
-            optionName: 'Sign Out',
-            listId: 'signOut',
-            listClass: 'menu__Link',
-            link: '#',
-            headingId: 'signOutText',
-            headingClass: 'signOutHeading'
-        }
-    ]
-
 </script>
 
 
 <main>
     <nav class="menu" class:active="{ navActive }">
-        <button class="menu__Toggle" on:click="{ () => toggleNav()}">{ navActive ? 'X' : '≡'}</button>
+        <button class="menu_Toggle" on:click="{ () => toggleNav()}">{ navActive ? 'X' : '≡'}</button>
 <!--        <button class:active={active} on:click="{() => active = !active}">foo</button>-->
-        <section class="menu__List">
-            <ul class="menu__List">
-                <li class="menu__Item">
-                    <a id="home" class="menu_home__Link" href="#">
-                        <h1 class="homeHeading" id="homeText">
-                            Home</h1></a>
+        <section class="menu_List">
+            <ul class="menu_List">
+                <li class="menu_Item">
+                    <a id="home" class="menu_home_Link" href="/">
+                        <h1 class="homeHeading" id="homeText">Home</h1>
+                    </a>
                 </li>
-                <li class="menu__Item">
-                    <a id="customer" class="menu_customers_Link" href="/customers">
-                        <h1 class="customerHeading" id="customerText">
-                            Customer</h1></a></li>
-                <li class="menu__Item">
-                    <a id="converters" class="menu_converters__Link" href="/converters">
-                        <h1 class="converterHeading" id="converterText">
-                            Converters</h1></a>
+                {#if role !== "Client"}
+                    <li class="menu_Item">
+                        <a id="customer" class="menu_customers_Link" href="/customers">
+                            <h1 class="customerHeading" id="customerText">Customer</h1>
+                        </a>
+                    </li>
+                {/if}
+                <li class="menu_Item">
+                    <a id="converters" class="menu_converters_Link" href="/converters">
+                        <h1 class="converterHeading" id="converterText">Converters</h1>
+                    </a>
                 </li>
-                <li class="menu__Item">
-                    <a id="tickets" class="menu_tickets__Link" href="/tickets">
-                        <h1 class="ticketHeading" id="ticketText">
-                            Tickets</h1></a>
+                <li class="menu_Item">
+                    <a id="tickets" class="menu_tickets_Link" href="/tickets">
+                        <h1 class="ticketHeading" id="ticketText">Tickets</h1>
+                    </a>
                 </li>
-                <li class="menu__Item">
-                    <a id="signOut" class="menu__Link" href="login">
-                        <h1 class="signOutHeading" id="signOutText">
-                            Sign out</h1></a>
+                <li class="menu_Item">
+                    <a on:click={checkSignOut} id="signOut" class="menu_Link" href="/login">
+                        <h1 class="signOutHeading" id="signOutText">Sign out</h1>
+                    </a>
                 </li>
             </ul>
 <!--            <ul class="menu__List">-->
@@ -172,54 +154,44 @@
     .homeHeading {
         color: transparent;
         position: fixed;
-        top: 123px;
         left: 4rem;
         font-size: 20px;
-        transition: 1000ms;
         font-family: Arial,serif ;
     }
 
     .customerHeading {
         color: transparent;
         position: fixed;
-        top: 183px;
         left: 4rem;
         font-size: 20px;
         text-indent: 0;
-        transition: 1000ms;
         font-family: Arial,serif ;
     }
 
     .converterHeading {
         color: transparent;
         position: fixed;
-        top: 243px;
         left: 4rem;
         font-size: 20px;
         text-indent: 0;
-        transition: 1000ms;
         font-family: Arial,serif ;
     }
 
     .ticketHeading {
         color: transparent;
         position: fixed;
-        top: 303px;
         left: 4rem;
         font-size: 20px;
         text-indent: 0;
-        transition: 1000ms;
         font-family: Arial,serif ;
     }
 
     .signOutHeading {
         color: transparent;
         position: fixed;
-        top: 363px;
         left: 4rem;
         font-size: 20px;
         text-indent: 0;
-        transition: 1000ms;
         font-family: Arial,serif ;
     }
 
@@ -239,22 +211,22 @@
         color: red;
     }
 
-    .menu.active .menu__Link {
+    .menu.active .menu_Link {
         color: white;
     }
 
-    .menu__List {
+    .menu_List {
         all: unset;
         display: block;
         width: 100%;
         z-index: 999;
     }
 
-    .menu__Item {
+    .menu_Item {
         display: block;
     }
 
-    .menu__Link {
+    .menu_Link {
         display: block;
         width: 50px;
         padding: 5px;
@@ -266,15 +238,15 @@
         transition: 300ms;
     }
 
-    .menu__Link:hover {
+    .menu_Link:hover {
         color: orange;
     }
 
-    .menu__Link.active {
+    .menu_Link.active {
         background: #555;
     }
 
-    .menu__Link::before {
+    .menu_Link::before {
         content: attr(title);
         display: inline-block;
         width: 45px;
@@ -285,7 +257,7 @@
         color: orange;
     }
 
-    .menu__Link {
+    .menu_Link {
         background: white url("bootstrap-icons/icons/box-arrow-left.svg") no-repeat 50% 50%;
         display: block;
         height: 45px;
@@ -294,7 +266,7 @@
         overflow: hidden;
     }
 
-    .menu__Toggle {
+    .menu_Toggle {
         all: unset;
         font-size: 25px;
         color: white;
@@ -315,7 +287,7 @@
     }
 
 
-    .menu_home__Link {
+    .menu_home_Link {
         display: block;
         padding: 5px;
         margin: 15px;
@@ -326,15 +298,15 @@
         transition: 300ms;
     }
 
-    .menu_home__Link:hover {
+    .menu_home_Link:hover {
         color: orange;
     }
 
-    .menu_home__Link.active {
+    .menu_home_Link.active {
         background: #555;
     }
 
-    .menu_home__Link::before {
+    .menu_home_Link::before {
         content: attr(title);
         display: inline-block;
         width: 45px;
@@ -345,7 +317,7 @@
         color: orange;
     }
 
-    .menu_home__Link {
+    .menu_home_Link {
         background: white url("bootstrap-icons/icons/house-door.svg") no-repeat 50% 50%;
         display: block;
         height: 45px;
@@ -394,7 +366,7 @@
     }
 
 
-    .menu_converters__Link {
+    .menu_converters_Link {
         display: block;
         padding: 5px;
         margin: 15px;
@@ -405,15 +377,15 @@
         transition: 300ms;
     }
 
-    .menu_converters__Link:hover {
+    .menu_converters_Link:hover {
         color: orange;
     }
 
-    .menu_converters__Link.active {
+    .menu_converters_Link.active {
         background: #555;
     }
 
-    .menu_converters__Link::before {
+    .menu_converters_Link::before {
         content: attr(title);
         display: inline-block;
         width: 45px;
@@ -424,7 +396,7 @@
         color: orange;
     }
 
-    .menu_converters__Link {
+    .menu_converters_Link {
         background: white url("bootstrap-icons/icons/motherboard.svg") no-repeat 50% 50%;
         display: block;
         height: 45px;
@@ -433,7 +405,7 @@
         overflow: hidden;
     }
 
-    .menu_tickets__Link {
+    .menu_tickets_Link {
         display: block;
         padding: 5px;
         margin: 15px;
@@ -444,15 +416,15 @@
         transition: 300ms;
     }
 
-    .menu_tickets__Link:hover {
+    .menu_tickets_Link:hover {
         color: orange;
     }
 
-    .menu_tickets__Link.active {
+    .menu_tickets_Link.active {
         background: #555;
     }
 
-    .menu_tickets__Link::before {
+    .menu_tickets_Link::before {
         content: attr(title);
         display: inline-block;
         width: 45px;
@@ -463,7 +435,7 @@
         color: orange;
     }
 
-    .menu_tickets__Link {
+    .menu_tickets_Link {
         background: white url("bootstrap-icons/icons/ticket-perforated.svg") no-repeat 50% 50%;
         display: block;
         height: 45px;

@@ -1,18 +1,38 @@
 <script lang="ts">
-    import {onMount} from "svelte";
+    import {createEventDispatcher, onMount, setContext} from "svelte";
     import {
         loadConverters,
         addConverter,
         removeConverter,
         editConverter,
-        isValidConverter, validateConverterUpdate
+        isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters
     } from "../scripts/converterScript";
-    import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
-    import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {apiData} from "../stores/store.ts";
+    import {loadCustomers, loadSelectCustomers} from "../scripts/customerScript";
+    import Pagination from "../components/Pagination.svelte"
 
-    onMount(loadConverters)
+    const dispatch = createEventDispatcher();
+
+    let loading = false;
+    let page = 0;
+    let pageIndex = 0;
+    let pageSize = 10;
+    let responsive = true;
+    let rows = [];
+    let serverSide = false;
+
+    onMount(()=> {
+        if(localStorage.getItem('role') === 'CompanyAdmin'){
+            loadSelectConverters(localStorage.getItem('company_id'))
+
+        } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+            loadConverters()
+        }
+        else if (localStorage.getItem('role') === 'Client'){
+            loadClientConverters(localStorage.getItem('id'));
+        }
+    })
 
     let showEditPopup = false;
     let showAddPopup = false;
@@ -90,11 +110,54 @@
         }
     }
 
+    $: rows = new Array($apiData.length);
+
+    let buttons = [-2, -1, 0, 1, 2];
+    let pageCount = 0;
+
+    $: filteredRows = rows;
+    $: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
+
+    setContext("state", {
+        getState: () => ({
+            page,
+            pageIndex,
+            pageSize,
+            rows,
+            filteredRows
+        }),
+        setPage: (_page, _pageIndex) => {
+            page = _page;
+            pageIndex = _pageIndex;
+        },
+        setRows: _rows => (filteredRows = _rows)
+    });
+
+    function onPageChange(event) {
+        dispatch("pageChange", event.detail);
+    }
+
+    function onSearch(event) {
+        dispatch("search", event.detail);
+    }
+
 
 </script>
 
 
 <body>
+
+<slot name="bottom">
+    <div class="slot-bottom">
+        <svelte:component
+                this={Pagination}
+                {page}
+                {pageSize}
+                {serverSide}
+                count={filteredRows.length - 1}
+                on:pageChange={onPageChange} />
+    </div>
+</slot>
 
 <div class="container">
     <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
@@ -128,7 +191,6 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <div class="form-group">
                     <label>Owner ID</label>
                     <input type="number" class="form-control" bind:value={ownerId} required>
@@ -195,23 +257,29 @@
             <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add a new converter
             </button>
         </div>
-        <table class="table table-hover ; table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Converter_id</th>
-                <th scope="col">Owner_id</th>
-                <th scope="col">Installer_id</th>
-                <th scope="col">Throughput</th>
-                <th scope="col">Actions</th>
-            </tr>
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Converter_id</th>
+                    <th scope="col">Converter Name</th>
+                    <th scope="col">Expected throughput</th>
+                    <th scope="col">Actual throughput</th>
+                    <th scope="col">Converter Status</th>
+
+                </tr>
             </thead>
+
             <tbody>
-            {#each $apiData as Converter}
+            {#each $apiData as Converter, index}
+                {#if page * pageSize <= index && index < (page + 1) * pageSize}
                 <tr>
                     <th scope="row">{Converter.converter_id}</th>
-                    <td>{Converter.owner_id}</td>
-                    <td>{Converter.installer_id}</td>
+                    <td>{Converter.converter_name}</td>
                     <td>{Converter.expected_throughput}</td>
+                    <td>{Converter.throughput}</td>
+
+                    <td>{Converter.status}</td>
+
                     <td>
                         <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                 on:click={() => deleteConverter(Converter.converter_id)}></button>
@@ -219,34 +287,42 @@
                                 on:click={() =>isEdit(Converter.converter_id)}></button>
                     </td>
                 </tr>
+                {/if}
             {/each}
-            <!--            <tr>-->
-            <!--                <th scope="row">2</th>-->
-            <!--                <td>Converter</td>-->
-            <!--                <td>Working</td>-->
-            <!--                <td>-->
-            <!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
-            <!--                    <i class="bi bi-pencil-square ; btn btn-primary"></i>-->
-            <!--                </td>-->
-            <!--            </tr>-->
-            <!--            <tr>-->
-            <!--                <th scope="row">3</th>-->
-            <!--                <td>Converter</td>-->
-            <!--                <td>Working</td>-->
-            <!--                <td>-->
-            <!--                    <button class="bi bi-trash3-fill ; btn btn-danger" type="button"  on:click={ () => showDeletePopup = true}></button>-->
-            <!--                    <button class="bi bi-pencil-square ; btn btn-primary" type="button"  on:click={ () => showEditPopup = true}></button>-->
-            <!--                </td>-->
-            <!--            </tr>-->
-            <!--            </tbody>-->
+            </tbody>
         </table>
+    </div>
+    
+    <slot name="bottom">
+        <div class="slot-bottom">
+            <svelte:component
+                    this={Pagination}
+                    {page}
+                    {pageSize}
+                    {serverSide}
+                    count={filteredRows.length - 1}
+                    on:pageChange={onPageChange} />
+        </div>
+    </slot>
 
     </div>
-</div>
-
-
 </body>
 
 <style>
+
+    body{
+        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-y: hidden;
+    }
+    body {
+        height: 100vh;
+    }
+    table {
+        color: azure;
+    }
 
 </style>

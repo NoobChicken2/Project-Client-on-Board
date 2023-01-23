@@ -1,20 +1,32 @@
 <script lang="ts">
-    import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte";
-    import {onMount} from "svelte";
+    import {createEventDispatcher, onMount, setContext} from "svelte";
     import {apiData} from "../stores/store.ts";
     import {
         addCustomer,
         isValidCustomer,
-        loadCustomers,
+        loadCustomers, loadSelectCustomers,
         patchCustomer,
         removeCustomer, validateCustomerUpdate
     } from "../scripts/customerScript.ts";
     import router from "page";
+    import {addCompanyAdmin} from "../scripts/companyAdminScript";
+    import Pagination from "../components/Pagination.svelte";
+
+    const dispatch = createEventDispatcher();
+
+    let loading = false;
+    let page = 0;
+    let pageIndex = 0;
+    let pageSize = 10;
+    let responsive = true;
+    let rows: {} = [];
+    let serverSide = false;
 
     const myInput = document.getElementById('myInput');
     let showDeletePopup = false;
     let showAddPopup = false;
+    let showAddPopupAdmin = false;
 
 
     let selectedCompanyId;
@@ -22,7 +34,15 @@
     let body = {};
     let showEditPopup = false;
 
-    onMount(loadCustomers);
+    let adminBody={};
+
+    onMount(() => {
+        if(localStorage.getItem('role') === 'CompanyAdmin'){
+            loadSelectCustomers(localStorage.getItem('company_id'))
+        } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+            loadCustomers()
+        }
+    })
 
     function converterByOwnerId(id){
         router('/customers/'+ id + '/converters')
@@ -62,6 +82,22 @@
         }
     }
 
+    const addNewAdmin = async () => {
+        const data = {};
+
+        const fields = ['admin_company_id','admin_username', 'admin_first_name', 'admin_last_name', 'admin_email', 'admin_password', 'admin_repeat_password', 'admin_phone_number'];
+
+        for (const field of fields) {
+            data[field] = getValueById(field);
+        }
+
+        if (isValidCustomer(data)) {
+            await addCompanyAdmin(data)
+            showAddPopup = false;
+            await loadCustomers();
+        }
+    }
+
     const deleteCustomer = async () => {
         await removeCustomer(selectedCompanyId)
         showDeletePopup = false;
@@ -73,20 +109,43 @@
         showDeletePopup = true;
     }
 
+    $: rows = new Array($apiData.length);
+
+    let buttons = [-2, -1, 0, 1, 2];
+    let pageCount = 0;
+
+    $: filteredRows = rows;
+    $: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
+
+    setContext("state", {
+        getState: () => ({
+            page,
+            pageIndex,
+            pageSize,
+            rows,
+            filteredRows
+        }),
+        setPage: (_page, _pageIndex) => {
+            page = _page;
+            pageIndex = _pageIndex;
+        },
+        setRows: _rows => (filteredRows = _rows)
+    });
+
+    function onPageChange(event) {
+        dispatch("pageChange", event.detail);
+    }
+
+    function onSearch(event) {
+        dispatch("search", event.detail);
+    }
 
 </script>
 
 
 <body>
-<div class="p-5 my-4 bg-light rounded-3 container">
-
-    <!-- Page Header -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Customer List</a>
-    </nav>
-
-
-    <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
+<div class="container">
+       <Modal open={showAddPopup} on:click={ () => showDeletePopup = false}>
         <form>
             <div class="modal-header">
                 <h5 class="modal-title">Add</h5>
@@ -95,6 +154,7 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <div class="form-group">
                     <label>Username</label>
                     <input id="username" type="text" class="form-control" required>
@@ -134,8 +194,62 @@
             </div>
         </form>
     </Modal>
-    <div class="container">
-        <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
+    <Modal open={showAddPopupAdmin} on:click={ () => showDeletePopup = false}>
+        <form>
+            <div class="modal-header">
+                <h5 class="modal-title">Add</h5>
+                <button type="button" class="bi bi-x-circle" data-dismiss="modal"
+                        on:click={ () => showAddPopup = false}>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>CompanyID</label>
+                    <input id="admin_company_id"  type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input id="admin_username"  type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input id="admin_password"  type="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Repeat Password</label>
+                    <input id="admin_repeat_password" type="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input id="admin_first_name" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input id="admin_last_name" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input id="admin_email" type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input id="admin_phone_number" type="text" class="form-control" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        on:click={ () => showAddPopupAdmin = false}>Close
+                </button>
+                <button type="button" class="btn btn-success"
+                        on:click={() => addNewAdmin() }>Add
+                </button>
+            </div>
+        </form>
+    </Modal>
+
+
+
+    <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
             <form>
                 <div class="modal-header">
                     <h5 class="modal-title" id="sampleModalLabel">Delete</h5>
@@ -156,15 +270,19 @@
                 </div>
             </form>
         </Modal>
-    </div>
     <div class="container">
         <div class="table-wrapper">
             <div class="col-md-6">
-                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a customer
+                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a customer
                 </button>
+                {#if localStorage.getItem('role') === 'GlobalAdmin'}
+                    <button class=" btn btn-success" type="button" on:click={ () => showAddPopupAdmin = true}>Add new a CompanyAdmin
+                    </button>
+                {/if}
+
             </div>
             <!-- Table of customers -->
-            <table class="table table-hover; table table-striped">
+            <table class="table table-hover">
                 <thead class="table-dark">
                 <tr>
                     <th scope="col">#id</th>
@@ -174,9 +292,10 @@
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
-                <tbody>
 
-                {#each $apiData as Customer}
+                <tbody>
+                {#each $apiData as Customer, index}
+                    {#if page * pageSize <= index && index < (page + 1) * pageSize}
                     <tr>
                         <th scope="row">{Customer.user_id}</th>
                         <td>{Customer.first_name}</td>
@@ -187,43 +306,42 @@
                                     on:click={ () =>deleteClicked(Customer.user_id)}></button>
                             <button class="bi bi-pencil-square ; btn btn-primary" type="button"
                                     on:click={  () => editCustomer(Customer.user_id)}></button>
+                            <button class="bi bi-motherboard ; btn btn-secondary"
+                                    on:click|preventDefault={converterByOwnerId(Customer.user_id)}></button>
                         </td>
-                        <button on:click|preventDefault={converterByOwnerId(Customer.user_id)}>Converters</button>
                     </tr>
+                    {/if}
                 {/each}
                 </tbody>
+
             </table>
         </div>
-    </div>
-    <!-- Pagination -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-end">
-            <li class="page-item disabled">
-                <a class="page-link">Previous</a>
-            </li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        </ul>
-    </nav>
 
+        <slot name="bottom">
+            <div class="slot-bottom">
+                <svelte:component
+                        this={Pagination}
+                        {page}
+                        {pageSize}
+                        {serverSide}
+                        count={filteredRows.length - 1}
+                        on:pageChange={onPageChange} />
+            </div>
+        </slot>
+
+    </div>
     <!-- Modal -->
+    <div class="container">
     <Modal open="{showEditPopup}" class="modal fade" id="staticBackdrop add-model" data-bs-backdrop="static"
            data-bs-keyboard="false"
            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <form>
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Customer</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body col-md">
-                    <form>
+
 
                         <div class="row mb-3">
                             <label for="modal-username" class="col-sm-3 col-form-label text-start">Username:</label>
@@ -272,15 +390,15 @@
                             <div class="invalid-feedback">Please enter a phone number</div>
                         </div>
 
-                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" on:click={ () => showEditPopup = false}>Close</button>
                     <button type="button" class="btn btn-primary" on:click={ () => handleEdit()}>Finish</button>
                 </div>
-            </div>
-        </div>
-    </Modal>
+        </form>
+    </Modal></div>
+
 </div>
 </body>
 
@@ -289,5 +407,20 @@
         top: 50px;
         left: 150px;
         position: absolute;
+    }
+    table, body {
+
+        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-x: hidden;
+    }
+    table{
+        color: azure;
+    }
+    body{
+        height: 100vh;
     }
 </style>
