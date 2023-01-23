@@ -31,7 +31,6 @@
 
     let ownerId;
     let installerId;
-    let expected_throughput;
 
     let error;
     let message;
@@ -39,8 +38,7 @@
 
     let data = {
         owner_id: "",
-        installer_id: "",
-        expected_throughput: ""
+        installer_id: ""
     }
 
     function isEdit(converterId: number): void {
@@ -85,11 +83,11 @@
     }
 
     function handleAdd() {
-        if (isValidConverter(ownerId, installerId, expected_throughput)) {
+        if (isValidConverter(ownerId, installerId)) {
             error = undefined;
             message = undefined;
 
-            addConverter(ownerId, installerId, expected_throughput).then((response) => {
+            addConverter(ownerId, installerId).then((response) => {
                 if (response.error !== undefined) {
                     error = response.error
                 } else {
@@ -147,10 +145,6 @@
                     <label>Installer ID</label>
                     <input type="number" class="form-control" bind:value={installerId} required/>
                 </div>
-                <div class="form-group">
-                    <label>Expected Throughput</label>
-                    <input type="number" class="form-control" bind:value={expected_throughput} required>
-                </div>
                 {#if error}<p>{error}</p> {/if}
                 {#if message}<p>{message}</p>{/if}
             </div>
@@ -184,10 +178,7 @@
                     <label>Installer ID</label>
                     <input bind:value={data.installer_id} type="email" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label>Throughput</label>
-                    <input bind:value={data.expected_throughput} type="text" class="form-control" required/>
-                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"

@@ -69,9 +69,8 @@ router.post('/',async(req,resp) => {
 
     let ownerId = req.body.owner_id;
     let installerId = req.body.installer_id;
-    let expected_throughput = req.body.expected_throughput;
 
-    pool.query('INSERT INTO converters(owner_id,installer_id,expected_throughput) VALUES ($1,$2,$3)',[ownerId,installerId,expected_throughput],(err:any,result:{rows:any;}) => {
+    pool.query('INSERT INTO converters(owner_id,installer_id) VALUES ($1,$2,)',[ownerId,installerId],(err:any,result:{rows:any;}) => {
         if (err){
             return resp.status(400).json({error:"Server side issue (POST)"})
         }

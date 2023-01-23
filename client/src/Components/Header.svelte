@@ -29,7 +29,7 @@
             <!-- Right elements -->
             <div class="d-flex align-items-center">
                 <!-- Notifications  (NEEDS TO BE CHANGED AFTER WE HAVE A WAY TO GET TICKETS) -->
-                <!--{#if localStorage.getItem('role') ==='CompanyAdmin' || localStorage.getItem('role') ==='Client'}-->
+                {#if localStorage.getItem('role') ==='CompanyAdmin' || localStorage.getItem('role') ==='Client'}
                 <div class="dropdown">
                     <a
                             class="btn shadow-none bg-light dropdown-toggle d-flex align-items-center pe-auto pb-0 me-2 mb-0 mt-1"
@@ -44,12 +44,12 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 
                         {#each $apiData as Ticket}
-                            <a class="dropdown-item" href="#">{Ticket.log_event}</a>
+                            <a class="dropdown-item" href="#">{Ticket.log_event} {Ticket.created_at}</a>
                         {/each}
 
                     </div>
                 </div>
-                <!--{/if}-->
+                {/if}
                 <!-- Avatar (WILL BE CHANGED)-->
                 <!--                <div class="dropdown">-->
                 <!--                    <a-->

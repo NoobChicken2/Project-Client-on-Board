@@ -54,7 +54,7 @@
     function handleAdd() {
         error = undefined;
         message = undefined;
-        addConverter(ownerId, installerId, expected_throughput).then((response) => {
+        addConverter(ownerId, installerId).then((response) => {
             if (response.error !== undefined) {
                 error = response.error
             } else {
