@@ -17,6 +17,20 @@ export async function loadCustomers() {
         return customers;
     });
 }
+export async function loadSelectCustomers(company_id) {
+    const resp = await fetch('http://localhost:3000/customers/company/'+company_id,{
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }
+    });
+    customers = await resp.json();
+
+    apiData.update((oldValue) => {
+        return customers;
+    });
+}
 
 export async function logIn(username, password) {
     try {

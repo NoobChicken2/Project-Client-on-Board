@@ -50,14 +50,12 @@ router.get('/company/:id',isLoggedIn, async (req, resp) => {
     if (isNaN(id)) {
         return resp.status(400).json({error:"Bad ID format!"});
     }
-    pool.query(`SELECT *
-                FROM users
-                WHERE company_id = ${id}`, (err: any, result: { rows: any; }) => {
+    pool.query(`SELECT user_id,first_name,last_name,email
+                FROM users INNER JOIN converters c on users.user_id = c.owner_id
+                           INNER JOIN companies c2 on c2.company_id = c.installer_id
+                WHERE c.installer_id = 2 AND users.role = 'Client' GROUP BY user_id`, (err: any, result: { rows: any; }) => {
         if (err) {
             resp.json({error: "Server side issue(GET)"})
-        }
-        if (result.rows.length !== 1) {
-            resp.status(404).json({error:"Customer with ID " + id + " does not exist!"});
         } else {
             resp.status(200).json(result.rows);
         }

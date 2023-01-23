@@ -13,6 +13,8 @@ router.post("/", tokenBodyDetails, compareLoginDetails, (req, res) => {
         user_id: req.user_id,
         username: req.body.username,
         date: new Date(),
+        // @ts-ignore
+        role: req.role
     };
 
     jwt.sign(payload, secret, {algorithm: 'HS256'}, (err, result) => {

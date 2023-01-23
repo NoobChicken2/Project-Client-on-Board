@@ -5,14 +5,25 @@
         addConverter,
         removeConverter,
         editConverter,
-        isValidConverter, validateConverterUpdate
+        isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters
     } from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
     import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {apiData} from "../stores/store.ts";
+    import {loadCustomers, loadSelectCustomers} from "../scripts/customerScript";
 
-    onMount(loadConverters)
+    onMount(()=> {
+        if(localStorage.getItem('role') === 'CompanyAdmin'){
+            loadSelectConverters(localStorage.getItem('company_id'))
+
+        } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+            loadConverters()
+        }
+        else if (localStorage.getItem('role') === 'Client'){
+            loadClientConverters(localStorage.getItem('id'));
+        }
+    })
 
     let showEditPopup = false;
     let showAddPopup = false;
@@ -20,7 +31,6 @@
 
     let ownerId;
     let installerId;
-    let expected_throughput;
 
     let error;
     let message;
@@ -28,8 +38,7 @@
 
     let data = {
         owner_id: "",
-        installer_id: "",
-        expected_throughput: ""
+        installer_id: ""
     }
 
     function isEdit(converterId: number): void {
@@ -74,11 +83,11 @@
     }
 
     function handleAdd() {
-        if (isValidConverter(ownerId, installerId, expected_throughput)) {
+        if (isValidConverter(ownerId, installerId)) {
             error = undefined;
             message = undefined;
 
-            addConverter(ownerId, installerId, expected_throughput).then((response) => {
+            addConverter(ownerId, installerId).then((response) => {
                 if (response.error !== undefined) {
                     error = response.error
                 } else {
@@ -136,10 +145,6 @@
                     <label>Installer ID</label>
                     <input type="number" class="form-control" bind:value={installerId} required/>
                 </div>
-                <div class="form-group">
-                    <label>Expected Throughput</label>
-                    <input type="number" class="form-control" bind:value={expected_throughput} required>
-                </div>
                 {#if error}<p>{error}</p> {/if}
                 {#if message}<p>{message}</p>{/if}
             </div>
@@ -173,10 +178,7 @@
                     <label>Installer ID</label>
                     <input bind:value={data.installer_id} type="email" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label>Throughput</label>
-                    <input bind:value={data.expected_throughput} type="text" class="form-control" required/>
-                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
@@ -198,19 +200,23 @@
             <thead class="table-dark">
             <tr>
                 <th scope="col">Converter_id</th>
-                <th scope="col">Owner_id</th>
-                <th scope="col">Installer_id</th>
-                <th scope="col">Throughput</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Converter Name</th>
+                <th scope="col">Expected throughput</th>
+                <th scope="col">Actual throughput</th>
+                <th scope="col">Converter Status</th>
+
             </tr>
             </thead>
             <tbody>
             {#each $apiData as Converter}
                 <tr>
                     <th scope="row">{Converter.converter_id}</th>
-                    <td>{Converter.owner_id}</td>
-                    <td>{Converter.installer_id}</td>
+                    <td>{Converter.converter_name}</td>
                     <td>{Converter.expected_throughput}</td>
+                    <td>{Converter.throughput}</td>
+
+                    <td>{Converter.status}</td>
+
                     <td>
                         <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                 on:click={() => deleteConverter(Converter.converter_id)}></button>

@@ -11,8 +11,7 @@ export async function loadCompanies() {
         }
     });
 
-    companies = await fetch('http://localhost:3000/companies').then(res => res.json())
-        .catch(err => alert(err));
+    companies = await resp.json();
 
     apiData.update((oldValue) => {
         return companies;
@@ -30,7 +29,12 @@ export async function editCompany(id, data){
         .catch(err => alert(err))
 }
 export async function removeCompany(id) {
-    return await fetch(`http://localhost:3000/companies/${id}`, {method: 'DELETE'})
+    return await fetch(`http://localhost:3000/companies/`+id, {
+        method: 'DELETE',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        }})
         .then((response) => response.json())
         .then((data) => {
             return data;
@@ -43,7 +47,6 @@ export async function addCompany(data) {
         headers: {
             'Content-Type': 'application/json',
             'Authorization':'Bearer '+ localStorage.getItem('token')
-
         },
         body: JSON.stringify({company_name: data})
     }).then(response => response.json())
