@@ -104,7 +104,7 @@
 
     tr.clickable-row:hover {
         background-color: #f5f5f5;
-        color: #00f;
+        color: #7a7a7a;
         cursor: pointer;
 
     }
@@ -126,7 +126,6 @@
 
     .dropdown-menu {
         max-width: 300px;
-        min-width: 150px;
     }
 
 
