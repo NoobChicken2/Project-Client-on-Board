@@ -1,7 +1,5 @@
 <script>
-    import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
-    import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {addCompany, loadCompanies, removeCompany, editCompany, isValidCompany} from "../scripts/companyScript";
     import {onMount} from "svelte";
     import {apiData} from "../stores/store.ts";
@@ -191,7 +189,7 @@
     body{
 
 
-        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        background: url("client/lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;

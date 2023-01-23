@@ -55,11 +55,10 @@ export async function editConverter(data, id) {
         .catch(err => alert(err))
 }
 
-export async function addConverter(ownerId, installerId, expected_throughput) {
+export async function addConverter(ownerId, installerId) {
     let Converter = {
         owner_id: ownerId,
-        installer_id: installerId,
-        expected_throughput: expected_throughput
+        installer_id: installerId
 
     }
     const resp = await fetch('http://localhost:3000/converters', {
