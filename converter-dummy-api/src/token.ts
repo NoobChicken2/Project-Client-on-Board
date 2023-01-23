@@ -1,18 +1,21 @@
 import express from 'express';
 const router = express.Router();
 
-import {compareLoginDetails, tokenBodyDetails, secret} from '../middleware/authorizationMiddleware';
+import {compareLoginDetails, tokenBodyDetails, secret} from './authorizationMiddleware';
 import jwt from 'jsonwebtoken';
+
+// to parse JSON from request body - body-parser is DEPRECATED
+router.use(express.urlencoded({extended: true}));
+router.use(express.json());
 
 // @ts-ignore
 router.post("/", tokenBodyDetails, compareLoginDetails, (req, res) => {
+
     let payload = {
         // @ts-ignore
-        company_id:req.company_id,
-        // @ts-ignore
-        user_id: req.user_id,
         username: req.body.username,
         date: new Date(),
+        // @ts-ignore
     };
 
     jwt.sign(payload, secret, {algorithm: 'HS256'}, (err, result) => {

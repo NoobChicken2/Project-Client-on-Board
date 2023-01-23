@@ -1,0 +1,8 @@
+### Login - get token
+POST http://localhost:3060/token
+Content-Type: application/json
+
+{
+  "username": "server",
+  "password": "password"
+}

@@ -1,9 +1,12 @@
 import pool from "../database/databaseConnection";
 import {QueryResult} from "pg";
+import {apiToken} from "./serverAPILoginScript";
 
 const cron = require("node-cron")
 
 const express = require("express")
+
+
 
 export function runUpdateStatusCronJob() {
     cron.schedule('*/5 * * * *', async () => {
@@ -76,7 +79,13 @@ async function createTicket(status: string, converter_id: number) {
 
 async function fetchConverterStatus(deviceId: string): Promise<any> {
     return new Promise((resolve, reject) => {
-        fetch(`http://localhost:3060/v1/devices/${deviceId}/status`)
+        fetch(`http://localhost:3060/v1/devices/${deviceId}/status`, {
+            method: 'GET',
+            headers:{
+
+                'Authorization':'Bearer '+ apiToken
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 resolve(data.device.status);
