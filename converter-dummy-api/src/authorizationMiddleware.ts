@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import express from "express";
 
 export let secret = 'ClientOnBoardSecret';
-const servers = require('serverCredentials');
+import servers from './serverCredentials';
 
 export function compareLoginDetails (req: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: string }): void; new(): any; }; }; json(param: { error: string }): void; }, next: any) {
     let username = req.body.username;
@@ -20,6 +20,7 @@ export function compareLoginDetails (req: any, res: { status: (arg0: number) => 
 
     let server = servers.find(exists);
 
+    // @ts-ignore. Ignoring compile error that says server is possibly undefined - condition is guaranteed as check is done above
     bcrypt.compare(password, server.password, (err, result) => {
         if (err) {
             return res.status(500).json({error: 'An error occurred while comparing passwords'});
