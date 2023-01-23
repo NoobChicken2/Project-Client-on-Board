@@ -1,4 +1,5 @@
-GET localhost:3000/customers
+GET localhost:3000/tickets/users/3
+Authorization: Bearer {{token}}
 
 > {%
 client.test(
@@ -27,8 +28,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "LukeMitch",
-  "password": "password123"
+  "username": "Harry4324",
+  "password": "companyadmin"
 }
 
 > {%
