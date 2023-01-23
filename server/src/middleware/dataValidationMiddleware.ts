@@ -29,7 +29,7 @@ export function validateUserPatch(req:Request,res:Response,next:NextFunction){
 }
 export function validateUser(req:Request,res:Response,next:NextFunction){
     let body = req.body;
-    if (body.user_id != null || body.company_id != null) {
+    if (body.user_id != null) {
         return res.status(400).json({error:"Cannot change ID "});
     }
 
