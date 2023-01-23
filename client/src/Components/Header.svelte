@@ -101,18 +101,46 @@
         padding: 10px;
     }
 
-    .dropdown {
-        padding-right: 100px;
+
+    tr.clickable-row:hover {
+        background-color: #f5f5f5;
+        color: #00f;
+        cursor: pointer;
+
     }
 
-    a:hover {
-        background-color: lightgray;
+    tr.clickable-row {
+        border-bottom: 1px solid #ddd;
+        transition: background-color 0.2s ease-in-out;
+        animation: hover-effect 0.2s ease-in-out;
+    }
+    @keyframes hover-effect {
+        from {
+            background-color: transparent;
+        }
+        to {
+            background-color: #f5f5f5;
+        }
     }
 
-    a {
-        text-decoration: none;
-        color: black;
-        width: 100%;
+
+    .dropdown-menu {
+        max-width: 300px;
+        min-width: 150px;
+    }
+
+
+
+    @media only screen and (min-width: 768px) {
+        .dropdown-menu {
+            width: 300px;
+        }
+    }
+
+
+    .dropdown-menu {
+        right: 0;
+        left: auto;
     }
 
 </style>
