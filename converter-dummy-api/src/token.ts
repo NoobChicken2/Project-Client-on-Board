@@ -9,6 +9,7 @@ router.use(express.urlencoded({extended: true}));
 router.use(express.json());
 
 // @ts-ignore
+
 router.post("/", tokenBodyDetails, compareLoginDetails, (req, res) => {
 
     let payload = {

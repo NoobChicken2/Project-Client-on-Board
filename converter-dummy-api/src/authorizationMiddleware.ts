@@ -5,6 +5,7 @@ import express from "express";
 export let secret = 'ClientOnBoardSecret';
 import servers from './serverCredentials';
 
+
 export function compareLoginDetails (req: any, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: string }): void; new(): any; }; }; json(param: { error: string }): void; }, next: any) {
     let username = req.body.username;
     let password = req.body.password;
