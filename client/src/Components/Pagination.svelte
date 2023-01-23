@@ -83,7 +83,7 @@
 <style>
 
     .active {
-        background-color: rgb(150, 150, 235);
+        background-color: black;
         color: white;
     }
 
@@ -105,6 +105,7 @@
         margin-left: 3px;
         float: left;
         cursor: pointer;
+        color: azure;
     }
 
 </style>

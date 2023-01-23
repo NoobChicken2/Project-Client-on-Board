@@ -118,19 +118,19 @@
             </tbody>
         </table>
 
-    </div>
+        <slot name="bottom">
+            <div class="slot-bottom">
+                <svelte:component
+                        this={Pagination}
+                        {page}
+                        {pageSize}
+                        {serverSide}
+                        count={filteredRows.length - 1}
+                        on:pageChange={onPageChange} />
+            </div>
+        </slot>
 
-    <slot name="bottom">
-        <div class="slot-bottom">
-            <svelte:component
-                    this={Pagination}
-                    {page}
-                    {pageSize}
-                    {serverSide}
-                    count={filteredRows.length - 1}
-                    on:pageChange={onPageChange} />
-        </div>
-    </slot>
+    </div>
 
 </body>
 
@@ -147,7 +147,8 @@
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
-        overflow-x: hidden;
+        overflow-y: hidden;
+        height: 100vh;
     }
 
     main{
