@@ -16,7 +16,6 @@ updateConverterStatuses();
 updateConverterThroughOutPuts();
 
 cron.schedule('*/5 * * * *', () => {
-    console.log('running a task every 5 minutes');
     updateConverterStatuses()
 });
 
@@ -36,7 +35,6 @@ function updateConverterStatuses() {
 function updateConverterThroughOutPuts() {
     for (let i = 0; i < converters.length; i++) {
         converters[i].pvGeneration = simulateSolarPanelDailyThroughput();
-        console.log(converters[i].pvGeneration);
     }
 }
 
