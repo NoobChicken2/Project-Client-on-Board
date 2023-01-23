@@ -6,6 +6,7 @@
     import {loadConverters, addConverter, removeConverter} from "../scripts/converterScript";
     import NavigationBar from "../Components/NavigationBar.svelte";
     import Modal from "../Components/Modal.svelte";
+    import router from "page";
 
 
     let url = `http://localhost:3000/converters/owner/`+6
@@ -72,9 +73,14 @@
         }
     })
 
+    function converterLogs(id) {
+        router('/converters/' + id + '/logs');
+        localStorage.setItem("converterId", id);
+    }
+
 
 </script>
-<NavigationBar/>
+
 <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
     <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
          <div class="toast-header">
@@ -211,6 +217,8 @@
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                     on:click={() => deleteConverter(Converter.converter_id) }></button>
                             <i class="bi bi-pencil-square ; btn btn-primary"></i>
+                            <button class="bi bi-motherboard ; btn btn-secondary"
+                                    on:click|preventDefault={converterLogs(Converter.converter_id)}></button>
                         </td>
                     </tr>
                 {/each}

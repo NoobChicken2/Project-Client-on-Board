@@ -9,6 +9,7 @@
     import customerConverters from './pages/customerConverters.svelte'
     import NavigationBar from "./components/NavigationBar.svelte";
     import customerTickets from "./pages/customerTickets.svelte";
+    import converterLog from "./pages/ConverterLog.svelte";
     import main from './pages/Main.svelte';
 
     let currentRoute;
@@ -19,31 +20,34 @@
         page = customerTickets;
     })
     router('/companies', (ctx) =>{
-        page = company
+        page = company;
     })
     router('/login', (ctx) => {
         page = login;
     })
     router('/customers', (ctx) =>{
-        page = customers
+        page = customers;
     })
     router('/tickets', (ctx) =>{
-        page = ticket
+        page = ticket;
     })
     router('/converters', (ctx) => {
-        page = converter
+        page = converter;
     })
     router('/customers/:id/converters', (ctx) => {
-        page = customerConverters
+        page = customerConverters;
         currentRoute = ctx.pathname;
         params = ctx.params;
 
+    })
+    router('/converters/:id/logs', (ctx) => {
+        page = converterLog;
     })
     router('/', (ctx) => {
         page = main;
     })
 
-    router.start()
+    router.start();
 </script>
 
 <main>
