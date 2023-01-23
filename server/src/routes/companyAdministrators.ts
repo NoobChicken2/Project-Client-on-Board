@@ -87,6 +87,7 @@ router.get('/', isLoggedIn,async (req, res) => {
             return res.status(400).json({error: "Server side issue (GET)"})
         }
         res.status(200).json(results.rows)
+
     })
 
 });
