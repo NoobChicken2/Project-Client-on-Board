@@ -8,9 +8,9 @@
         isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters
     } from "../scripts/converterScript";
     import Modal from "../Components/Modal.svelte";
-    import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
     import {apiData} from "../stores/store.ts";
     import {loadCustomers, loadSelectCustomers} from "../scripts/customerScript";
+    import Pagination from "../components/Pagination.svelte"
 
     const dispatch = createEventDispatcher();
 
@@ -110,7 +110,7 @@
         }
     }
 
-    rows = new Array($apiData.length);
+    $: rows = new Array($apiData.length);
 
     let buttons = [-2, -1, 0, 1, 2];
     let pageCount = 0;
@@ -146,6 +146,18 @@
 
 
 <body>
+
+<slot name="bottom">
+    <div class="slot-bottom">
+        <svelte:component
+                this={Pagination}
+                {page}
+                {pageSize}
+                {serverSide}
+                count={filteredRows.length - 1}
+                on:pageChange={onPageChange} />
+    </div>
+</slot>
 
 <div class="container">
     <Modal open={showDeletePopup} on:click={ () => showAddPopup = false}>
@@ -280,7 +292,7 @@
             </tbody>
         </table>
     </div>
-
+    
     <slot name="bottom">
         <div class="slot-bottom">
             <svelte:component

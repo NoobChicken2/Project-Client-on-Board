@@ -26,7 +26,7 @@
 
     });
 
-    rows = new Array($apiData.length);
+    $: rows = new Array($apiData.length);
 
     let buttons = [-2, -1, 0, 1, 2];
     let pageCount = 0;
