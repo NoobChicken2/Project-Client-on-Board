@@ -17,6 +17,10 @@
 
     });
 
+    function redirectToTickets() {
+        window.location.href="/tickets"
+    }
+
 </script>
 
 <div class="container mh-100 bg-light mt-4">
@@ -29,27 +33,32 @@
             <!-- Right elements -->
             <div class="d-flex align-items-center">
                 <!-- Notifications -->
-                {#if localStorage.getItem('role') ==='CompanyAdmin' || localStorage.getItem('role') ==='Client'}
-                <div class="dropdown">
-                    <a
-                            class="btn shadow-none bg-light dropdown-toggle d-flex align-items-center pe-auto pb-0 me-2 mb-0 mt-1"
-                            href="#"
-                            id="dropdownMenuLink"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
-                        <p>Notifications</p>
-                        <span class="badge rounded-pill badge-notification bg-danger">22</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <th style="width: 100px" class = "notification-column" scope="col">Converter ID</th>
-                        <th style="width: 100px" class = "notification-column" scope="col">Issue</th>
-                        {#each $apiData as Ticket}
-                            <a class="dropdown-item" href="/tickets">{Ticket.converter_id}     {Ticket.log_event}</a>
-                        {/each}
-
+                {#if localStorage.getItem('role') === 'CompanyAdmin' || localStorage.getItem('role') === 'Client'}
+                    <div class="dropdown">
+                        <a class="btn shadow-none bg-light dropdown-toggle d-flex align-items-center pe-auto pb-0 me-2 mb-0 mt-1"
+                           href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            <p>Notifications</p>
+                            <span class="badge rounded-pill badge-notification bg-danger">{$apiData.length }</span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th class="notification-column">Converter ID</th>
+                                    <th class="notification-column">Issue</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {#each $apiData as Ticket}
+                                    <tr on:click={redirectToTickets} class="clickable-row">
+                                        <td class="notification-column">{Ticket.converter_id}</td>
+                                        <td class="notification-column">{Ticket.log_event}</td>
+                                    </tr>
+                                {/each}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
                 {/if}
                 <!-- Avatar (WILL BE CHANGED)-->
                 <!--                <div class="dropdown">-->
@@ -86,10 +95,24 @@
 <style>
     .dropdown-toggle::after {
         content: none;
-        width: 1111px;
     }
 
-    .notification-column{
+    .notification-column {
         padding: 10px;
     }
+
+    .dropdown {
+        padding-right: 100px;
+    }
+
+    a:hover {
+        background-color: lightgray;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+        width: 100%;
+    }
+
 </style>
