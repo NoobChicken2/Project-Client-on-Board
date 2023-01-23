@@ -141,23 +141,23 @@
     /*    color: white;*/
     /*}*/
 
-    /*body, div {*/
-    /*    background: url("../lib/Image 2.svg") no-repeat fixed center;*/
-    /*    -webkit-background-size: cover;*/
-    /*    -moz-background-size: cover;*/
-    /*    -o-background-size: cover;*/
-    /*    background-size: cover;*/
-    /*    overflow-x: hidden;*/
-    /*}*/
+    body, div {
+        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-x: hidden;
+    }
 
-    /*main{*/
-    /*    top: 50px;*/
-    /*    left: 150px;*/
-    /*    position: absolute;*/
-    /*}*/
+    main{
+        top: 50px;
+        left: 150px;
+        position: absolute;
+    }
 
-    /*table{*/
-    /*    color: azure;*/
-    /*}*/
+    table{
+        color: azure;
+    }
 
 </style>

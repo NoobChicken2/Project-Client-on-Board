@@ -196,7 +196,7 @@
             <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add a new converter
             </button>
         </div>
-        <table class="table table-hover ; table table-striped">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <th scope="col">Converter_id</th>
@@ -250,5 +250,24 @@
 </body>
 
 <style>
+    main {
+        top: 50px;
+        left: 150px;
+        position: absolute;
+    }
+    table, body {
 
+        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        overflow-x: hidden;
+    }
+    table{
+        color: azure;
+    }
+    body{
+        height: 100vh;
+    }
 </style>
