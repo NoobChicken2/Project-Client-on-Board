@@ -25,8 +25,8 @@
         <table style="text-align: left" class="table table-hover" id="table__tickets">
             <thead class= "table-dark">
                 <tr>
-
-                    <th style="width: 100px" scope="col">#id</th>
+                    <th style="width: 100px" scope="col">Converter ID</th>
+                    <th style="width: 100px" scope="col">Ticket ID</th>
                     <th style="width: 300px" scope="col">Title</th>
                     <th style="width: 150px" scope="col">LogID</th>
                     <th style="width: 200px" scope="col">Date</th>
@@ -37,6 +37,7 @@
 
             {#each $apiData as Ticket}
                 <tr>
+                    <td>{Ticket.converter_id}</td>
                     <th scope="row">{Ticket.ticket_id}</th>
                     <td>{Ticket.log_event}</td>
                     <td>{Ticket.log_id}</td>
