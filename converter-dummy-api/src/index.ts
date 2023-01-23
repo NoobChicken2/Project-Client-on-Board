@@ -98,12 +98,12 @@ app.get(`/v1/devices/:id/measurements/sets/EnergyAndPowerBattery/Day`, isLoggedI
         }
     }
 
-    let throughOutPut: number = converter.pvGeneration;
+    let throughOutPut = converter.pvGeneration;
 
     if (throughOutPut != undefined || isNaN(throughOutPut)) {
         return res.status(200).json(converter);
     } else {
-        return res.status(400).json({error: "Server side issue(GET)"});
+        return res.status(500).json({error: "Server side issue(GET)"});
     }
 });
 

@@ -43,9 +43,9 @@ export function tokenBodyDetails (req: { body: any; }, res: { status: (arg0: num
 
 export function isLoggedIn (req: { get: (arg0: string) => any; token: string; user: (jwt.Jwt & jwt.JwtPayload & (string | jwt.JwtPayload)) | null; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: string; }): any; new(): any; }; }; }, next: () => any) {
     let token = req.get('Authorization');
-    console.log(token)
+    //console.log(token)
     token = token.split(' ');
-    console.log(token[1])
+    //console.log(token[1])
 
     // @ts-ignore
     jwt.verify(token[1], secret, {algorithm: 'HS256'}, (err) => {

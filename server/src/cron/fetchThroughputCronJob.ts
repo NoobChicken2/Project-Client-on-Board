@@ -1,6 +1,7 @@
 import pool from "../database/databaseConnection";
 import {QueryResult} from "pg";
 import {addLog, getConverterIds} from "./fetchStatusCronJob";
+import {apiToken} from "./serverAPILoginScript";
 
 const cron = require("node-cron")
 
@@ -18,7 +19,12 @@ export async function runUpdateThroughputCronJob() {
 
 async function fetchConverterThroughput(deviceId: string): Promise<any> {
     return new Promise((resolve, reject) => {
-        fetch(`http://localhost:3060/v1/devices/${deviceId}/measurements/sets/EnergyAndPowerBattery/Day`)
+        fetch(`http://localhost:3060/v1/devices/${deviceId}/measurements/sets/EnergyAndPowerBattery/Day`, {
+            method: 'GET',
+            headers:{
+                'Authorization':'Bearer '+ apiToken
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 resolve(Math.round(data.pvGeneration));
