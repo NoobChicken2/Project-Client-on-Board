@@ -198,8 +198,6 @@
         </form>
     </Modal>
 </div>
-
-
 <div class="container">
     <Modal open={showEditPopup} on:click={() => showEditPopup = false}>
         <form>
