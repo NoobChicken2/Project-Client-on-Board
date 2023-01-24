@@ -1,10 +1,19 @@
 <script>
-    import NavigationBar from "../components/NavigationBar.svelte";
     import Modal from "../components/Modal.svelte"
-    import {Pagination, PaginationItem, PaginationLink} from "sveltestrap";
+    import {Pagination} from "sveltestrap";
     import {addCompany, loadCompanies, removeCompany, editCompany, isValidCompany} from "../scripts/companyScript";
-    import {onMount} from "svelte";
+    import {createEventDispatcher, onMount, setContext} from "svelte";
     import {apiData} from "../stores/store.ts";
+
+    const dispatch = createEventDispatcher();
+
+    let loading = false;
+    let page = 0;
+    let pageIndex = 0;
+    let pageSize = 10;
+    let responsive = true;
+    let rows = [];
+    let serverSide = false;
 
     let showEditPopup = false;
     let showAddPopup = false;
@@ -58,6 +67,36 @@
         showDeletePopup = true;
     }
 
+    $: rows = new Array($apiData.length);
+
+    let buttons = [-2, -1, 0, 1, 2];
+    let pageCount = 0;
+
+    $: filteredRows = rows;
+    $: visibleRows = filteredRows.slice(pageIndex, pageIndex + pageSize);
+
+    setContext("state", {
+        getState: () => ({
+            page,
+            pageIndex,
+            pageSize,
+            rows,
+            filteredRows
+        }),
+        setPage: (_page, _pageIndex) => {
+            page = _page;
+            pageIndex = _pageIndex;
+        },
+        setRows: _rows => (filteredRows = _rows)
+    });
+
+    function onPageChange(event) {
+        dispatch("pageChange", event.detail);
+    }
+
+    function onSearch(event) {
+        dispatch("search", event.detail);
+    }
 
 </script>
 
@@ -162,9 +201,8 @@
                 <p>Loading companies...</p>
             {:then companies}
 
-
-
-                { #each $apiData as Company}
+                { #each $apiData as Company, index}
+                    {#if page * pageSize <= index && index < (page + 1) * pageSize}
                     <tr>
                         <th scope="row">{Company.company_id}</th>
                         <td>{Company.company_name}</td>
@@ -175,11 +213,26 @@
                                     on:click={ () => isEdit(Company)}></button>
                         </td>
                     </tr>
+                    {/if}
                 {/each}
+
             {/await}
             </tbody>
         </table>
     </div>
+
+    <slot name="bottom">
+        <div class="slot-bottom">
+            <svelte:component
+                    this={Pagination}
+                    {page}
+                    {pageSize}
+                    {serverSide}
+                    count={filteredRows.length - 1}
+                    on:pageChange={onPageChange} />
+        </div>
+    </slot>
+
 </div>
 
 </body>
@@ -191,7 +244,7 @@
     body{
 
 
-        background: url("../lib/Image 2.svg") no-repeat fixed center;
+        background: url("client/lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
