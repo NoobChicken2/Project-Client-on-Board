@@ -16,12 +16,14 @@
 
         let home = document.getElementById("home");
         let customer = document.getElementById("customer");
+        let company = document.getElementById("company");
         let converter = document.getElementById("converters");
         let ticket = document.getElementById("tickets");
         let signOut = document.getElementById("signOut");
 
         let homeText = document.getElementById("homeText");
         let customerText = document.getElementById("customerText");
+        let companyText = document.getElementById("companyText");
         let converterText = document.getElementById("converterText");
         let ticketText = document.getElementById("ticketText");
         let signOutText = document.getElementById("signOutText");
@@ -31,7 +33,14 @@
             converterText.style.top = "183px";
             ticketText.style.top = "243px";
             signOutText.style.top = "303px";
-        } else {
+        } else if (role === "GlobalAdmin"){
+            homeText.style.top = "123px";
+            customerText.style.top = "183px";
+            companyText.style.top = "243px";
+            converterText.style.top = "303px";
+            ticketText.style.top = "363px";
+            signOutText.style.top = "423px";
+        } else if (role === "CompanyAdmin"){
             homeText.style.top = "123px";
             customerText.style.top = "183px";
             converterText.style.top = "243px";
@@ -45,6 +54,12 @@
                 customer.style.width = "80%";
                 customerText.style.color = "black";
                 customerText.style.transition = "1000ms";
+            }
+            if (company !== null && companyText !== null) {
+                company.style.backgroundPositionX = "9%"
+                company.style.width = "80%";
+                companyText.style.color = "black";
+                companyText.style.transition = "1000ms";
             }
 
             home.style.backgroundPositionX = "9%"
@@ -73,6 +88,12 @@
                 customerText.style.color = "transparent";
                 customer.style.width = "45px";
                 customer.style.background = "";
+            }
+            if (company !== null && customerText !== null) {
+                companyText.style.transition = "200ms";
+                companyText.style.color = "transparent";
+                company.style.width = "45px";
+                company.style.background = "";
             }
 
             homeText.style.transition = "200ms";
@@ -114,6 +135,13 @@
                     <li class="menu_Item">
                         <a id="customer" class="menu_customers_Link" href="/customers">
                             <h1 class="customerHeading" id="customerText">Customer</h1>
+                        </a>
+                    </li>
+                {/if}
+                {#if role === "GlobalAdmin"}
+                    <li class="menu_Item">
+                        <a id="company" class="menu_company_Link" href="/companies">
+                            <h1 class="companyHeading" id="companyText">Companies</h1>
                         </a>
                     </li>
                 {/if}
@@ -187,6 +215,15 @@
     }
 
     .signOutHeading {
+        color: transparent;
+        position: fixed;
+        left: 4rem;
+        font-size: 20px;
+        text-indent: 0;
+        font-family: Arial,serif ;
+    }
+
+    .companyHeading {
         color: transparent;
         position: fixed;
         left: 4rem;
@@ -365,7 +402,6 @@
         overflow: hidden;
     }
 
-
     .menu_converters_Link {
         display: block;
         padding: 5px;
@@ -442,6 +478,40 @@
         text-indent: -99999em;
         width: 45px;
         overflow: hidden;
+    }
+    .menu_company_Link:hover {
+        color: orange;
+    }
+
+    .menu_company_Link.active {
+        background: #555;
+    }
+
+    .menu_company_Link::before {
+        content: attr(title);
+        display: inline-block;
+        width: 45px;
+        height: 45px;
+        line-height: 40px;
+        text-align: center;
+        margin-right: 20px;
+        color: orange;
+    }
+
+    .menu_company_Link {
+        background: white url("bootstrap-icons/icons/buildings.svg") no-repeat 50% 50%;
+        display: block;
+        height: 45px;
+        text-indent: -99999em;
+        width: 45px;
+        overflow: hidden;
+        padding: 5px;
+        margin: 15px;
+        text-decoration: none;
+        white-space: nowrap;
+        border-radius: 30px;
+        color: transparent;
+        transition: 300ms;
     }
 
 </style>
