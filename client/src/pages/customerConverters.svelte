@@ -7,7 +7,7 @@
         loadClientConverters,
         addConverter,
         removeConverter,
-        editConverter, loadConverters
+        editConverter, loadConvertersGlobal
     } from "../scripts/converterScript";
     import Modal from "../Components/Modal.svelte";
     import router from "page";
@@ -26,7 +26,6 @@
 
     onMount(() => {
         loadClientConverters(customerId[4]);
-        console.log(customerId[4])
     }
     )
     let showEditPopup = false;
@@ -61,7 +60,7 @@
     const execute = async () => {
         await removeConverter(deleteId);
         showDeletePopup = false;
-        await loadConverters();
+        await loadConvertersGlobal();
     }
 
     function handleAdd() {
@@ -73,7 +72,7 @@
             } else {
                 message = "Converter added!"
                 showAddPopup = false;
-                loadConverters()
+                loadConvertersGlobal()
             }
         })
     }

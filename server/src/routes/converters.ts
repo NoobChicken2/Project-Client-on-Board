@@ -119,51 +119,30 @@ router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
         let converterUpdate;
         console.log("here", updates)
         if (updates.owner_id !== undefined)
-           converterUpdate = updates.owner_id
-        if(updates.installer_id !== undefined)
+            converterUpdate = updates.owner_id
+        if (updates.installer_id !== undefined)
             converterUpdate = updates.installer_id;
-        if(updates.converter_id !== undefined)
+        if (updates.converter_id !== undefined)
             converterUpdate = updates.converter_id;
         console.log("here1", converterUpdate)
-        if(converterUpdate !== undefined) {
+        if (converterUpdate !== undefined) {
             const converterUpdatesString = Object.entries(converterUpdate)
                 .map(([key, value]) => `${key}='${value}'`)
                 .join(', ');
 
 
-            updates.owner_id = undefined;
-            updates.installer_id = undefined;
-            updates.converter_id = undefined;
-
             pool.query(`UPDATE converters
                         SET ${converterUpdatesString}
-                        WHERE converter_id = ${id}`
-                , (error: any, results: any) => {
-                    if (error) {
-                        res.status(500).json({error});
-                    }
-                    res.status(200).json(results);
-                });
-        }
-        console.log(updates);
-
-        const converterDetailsString = Object.entries(updates)
-            .map(([key, value]) => `${key}='${value}'`)
-            .join(', ');
-        pool.query(`
-                    UPDATE converter_details
-                    SET ${converterDetailsString}
-                    WHERE converter_id = ${id}`
-            , (error: any, results: any) => {
+                        WHERE converter_id = ${id}`, (error: any, results: any) => {
                 if (error) {
                     res.status(500).json({error});
                 }
                 res.status(200).json(results);
             });
-    } else {
-        return res.status(401).json({error: "Unauthorized access"})
+        } else {
+            return res.status(401).json({error: "Unauthorized access"})
+        }
     }
-
 });
 
 router.delete('/:id', isLoggedIn, async (req: any, resp: any) => {

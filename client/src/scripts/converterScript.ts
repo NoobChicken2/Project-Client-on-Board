@@ -2,7 +2,7 @@ import {apiData} from "../stores/store";
 
 let converters;
 
-export async function loadConverters() {
+export async function loadConvertersGlobal() {
     const resp = await fetch('http://localhost:3000/converters',{
         headers:{
             'Authorization':'Bearer '+ localStorage.getItem('token')
@@ -143,4 +143,15 @@ export function validateConverterUpdate(data) {
         }
     }
     return true;
+}
+export function loadSelectedData(){
+    if(localStorage.getItem('role') === 'CompanyAdmin'){
+       return  loadSelectConverters(localStorage.getItem('company_id'))
+
+    } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+       return  loadConvertersGlobal()
+    }
+    else if (localStorage.getItem('role') === 'Client'){
+        return loadClientConverters(localStorage.getItem('id'));
+    }
 }

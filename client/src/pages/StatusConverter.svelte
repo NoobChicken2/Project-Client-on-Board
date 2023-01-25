@@ -1,15 +1,15 @@
 <script lang="ts">
     import {createEventDispatcher, onMount, setContext} from "svelte";
     import {
-        loadConverters,
+        loadConvertersGlobal,
         addConverter,
         removeConverter,
         editConverter,
-        isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters
+        isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters, loadSelectedData
     } from "../scripts/converterScript";
     import Modal from "../Components/Modal.svelte";
     import {apiData} from "../stores/store.ts";
-    import {loadCustomers, loadSelectCustomers} from "../scripts/customerScript";
+    import {loadCustomersGlobal, loadSelectCustomers} from "../scripts/customerScript";
     import Pagination from "../components/Pagination.svelte"
 
     const dispatch = createEventDispatcher();
@@ -27,7 +27,7 @@
             loadSelectConverters(localStorage.getItem('company_id'))
 
         } else if (localStorage.getItem('role') === 'GlobalAdmin'){
-            loadConverters()
+            loadConvertersGlobal()
         }
         else if (localStorage.getItem('role') === 'Client'){
             loadClientConverters(localStorage.getItem('id'));
@@ -76,7 +76,7 @@
         if (validateConverterUpdate(dataToUpdate)) {
             await editConverter(dataToUpdate, selectedId);
             showEditPopup = false;
-            await loadConverters();
+            await loadSelectedData();
         }
     }
 
@@ -88,7 +88,8 @@
     const execute = async () => {
         await removeConverter(selectedId);
         showDeletePopup = false;
-        await loadConverters();
+        await loadSelectedData(localStorage.getItem('role'))
+
     }
 
     function handleAdd() {
@@ -102,7 +103,7 @@
                 } else {
                     message = "Converter added!"
                     showAddPopup = false;
-                    loadConverters()
+                    loadSelectedData(localStorage.getItem('role'))
                 }
             })
         }

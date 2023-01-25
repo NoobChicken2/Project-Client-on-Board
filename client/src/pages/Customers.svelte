@@ -5,9 +5,9 @@
     import {
         addCustomer,
         isValidCustomer,
-        loadCustomers, loadSelectCustomers,
+        loadCustomersGlobal, loadSelectCustomers,
         patchCustomer,
-        removeCustomer, validateCustomerUpdate
+        removeCustomer, validateCustomerUpdate, loadSelectedData
     } from "../scripts/customerScript.ts";
     import router from "page";
     import {addCompanyAdmin} from "../scripts/companyAdminScript";
@@ -40,7 +40,7 @@
         if(localStorage.getItem('role') === 'CompanyAdmin'){
             loadSelectCustomers(localStorage.getItem('company_id'))
         } else if (localStorage.getItem('role') === 'GlobalAdmin'){
-            loadCustomers()
+            loadCustomersGlobal()
         }
     })
 
@@ -57,7 +57,7 @@
         if (validateCustomerUpdate(body)) {
             await patchCustomer(customerId, body);
             showEditPopup = false;
-            await loadCustomers();
+            await loadSelectedData();
         }
     }
 
@@ -78,7 +78,7 @@
         if (isValidCustomer(data)) {
             await addCustomer(data)
             showAddPopup = false;
-            await loadCustomers();
+            await loadSelectedData();
         }
     }
 
@@ -94,14 +94,14 @@
         if (isValidCustomer(data)) {
             await addCompanyAdmin(data)
             showAddPopup = false;
-            await loadCustomers();
+            await loadSelectedData();
         }
     }
 
     const deleteCustomer = async () => {
         await removeCustomer(selectedCompanyId)
         showDeletePopup = false;
-        await loadCustomers();
+        await loadSelectedData();
     }
 
     function deleteClicked(user_id) {
