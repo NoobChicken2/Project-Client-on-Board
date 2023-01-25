@@ -76,15 +76,6 @@
                 }
             })
     }
-    function showAddButton() {
-        if(localStorage.getItem('role') === 'GlobalAdmin'){
-            addButton = true;
-        }else if (localStorage.getItem('role') === 'CompanyAdmin'){
-            addButton = true;
-        }else{
-            addButton = false;
-        }
-    }
 </script>
 
 
