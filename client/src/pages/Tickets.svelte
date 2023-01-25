@@ -1,6 +1,6 @@
 <script>
     import {afterUpdate, createEventDispatcher, onMount, setContext} from "svelte";
-    import {loadTickets} from "../scripts/ticketScript.ts";
+    import {loadTickets, checkingValidTicket, addTicket} from "../scripts/ticketScript.ts";
     import {apiData} from "../stores/store.ts";
     import Pagination from "../components/Pagination.svelte";
     import Modal from "../Components/Modal.svelte";
@@ -21,7 +21,11 @@
     let converterID;
     let showEditPopup = false;
     onMount(loadTickets)
-
+    let data = {
+        log_id: "",
+        converter_id: "",
+        log_event:""
+    }
     afterUpdate(() => {
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
         var popoverList = popoverTriggerList.map(function(element){
@@ -66,8 +70,13 @@
     }
 
 
-    function handleAdd(){
-
+    function handleAdd(converterID){
+        if (localStorage.getItem('role') === 'CompanyAdmin') {
+            checkingValidTicket(converterID)
+        }
+        else{
+            addTicket(data)
+        }
     }
 </script>
 
@@ -84,8 +93,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Ticket ID</label>
-                    <input type="number" class="form-control" bind:value={ticketID} required>
+                    <label>Log ID</label>
+                    <input type="number" class="form-control" bind:value={logID} required>
                 </div>
                 <div class="form-group">
                     <label>Converter ID</label>
@@ -100,7 +109,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showAddPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-success" on:click={() => handleAdd()}>Add</button>
+                <button type="button" class="btn btn-success" on:click={() => handleAdd(converterID)}>Add</button>
             </div>
 
         </form>
@@ -108,6 +117,10 @@
 </div>
         <div class="p-4 my-4 bg-light rounded- container">
             {#if localStorage.getItem('role') === 'GlobalAdmin'}
+                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a ticket
+                </button>
+            {/if}
+            {#if localStorage.getItem('role') === 'CompanyAdmin'}
                 <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a ticket
                 </button>
             {/if}

@@ -99,9 +99,6 @@ router.post('/', isLoggedIn,async (req, res) => {
     })
 
 });
-router.post('/add', isLoggedIn, async (req, res) => {
-
-})
 
 router.delete('/:id',isLoggedIn, async (req:any, res:any) => {
     let id = Number(req.body.log_id);
