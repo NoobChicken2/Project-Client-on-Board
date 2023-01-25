@@ -59,12 +59,16 @@ export async function editConverter(data, id) {
     }
 }
 
-export async function addConverter(ownerId, installerId) {
+export async function addConverter(ownerId, installerId, expected_throughput, serial_number, converter_name, converter_id,) {
     let Converter = {
         owner_id: ownerId,
-        installer_id: installerId
-
+        installer_id: installerId,
+        expected_throughput: expected_throughput,
+        serial_number: serial_number,
+        converter_name: converter_name,
+        converter_id: converter_id
     }
+    console.log(Converter)
     const resp = await fetch('http://localhost:3000/converters', {
         method: 'POST',
         headers: {
@@ -102,10 +106,22 @@ function validateNumberField(field, fieldName) {
     return true;
 }
 
-export function isValidConverter(ownerId, installerId) {
-    return (validateNumberField(ownerId, "Owner ID") ||
-        validateNumberField(installerId, "Installer ID"));
+function validateTextField(field, fieldName) {
+    if (field === undefined || field === null || field === "") {
+        alert(`${fieldName} cannot be empty, null or undefined`);
+        return false;
+    }
 
+    return true;
+}
+
+export function isValidConverter(ownerId, installerId, expected_throughput, serial_number, converter_name, converter_id) {
+    return (validateNumberField(ownerId, "Owner ID") ||
+        validateNumberField(installerId, "Installer ID") ||
+        validateNumberField(expected_throughput, "Expected Throughput") ||
+        validateTextField(serial_number, "Serial Number") ||
+        validateTextField(converter_name, "Converter Name") ||
+        validateNumberField(converter_id, "Converter ID") );
 }
 
 export function validateConverterUpdate(data) {

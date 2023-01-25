@@ -1,9 +1,11 @@
 import pool from "../database/databaseConnection";
 import {QueryResult} from "pg";
+import {stat} from "fs";
 
 const cron = require("node-cron")
 
 const express = require("express")
+
 
 export function runUpdateStatusCronJob() {
     cron.schedule('*/5 * * * *', async () => {
@@ -12,13 +14,16 @@ export function runUpdateStatusCronJob() {
 }
 
 async function fetchConverters() {
-    const result =  await getConverterIds();
+    const result = await getConverterIds();
 
     for (let i = 0; i < result.rows.length; i++) {
         let deviceId = result.rows[i].converter_id;
 
+
         let status = await fetchConverterStatus(deviceId);
-        await createTicket(status, deviceId);
+        if (status !== undefined) {
+            await createTicket(status, deviceId);
+        }
     }
 }
 
@@ -64,7 +69,12 @@ async function createTicket(status: string, converter_id: number) {
         }
         if (status === 'Ok') {
             //delete tickets for that converter that are not for throughput
-            await pool.query(`DELETE FROM tickets WHERE log_id IN (SELECT log_id FROM logs WHERE converter_id = $1 AND log_event NOT LIKE 'Daily throughput:%')`, [converter_id]);
+            await pool.query(`DELETE
+                              FROM tickets
+                              WHERE log_id IN (SELECT log_id
+                                               FROM logs
+                                               WHERE converter_id = $1
+                                                 AND log_event NOT LIKE 'Daily throughput:%')`, [converter_id]);
 
         }
 
