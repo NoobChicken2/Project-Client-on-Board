@@ -23,7 +23,6 @@ router.get('/:id',isLoggedIn, async (req:any, res:any) => {
     if (isNaN(id)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
-
     if (req.user.role === 'GlobalAdmin' || req.user.role === 'CompanyAdmin'){
         pool.query(`SELECT *
                 FROM tickets
@@ -100,7 +99,7 @@ router.post('/', isLoggedIn,async (req, res) => {
     })
 
 });
-router.post('/manualadd', async (req, res) => {
+router.post('/manualadd',async (req, res) => {
     let id = Number(req.body.log_id);
     if (!Number.isInteger(id)) {
         return res.status(400).json({error:"log_id must be an integer!"});

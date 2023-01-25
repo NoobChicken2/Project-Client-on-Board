@@ -28,9 +28,12 @@ export async function loadTickets() {
 export function checkingValidTicket() {
 
 }
-export async function addTicket(data) {
+export async function addTicket(logID) {
+    let data = {
+        log_id: logID
+    }
     let resp;
-    resp = await fetch('http://localhost:3000/tickets', {
+    resp = await fetch('http://localhost:3000/tickets/manualadd', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -38,5 +41,5 @@ export async function addTicket(data) {
         },
         body: JSON.stringify(data)
     })
-    return await resp.json
+    return await resp.json();
 }

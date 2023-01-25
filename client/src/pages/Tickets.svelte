@@ -15,17 +15,12 @@
     let rows = [];
     let serverSide = false;
     let showAddPopup = false;
-    let ticketID;
     let logID;
-    let issue;
-    let converterID;
     let showEditPopup = false;
+    let error;
+    let message;
+    let addButton = false;
     onMount(loadTickets)
-    let data = {
-        log_id: "",
-        converter_id: "",
-        log_event:""
-    }
     afterUpdate(() => {
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
         var popoverList = popoverTriggerList.map(function(element){
@@ -70,8 +65,25 @@
     }
 
 
-    function handleAdd(){
-        addTicket(data)
+    function handleAdd() {
+            addTicket(logID).then((response) => {
+                if (response.error !== undefined) {
+                    error = response.error
+                } else {
+                    message = "Ticket added!"
+                    showAddPopup = false;
+                    loadTickets()
+                }
+            })
+    }
+    function showAddButton() {
+        if(localStorage.getItem('role') === 'GlobalAdmin'){
+            addButton = true;
+        }else if (localStorage.getItem('role') === 'CompanyAdmin'){
+            addButton = true;
+        }else{
+            addButton = false;
+        }
     }
 </script>
 
@@ -89,22 +101,14 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Log ID</label>
-                    <input type="number" class="form-control" bind:value={data.log_id} required>
-                </div>
-                <div class="form-group">
-                    <label>Converter ID</label>
-                    <input type="number" class="form-control" bind:value={data.converter_id} required/>
-                </div>
-                <div class="form-group">
-                    <label>Issue</label>
-                    <input type="text" class="form-control" bind:value={data.log_event} required/>
+                    <input type="number" class="form-control" bind:value={logID} required>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showAddPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-success" on:click={() => handleAdd(converterID)}>Add</button>
+                <button type="button" class="btn btn-success" on:click={() => handleAdd()}>Add</button>
             </div>
 
         </form>
@@ -114,8 +118,7 @@
             {#if localStorage.getItem('role') === 'GlobalAdmin'}
                 <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a ticket
                 </button>
-            {/if}
-            {#if localStorage.getItem('role') === 'CompanyAdmin'}
+                {:else if localStorage.getItem('role') === 'CompanyAdmin' }
                 <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a ticket
                 </button>
             {/if}

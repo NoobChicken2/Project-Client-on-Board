@@ -21,6 +21,17 @@ client.test(
     }
 );
 %}
+###
+GET localhost:3000/tickets/1
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
 
 ###
 POST localhost:3000/token
@@ -50,6 +61,24 @@ Accept: application/json
   "last_name": "Kazazi",
   "email": "lucaklaus921@gmail.com",
   "phone_number": "698317572"
+}
+
+> {%
+client.test(
+    "Request executed successfully",
+    function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    }
+);
+%}
+###
+POST localhost:3000/tickets/manualadd
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+  "log_id" : "2124651357192351"
 }
 
 > {%
