@@ -134,7 +134,13 @@
                 {#if role !== "Client"}
                     <li class="menu_Item">
                         <a id="customer" class="menu_customers_Link" href="/customers">
-                            <h1 class="customerHeading" id="customerText">Customer</h1>
+                            <h1 class="customerHeading" id="customerText">
+                                {#if role === "GlobalAdmin"}
+                                    Users
+                                {:else}
+                                    Customers
+                                {/if}
+                            </h1>
                         </a>
                     </li>
                 {/if}
