@@ -47,7 +47,10 @@
 
     let data = {
         owner_id: "",
-        installer_id: ""
+        installer_id: "",
+        expected_throughput: "",
+        serial_number:"",
+
     }
 
     function isEdit(converterId: number): void {
