@@ -99,10 +99,9 @@ function validateNumberField(field, fieldName) {
     return true;
 }
 
-export function isValidConverter(ownerId, installerId, expectedThroughput) {
+export function isValidConverter(ownerId, installerId) {
     return (validateNumberField(ownerId, "Owner ID") ||
-        validateNumberField(installerId, "Installer ID") ||
-        validateNumberField(expectedThroughput, "Expected throughput"));
+        validateNumberField(installerId, "Installer ID"));
 
 }
 
