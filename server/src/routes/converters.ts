@@ -6,7 +6,7 @@ import {isLoggedIn} from "../middleware/authorizationMiddleware";
 const router = express.Router();
 
 router.get('/', isLoggedIn, async (req: any, res: any) => {
-    if (req.user.role === 'GlobalAdmin') {
+    if (req.user.role === 'GlobalAdmin' || req.user.role === "CompanyAdmin") {
         pool.query(`SELECT *
                     FROM converters
                              INNER JOIN converter_details cd on converters.converter_id = cd.converter_id
@@ -116,20 +116,50 @@ router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
     if (req.user.role === 'GlobalAdmin' || req.user.role === 'CompanyAdmin') {
         const id = req.params.id;
         const updates = req.body;
+        let converterUpdate;
+        console.log("here", updates)
+        if (updates.owner_id !== undefined)
+           converterUpdate = updates.owner_id
+        if(updates.installer_id !== undefined)
+            converterUpdate = updates.installer_id;
+        if(updates.converter_id !== undefined)
+            converterUpdate = updates.converter_id;
+        console.log("here1", converterUpdate)
+        if(converterUpdate !== undefined) {
+            const converterUpdatesString = Object.entries(converterUpdate)
+                .map(([key, value]) => `${key}='${value}'`)
+                .join(', ');
 
-        const updatesString = Object.entries(updates)
+
+            updates.owner_id = undefined;
+            updates.installer_id = undefined;
+            updates.converter_id = undefined;
+
+            pool.query(`UPDATE converters
+                        SET ${converterUpdatesString}
+                        WHERE converter_id = ${id}`
+                , (error: any, results: any) => {
+                    if (error) {
+                        res.status(500).json({error});
+                    }
+                    res.status(200).json(results);
+                });
+        }
+        console.log(updates);
+
+        const converterDetailsString = Object.entries(updates)
             .map(([key, value]) => `${key}='${value}'`)
             .join(', ');
-
-
-        pool.query(`UPDATE converters
-                    SET ${updatesString}
-                    WHERE converter_id = ${id}`, (error: any, results: any) => {
-            if (error) {
-                res.status(500).json({error});
-            }
-            res.status(200).json(results);
-        });
+        pool.query(`
+                    UPDATE converter_details
+                    SET ${converterDetailsString}
+                    WHERE converter_id = ${id}`
+            , (error: any, results: any) => {
+                if (error) {
+                    res.status(500).json({error});
+                }
+                res.status(200).json(results);
+            });
     } else {
         return res.status(401).json({error: "Unauthorized access"})
     }
