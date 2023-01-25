@@ -11,7 +11,7 @@ const LOW_THROUGHPUT_MULTIPLIER = 0.7;
 
 export async function runUpdateThroughputCronJob() {
     cron.schedule('*/5 * * * *', async () => {
-        console.log("throughput CRON job running every 5 minutes")
+
         await fetchConvertersThroughputs()
     });
 }
@@ -47,13 +47,10 @@ async function updateThroughPut(throughput: number, converterId: number) {
 
         const log_id = await addLog("Daily throughput: " + throughput, converterId);
 
-        console.log("log ID " + log_id)
-        console.log("throughput " + throughput)
+
 
         const result  = await pool.query(`SELECT expected_throughput FROM converter_details WHERE converter_id = ($1)`, [converterId]);
         const expectedThroughput = result.rows[0].expected_throughput
-
-        console.log("expected " + expectedThroughput)
 
         if (throughput < expectedThroughput * LOW_THROUGHPUT_MULTIPLIER) {
             //add log

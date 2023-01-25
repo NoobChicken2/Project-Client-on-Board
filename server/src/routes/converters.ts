@@ -100,7 +100,7 @@ router.post('/', isLoggedIn, async (req: any, resp: any) => {
         let installerId = req.body.installer_id;
         let expected_throughput = req.body.expected_throughput;
 
-        pool.query('INSERT INTO converters(owner_id,installer_id,expected_throughput) VALUES ($1,$2,$3)', [ownerId, installerId, expected_throughput], (err: any, result: { rows: any; }) => {
+        pool.query('INSERT INTO converters(owner_id,installer_id) VALUES ($1,$2)', [ownerId, installerId, expected_throughput], (err: any, result: { rows: any; }) => {
             if (err) {
                 return resp.status(400).json({error: "Server side issue (POST)"})
             }
@@ -115,17 +115,27 @@ router.post('/', isLoggedIn, async (req: any, resp: any) => {
 router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
     if (req.user.role === 'GlobalAdmin' || req.user.role === 'CompanyAdmin') {
         const id = req.params.id;
-        const updates = req.body;
-        let converterUpdate;
-        console.log("here", updates)
-        if (updates.owner_id !== undefined)
-            converterUpdate = updates.owner_id
-        if (updates.installer_id !== undefined)
-            converterUpdate = updates.installer_id;
-        if (updates.converter_id !== undefined)
-            converterUpdate = updates.converter_id;
-        console.log("here1", converterUpdate)
-        if (converterUpdate !== undefined) {
+        const updates: any = req.body;
+
+        let converterDetailsUpdate: any = {};
+        let converterUpdate: any = {};
+
+
+        if (updates.converter_name !== undefined && updates.converter_name !== '')
+            converterDetailsUpdate.converter_name = updates.converter_name;
+        if (updates.expected_throughput !== undefined && updates.expected_throughput !== '')
+            converterDetailsUpdate.expected_throughput = updates.expected_throughput;
+        if (updates.serial_number !== undefined && updates.serial_number !== '')
+            converterDetailsUpdate.serial_number = updates.serial_number;
+
+        if (updates.owner_id !== undefined && updates.owner_id !== '')
+            converterUpdate.owner_id = updates.owner_id;
+        if (updates.installer_id !== undefined && updates.installer_id !== '')
+            converterUpdate.installer_id = updates.installer_id;
+
+
+        if (Object.keys(converterUpdate).length > 0 && req.user.role === 'GlobalAdmin') {
+
             const converterUpdatesString = Object.entries(converterUpdate)
                 .map(([key, value]) => `${key}='${value}'`)
                 .join(', ');
@@ -136,14 +146,34 @@ router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
                         WHERE converter_id = ${id}`, (error: any, results: any) => {
                 if (error) {
                     res.status(500).json({error});
+                } else {
+                    res.status(200).json(results);
                 }
-                res.status(200).json(results);
             });
-        } else {
-            return res.status(401).json({error: "Unauthorized access"})
         }
+
+
+        if (Object.keys(converterDetailsUpdate).length > 0) {
+            const converterDetailsString = Object.entries(converterDetailsUpdate)
+                .map(([key, value]) => `${key}='${value}'`)
+                .join(', ');
+
+
+            pool.query(`UPDATE converter_details
+                        SET ${converterDetailsString}
+                        WHERE converter_id = ${id}`, (error: any, results: any) => {
+                if (error) {
+                    res.status(500).json({error});
+                } else {
+                    res.status(200).json(results);
+                }
+            });
+        }
+    }else {
+        return res.status(401).json({error: "Unauthorized access"})
     }
 });
+
 
 router.delete('/:id', isLoggedIn, async (req: any, resp: any) => {
     if (req.user.role === 'GlobalAdmin'|| req.user.role === 'CompanyAdmin') {

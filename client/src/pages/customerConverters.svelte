@@ -216,10 +216,6 @@
                     <label>Expected Throughput</label>
                     <input bind:value={body.expected_throughput} type="text" class="form-control" required/>
                 </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"

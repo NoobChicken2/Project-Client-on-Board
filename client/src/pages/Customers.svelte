@@ -289,6 +289,7 @@
                     <th scope="col">Firstname</th>
                     <th scope="col">Lastname</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
@@ -301,6 +302,7 @@
                         <td>{Customer.first_name}</td>
                         <td>{Customer.last_name}</td>
                         <td>{Customer.email}</td>
+                        <td>{Customer.role}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                     on:click={ () =>deleteClicked(Customer.user_id)}></button>

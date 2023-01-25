@@ -65,7 +65,7 @@ async function createTicket(status: string, converter_id: number) {
         if (status === 'Ok') {
             //delete tickets for that converter that are not for throughput
             await pool.query(`DELETE FROM tickets WHERE log_id IN (SELECT log_id FROM logs WHERE converter_id = $1 AND log_event NOT LIKE 'Daily throughput:%')`, [converter_id]);
-        console.log("deleted tickets")
+
         }
 
     } catch (err) {
