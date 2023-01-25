@@ -36,12 +36,7 @@ export async function addTicket(data) {
             'Content-Type': 'application/json',
             'Authorization':'Bearer '+ localStorage.getItem('token')
         },
-        body: JSON.stringify({
-            log_id: data.log_id,
-            log_event: data.log_event,
-            converter_id: data.converter_id
-        })
-    }).then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error(error))
+        body: JSON.stringify(data)
+    })
+    return await resp.json
 }

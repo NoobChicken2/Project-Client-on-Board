@@ -70,13 +70,8 @@
     }
 
 
-    function handleAdd(converterID){
-        if (localStorage.getItem('role') === 'CompanyAdmin') {
-            checkingValidTicket(converterID)
-        }
-        else{
-            addTicket(data)
-        }
+    function handleAdd(){
+        addTicket(data)
     }
 </script>
 
@@ -94,15 +89,15 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Log ID</label>
-                    <input type="number" class="form-control" bind:value={logID} required>
+                    <input type="number" class="form-control" bind:value={data.log_id} required>
                 </div>
                 <div class="form-group">
                     <label>Converter ID</label>
-                    <input type="number" class="form-control" bind:value={converterID} required/>
+                    <input type="number" class="form-control" bind:value={data.converter_id} required/>
                 </div>
                 <div class="form-group">
                     <label>Issue</label>
-                    <input type="text" class="form-control" bind:value={issue} required/>
+                    <input type="text" class="form-control" bind:value={data.log_event} required/>
                 </div>
             </div>
             <div class="modal-footer">

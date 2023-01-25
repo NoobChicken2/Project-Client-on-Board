@@ -1,6 +1,7 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
 import {isLoggedIn} from "../middleware/authorizationMiddleware";
+import error from "svelte/types/compiler/utils/error";
 const router = express.Router();
 
 router.get('/',isLoggedIn, async (req:any, res:any) => {
@@ -99,6 +100,24 @@ router.post('/', isLoggedIn,async (req, res) => {
     })
 
 });
+router.post('/manualadd', async (req, res) => {
+    let id = Number(req.body.log_id);
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({error:"log_id must be an integer!"});
+    }
+
+    pool.query('SELECT log_id From logs WHERE log_id = id ', (error: any, results: {rows:any}) => {
+        if (isNaN(results.rows)){
+            return res.status(500).json(error)
+        }
+    })
+    pool.query('INSERT INTO tickets (log_id) values [id]', (error: any, results:{rows:any}) => {
+        if (error) {
+            return res.status(500).json(error)
+        }
+        res.status(200).json(results.rows)
+    })
+})
 
 router.delete('/:id',isLoggedIn, async (req:any, res:any) => {
     let id = Number(req.body.log_id);
