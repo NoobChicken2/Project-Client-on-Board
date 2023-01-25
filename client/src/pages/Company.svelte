@@ -187,8 +187,8 @@
             <button class=" btn btn-success" type="button" on:click={ () => showAddPopup= true}>Add new a company
             </button>
         </div>
-        <table class="table table-hover ; table table-striped">
-            <thead>
+        <table class="table table-hover">
+            <thead class="table-dark">
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
@@ -243,8 +243,7 @@
     }
     body{
 
-
-        background: url("client/lib/Image 2.svg") no-repeat fixed center;
+        background: url("/lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;

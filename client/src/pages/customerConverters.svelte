@@ -74,13 +74,12 @@
             }
         })
     }
-    afterUpdate(() => {
+
         window.onload = () => {
             let myAlert = document.querySelector('.toast')
             let bsAlert = new bootstrap.Toast(myAlert)
             bsAlert.show()
         }
-    })
 
     function converterLogs(id) {
         router('/converters/' + id + '/logs');
