@@ -49,9 +49,7 @@ export function tokenBodyDetails (req: { body: any; }, res: { status: (arg0: num
 
 export function isLoggedIn (req:any,res:any,next:NextFunction) {
     let token = req.get('Authorization');
-    console.log(token)
     token = token.split(' ');
-    console.log(token[1])
 
     // @ts-ignore
     jwt.verify(token[1], secret, {algorithm: 'HS256'}, (err:any) => {
@@ -65,23 +63,3 @@ export function isLoggedIn (req:any,res:any,next:NextFunction) {
     });
 }
 
-export function roleScanner (req:express.Request,resp:express.Response,next:express.NextFunction){
-    let token = req.get('Authorization');
-    // @ts-ignore
-    let to = token.split('Bearer');
-
-
-
-    // @ts-ignore
-    jwt.verify(token[1], secret, {algorithm: 'HS256'}, (err) => {
-        if (err) {
-            return resp.status(401).json({error: err})
-        } else {
-            // @ts-ignore
-            req.user = jwt.decode(req.token, secret);
-            return next();
-        }
-    });
-
-
-}

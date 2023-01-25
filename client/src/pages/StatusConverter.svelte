@@ -1,15 +1,15 @@
 <script lang="ts">
     import {createEventDispatcher, onMount, setContext} from "svelte";
     import {
-        loadConverters,
+        loadConvertersGlobal,
         addConverter,
         removeConverter,
         editConverter,
-        isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters
+        isValidConverter, validateConverterUpdate, loadClientConverters, loadSelectConverters, loadSelectedData
     } from "../scripts/converterScript";
     import Modal from "../Components/Modal.svelte";
     import {apiData} from "../stores/store.ts";
-    import {loadCustomers, loadSelectCustomers} from "../scripts/customerScript";
+    import {loadCustomersGlobal, loadSelectCustomers} from "../scripts/customerScript";
     import Pagination from "../components/Pagination.svelte"
 
     const dispatch = createEventDispatcher();
@@ -27,7 +27,7 @@
             loadSelectConverters(localStorage.getItem('company_id'))
 
         } else if (localStorage.getItem('role') === 'GlobalAdmin'){
-            loadConverters()
+            loadConvertersGlobal()
         }
         else if (localStorage.getItem('role') === 'Client'){
             loadClientConverters(localStorage.getItem('id'));
@@ -40,6 +40,10 @@
 
     let ownerId;
     let installerId;
+    let expected_throughput;
+    let serial_number;
+    let converter_name;
+    let converter_id;
 
     let error;
     let message;
@@ -47,7 +51,9 @@
 
     let data = {
         owner_id: "",
-        installer_id: ""
+        installer_id: "",
+        expected_throughput: "",
+        serial_number:"",
     }
 
     function isEdit(converterId: number): void {
@@ -60,9 +66,11 @@
             owner_id: string;
             installer_id: string;
             expected_throughput: string;
+            serial_number:string;
+            converter_name:string;
         };
 
-        const fieldsToUpdate: Array<keyof Data> = ['owner_id', 'installer_id', 'expected_throughput'];
+        const fieldsToUpdate: Array<keyof Data> = ['owner_id', 'installer_id', 'expected_throughput', "serial_number", "converter_name"];
         const dataToUpdate: Partial<Data> = {};
 
         fieldsToUpdate.forEach((field) => {
@@ -76,7 +84,7 @@
         if (validateConverterUpdate(dataToUpdate)) {
             await editConverter(dataToUpdate, selectedId);
             showEditPopup = false;
-            await loadConverters();
+            await loadSelectedData();
         }
     }
 
@@ -88,21 +96,22 @@
     const execute = async () => {
         await removeConverter(selectedId);
         showDeletePopup = false;
-        await loadConverters();
+        await loadSelectedData()
+        converter_name:""
     }
 
     function handleAdd() {
-        if (isValidConverter(ownerId, installerId)) {
+        if (isValidConverter(ownerId, installerId,expected_throughput,serial_number,converter_name,converter_id)) {
             error = undefined;
             message = undefined;
 
-            addConverter(ownerId, installerId).then((response) => {
+            addConverter(ownerId, installerId,expected_throughput,serial_number,converter_name,converter_id).then((response) => {
                 if (response.error !== undefined) {
                     error = response.error
                 } else {
                     message = "Converter added!"
                     showAddPopup = false;
-                    loadConverters()
+                    loadSelectedData()
                 }
             })
         }
@@ -176,7 +185,16 @@
                         on:click={ () => showAddPopup = false}>
                 </button>
             </div>
+
             <div class="modal-body">
+                <div class="form-group">
+                    <label>Converter Name</label>
+                    <input type="text" class="form-control" bind:value={converter_name} required/>
+                </div>
+                <div class="form-group">
+                    <label>Converter ID</label>
+                    <input type="number" class="form-control" bind:value={converter_id} required/>
+                </div>
                 <div class="form-group">
                     <label>Owner ID</label>
                     <input type="number" class="form-control" bind:value={ownerId} required>
@@ -185,6 +203,16 @@
                     <label>Installer ID</label>
                     <input type="number" class="form-control" bind:value={installerId} required/>
                 </div>
+                <div class="form-group">
+                    <label>Serial Number</label>
+                    <input type="text" class="form-control" bind:value={serial_number} required/>
+                </div>
+
+                <div class="form-group">
+                    <label>Expected Throughput</label>
+                    <input type="number" class="form-control" bind:value={expected_throughput} required/>
+                </div>
+
                 {#if error}<p>{error}</p> {/if}
                 {#if message}<p>{message}</p>{/if}
             </div>
@@ -211,12 +239,24 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <label>Converter_Name</label>
+                    <input bind:value={data.converter_name} type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
                     <label>Owner ID</label>
-                    <input bind:value={data.owner_id} type="text" class="form-control" required>
+                    <input bind:value={data.owner_id} type="number" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Installer ID</label>
-                    <input bind:value={data.installer_id} type="email" class="form-control" required>
+                    <input bind:value={data.installer_id} type="number" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Expected Throughput</label>
+                    <input bind:value={data.expected_throughput} type="number" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Serial Number</label>
+                    <input bind:value={data.serial_number} type="text" class="form-control" required>
                 </div>
 
             </div>
@@ -256,15 +296,15 @@
                     <td>{Converter.converter_name}</td>
                     <td>{Converter.expected_throughput}</td>
                     <td>{Converter.throughput}</td>
-
                     <td>{Converter.status}</td>
-
+                    {#if localStorage.getItem('role') === 'GlobalAdmin'}
                     <td>
                         <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                 on:click={() => deleteConverter(Converter.converter_id)}></button>
                         <button class="bi bi-pencil-square ; btn btn-primary" type="button"
                                 on:click={() =>isEdit(Converter.converter_id)}></button>
                     </td>
+                    {/if}
                 </tr>
                 {/if}
             {/each}

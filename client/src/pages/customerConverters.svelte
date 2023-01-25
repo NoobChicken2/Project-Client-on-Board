@@ -3,15 +3,19 @@
 
     export let params;
     import {afterUpdate, createEventDispatcher, onMount, setContext} from "svelte";
-    import {loadConverters, addConverter, removeConverter} from "../scripts/converterScript";
+    import {
+        loadClientConverters,
+        addConverter,
+        removeConverter,
+        editConverter, loadConvertersGlobal
+    } from "../scripts/converterScript";
     import Modal from "../Components/Modal.svelte";
     import router from "page";
     import Pagination from "../components/Pagination.svelte";
 
-    let url = `http://localhost:3000/converters/owner/`+6
-
     const dispatch = createEventDispatcher();
-
+    let url = document.URL;
+    let customerId = url.split("/")
     let loading = false;
     let page = 0;
     let pageIndex = 0;
@@ -20,20 +24,10 @@
     let rows = [];
     let serverSide = false;
 
-
-    async function getConverterByOwnerId() {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        const json = await response.json();
-        console.log(url)
-        return json;
+    onMount(() => {
+        loadClientConverters(customerId[4]);
     }
-
-    onMount(loadConverters)
+    )
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
@@ -41,14 +35,23 @@
     let ownerId;
     let installerId;
     let expected_throughput;
-
+    let converterId;
+    let body = {};
     let error;
     let message;
     let deleteId;
 
-    const editConverter = () => {
-
+    const isEditConverter = (id) => {
+        converterId = id;
+        showEditPopup = true;
     }
+    const handleEdit = async () => {
+
+       await editConverter(body, converterId)
+        showEditPopup = false;
+       await loadClientConverters(customerId[4])
+    }
+
 
     function deleteConverter(converter_id) {
         deleteId = converter_id;
@@ -58,7 +61,7 @@
     const execute = async () => {
         await removeConverter(deleteId);
         showDeletePopup = false;
-        await loadConverters();
+        await loadConvertersGlobal();
     }
 
     function handleAdd() {
@@ -70,17 +73,16 @@
             } else {
                 message = "Converter added!"
                 showAddPopup = false;
-                loadConverters()
+                loadConvertersGlobal()
             }
         })
     }
-    afterUpdate(() => {
+
         window.onload = () => {
             let myAlert = document.querySelector('.toast')
             let bsAlert = new bootstrap.Toast(myAlert)
             bsAlert.show()
         }
-    })
 
     function converterLogs(id) {
         router('/converters/' + id + '/logs');
@@ -205,26 +207,22 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" required>
+                    <input bind:value={body.converter_name} type="text" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>###</label>
-                    <input type="email" class="form-control" required>
+                    <label>Serial Number</label>
+                    <input bind:value={body.serial_number} type="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required/>
-                </div>
-                <div class="form-group">
-                    <label>###</label>
-                    <input type="text" class="form-control" required>
+                    <label>Expected Throughput</label>
+                    <input bind:value={body.expected_throughput} type="text" class="form-control" required/>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         on:click={ () => showEditPopup = false}>Close
                 </button>
-                <button type="button" class="btn btn-primary" on:click={() => editConverter()}>Save changes</button>
+                <button type="button" class="btn btn-primary" on:click={() => handleEdit()}>Save changes</button>
             </div>
         </form>
     </Modal>
@@ -242,6 +240,8 @@
                 <th scope="col">Converter_id</th>
                 <th scope="col">Converter Name</th>
                 <th scope="col">Status</th>
+                <th scope="col">Expected Throughput</th>
+                <th scope="col">Serial Number</th>
             </tr>
             </thead>
             <tbody>
@@ -254,10 +254,13 @@
                         <td>{Converter.converter_name}</td>
                         <td>{Converter.status}</td>
                         <td>{Converter.expected_throughput}</td>
+                        <td>{Converter.serial_number}</td>
                         <td>
                             <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                     on:click={() => deleteConverter(Converter.converter_id) }></button>
-                            <i class="bi bi-pencil-square ; btn btn-primary"></i>
+                            <button class="bi bi-pencil-square ; btn btn-primary"
+                            on:click={() => isEditConverter(Converter.converter_id)}>
+                            </button>
                             <button class="bi bi-journal ; btn btn-secondary"
                                     on:click|preventDefault={converterLogs(Converter.converter_id)}></button>
                         </td>

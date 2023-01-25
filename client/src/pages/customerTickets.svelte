@@ -1,7 +1,7 @@
 <script>
 import {apiData} from "../stores/store";
 import {createEventDispatcher, onMount, setContext} from "svelte";
-import {loadConverters} from "../scripts/converterScript";
+import {loadConvertersGlobal} from "../scripts/converterScript";
 import Pagination from "../components/Pagination.svelte";
 
 const dispatch = createEventDispatcher();
@@ -14,7 +14,7 @@ let responsive = true;
 let rows = [];
 let serverSide = false;
 
-onMount(loadConverters)
+onMount(loadConvertersGlobal)
 
 $: rows = new Array($apiData.length);
 
