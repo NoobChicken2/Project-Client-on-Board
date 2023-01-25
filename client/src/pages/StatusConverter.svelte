@@ -88,7 +88,7 @@
     const execute = async () => {
         await removeConverter(selectedId);
         showDeletePopup = false;
-        await loadSelectedData(localStorage.getItem('role'))
+        await loadSelectedData()
 
     }
 
@@ -103,7 +103,7 @@
                 } else {
                     message = "Converter added!"
                     showAddPopup = false;
-                    loadSelectedData(localStorage.getItem('role'))
+                    loadSelectedData()
                 }
             })
         }
@@ -257,15 +257,15 @@
                     <td>{Converter.converter_name}</td>
                     <td>{Converter.expected_throughput}</td>
                     <td>{Converter.throughput}</td>
-
                     <td>{Converter.status}</td>
-
+                    {#if localStorage.getItem('role') === 'GlobalAdmin'}
                     <td>
                         <button class="bi bi-trash3-fill ; btn btn-danger" type="button"
                                 on:click={() => deleteConverter(Converter.converter_id)}></button>
                         <button class="bi bi-pencil-square ; btn btn-primary" type="button"
                                 on:click={() =>isEdit(Converter.converter_id)}></button>
                     </td>
+                    {/if}
                 </tr>
                 {/if}
             {/each}
