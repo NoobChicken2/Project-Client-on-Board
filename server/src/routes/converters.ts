@@ -154,9 +154,8 @@ router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
                 .map(([key, value]) => `${key}='${value}'`)
                 .join(', ');
 
-            console.log(`UPDATE converters SET ${converterUpdatesString} WHERE converter_id = ${id}`)
 
-            await   pool.query(`UPDATE converters SET ${converterUpdatesString} WHERE converter_id = ${id}`);
+            await   pool.query(`UPDATE converters SET ${converterUpdatesString} WHERE converter_id = $1`,[id]);
         }
 
         if (Object.keys(converterDetailsUpdate).length > 0) {
@@ -164,11 +163,11 @@ router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
                 .map(([key, value]) => `${key}='${value}'`)
                 .join(', ');
 
-            console.log(`UPDATE converter_details SET ${converterDetailsString} WHERE converter_id = ${id}`)
+
 
             await  pool.query(`UPDATE converter_details
                         SET ${converterDetailsString}
-                        WHERE converter_id = ${id}`);
+                        WHERE converter_id = $1`,[id]);
         }
 
         return res.status(201).json(req.body);
