@@ -73,48 +73,24 @@ router.get('/users/:userId', isLoggedIn, async (req, res) => {
             break;
     }
 });
-
-router.post('/', isLoggedIn,async (req, res) => {
-    let id = Number(req.body.log_id);
+router.post('/',isLoggedIn,async (req, res) => {
+    let id = Number(req.body.converter_id);
+    let issue = req.body.issue;
+    let log_id;
     if (!Number.isInteger(id)) {
-        return res.status(400).json({error:"log_id must be an integer!"});
+        return res.status(400).json({error:"converter_id must be an integer!"});
     }
-    try {
-        let {rows} = await pool.query(`SELECT *
-                FROM tickets
-                WHERE log_id = ${id}`)
-
-        if (rows.length > 0) {
-            return res.status(400).json({error:"A ticket for this log is already existed!"});
+    await pool.query('INSERT INTO logs(converter_id, log_event) VALUES ($1,$2) RETURNING log_id', [id, issue], (err: any, result: { rows: any; }) => {
+        if (err) {
+            return res.status(400).json({error: "Server side issue (POST)"})
         }
-    } catch (e) {
-
-    }
-    pool.query(`INSERT INTO tickets (log_id)
-                VALUES (${id})`, (error: any, results: { rows: any; }) => {
-        if (error) {
-            return res.status(500).json(error)
-        }
-        res.status(200).json(results.rows)
+        log_id = result.rows;
     })
-
-});
-router.post('/manualadd',async (req, res) => {
-    let id = Number(req.body.log_id);
-    if (!Number.isInteger(id)) {
-        return res.status(400).json({error:"log_id must be an integer!"});
-    }
-
-    pool.query('SELECT log_id From logs WHERE log_id = id ', (error: any, results: {rows:any}) => {
-        if (isNaN(results.rows)){
-            return res.status(500).json(error)
+    await pool.query('INSERT INTO tickets (log_id) VALUES ($1) ', [log_id], (err: any, result2:{rows:any}) => {
+        if (err) {
+            return res.status(400).json({error: "Server side issue (POST)"})
         }
-    })
-    pool.query('INSERT INTO tickets (log_id) values [id]', (error: any, results:{rows:any}) => {
-        if (error) {
-            return res.status(500).json(error)
-        }
-        res.status(200).json(results.rows)
+        res.status(200).json(result2.rows);
     })
 })
 

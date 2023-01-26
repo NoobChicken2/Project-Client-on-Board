@@ -15,11 +15,14 @@
     let rows = [];
     let serverSide = false;
     let showAddPopup = false;
-    let logID;
     let showEditPopup = false;
     let error;
     let message;
-    let addButton = false;
+
+    let ticket = {
+        issue: "",
+        converterID: ""
+    }
     onMount(loadTickets)
     afterUpdate(() => {
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
@@ -66,15 +69,8 @@
 
 
     function handleAdd() {
-            addTicket(logID).then((response) => {
-                if (response.error !== undefined) {
-                    error = response.error
-                } else {
-                    message = "Ticket added!"
-                    showAddPopup = false;
-                    loadTickets()
-                }
-            })
+         checkingValidTicket(ticket)
+        addTicket
     }
 </script>
 
@@ -91,8 +87,12 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Log ID</label>
-                    <input type="number" class="form-control" bind:value={logID} required>
+                    <label>Issue</label>
+                    <input type="text" class="form-control" bind:value={ticket.issue} required>
+                </div>
+                <div class="form-group">
+                    <label>Converter ID</label>
+                    <input type="number" class="form-control" bind:value={ticket.converterID} required>
                 </div>
             </div>
             <div class="modal-footer">
@@ -106,13 +106,8 @@
     </Modal>
 </div>
         <div class="p-4 my-4 bg-light rounded- container">
-            {#if localStorage.getItem('role') === 'GlobalAdmin'}
                 <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a ticket
                 </button>
-                {:else if localStorage.getItem('role') === 'CompanyAdmin' }
-                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a ticket
-                </button>
-            {/if}
             <!-- Table of tickets -->
             <table style="text-align: left" class="table table-hover" id="table__tickets">
                 <thead class= "table-dark">

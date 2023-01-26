@@ -72,13 +72,14 @@ client.test(
 );
 %}
 ###
-POST localhost:3000/tickets/manualadd
+POST localhost:3000/tickets
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{token}}
 
 {
-  "log_id" : "2124651357192351"
+  "converter_id" : "12",
+  "issue": "hello"
 }
 
 > {%
