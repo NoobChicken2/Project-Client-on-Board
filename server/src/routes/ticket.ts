@@ -73,13 +73,13 @@ router.get('/users/:userId', isLoggedIn, async (req, res) => {
             break;
     }
 });
-router.post('/',isLoggedIn,async (req, res) => {
+router.post('/', isLoggedIn, async (req, res) => {
     let id = Number(req.body.converter_id);
-    let issue = req.body.issue;
+    let issue = req.body.logEvent;
     let log_id;
     if (!Number.isInteger(id)) {
         return res.status(400).json({error:"converter_id must be an integer!"});
-    }
+    }1
     await pool.query('INSERT INTO logs(converter_id, log_event) VALUES ($1,$2) RETURNING log_id', [id, issue], (err: any, result: { rows: any; }) => {
         if (err) {
             return res.status(400).json({error: "Server side issue (POST)"})
@@ -90,7 +90,7 @@ router.post('/',isLoggedIn,async (req, res) => {
         if (err) {
             return res.status(400).json({error: "Server side issue (POST)"})
         }
-        res.status(200).json(result2.rows);
+        res.status(200).json({success: 'Ticket Added Successfully'});
     })
 })
 

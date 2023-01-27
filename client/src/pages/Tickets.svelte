@@ -19,10 +19,8 @@
     let error;
     let message;
 
-    let ticket = {
-        issue: "",
-        converterID: ""
-    }
+    let issue;
+    let converter_id;
     onMount(loadTickets)
     afterUpdate(() => {
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
@@ -69,8 +67,13 @@
 
 
     function handleAdd() {
-         checkingValidTicket(ticket)
-        addTicket
+        if (checkingValidTicket(converter_id)) {
+            addTicket(issue, converter_id)
+            showAddPopup = false;
+        }else {
+
+        }
+        loadTickets();
     }
 </script>
 
@@ -88,11 +91,11 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Issue</label>
-                    <input type="text" class="form-control" bind:value={ticket.issue} required>
+                    <input type="text" class="form-control" bind:value={issue} required>
                 </div>
                 <div class="form-group">
                     <label>Converter ID</label>
-                    <input type="number" class="form-control" bind:value={ticket.converterID} required>
+                    <input type="number" class="form-control" bind:value={converter_id} required>
                 </div>
             </div>
             <div class="modal-footer">

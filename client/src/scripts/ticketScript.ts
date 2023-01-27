@@ -26,7 +26,7 @@ export async function loadTickets() {
 
 
 }
-export async function checkingValidTicket(ticket) {
+export async function checkingValidTicket(converterID) {
     if(localStorage.getItem('role') === 'CompanyAdmin'){
         let resp = await fetch(`http://localhost:3000/converters/owner/${localStorage.getItem('id')}`, {
             headers: {
@@ -34,7 +34,7 @@ export async function checkingValidTicket(ticket) {
             }
         });
         let converters = await resp.json();
-        if(converters.id = ticket.converterID){
+        if(converters.id = converterID){
             return true;
         }else{
             return false;
@@ -46,7 +46,7 @@ export async function checkingValidTicket(ticket) {
             }
         });
         let converters = await resp.json();
-        if(converters.id = ticket.converterID){
+        if(converters.id = converterID){
             return true;
         }else{
             return false;
@@ -55,18 +55,18 @@ export async function checkingValidTicket(ticket) {
         return true;
     }
 }
-// export async function addTicket(logID) {
-//     let data = {
-//         log_id: logID
-//     }
-//     let resp;
-//     resp = await fetch('http://localhost:3000/tickets', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Authorization':'Bearer '+ localStorage.getItem('token')
-//         },
-//         body: JSON.stringify(data)
-//     })
-//     return await resp.json();
-// }
+export async function addTicket(issue, converter_id) {
+    await fetch('http://localhost:3000/tickets', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization':'Bearer '+ localStorage.getItem('token')
+        },
+        body: JSON.stringify({
+            issue: issue,
+            converter_id: converter_id
+        })
+    }).then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
+}
