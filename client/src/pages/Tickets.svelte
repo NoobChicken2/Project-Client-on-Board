@@ -77,7 +77,6 @@
     }
 </script>
 
-
 <body>
 <div class="container">
     <Modal  open={showAddPopup} on:click={ () => showEditPopup = false} >

@@ -24,7 +24,7 @@
 
 <body>
     <Header username={username}/>
-    <div class="container mt-4 px-5" id="cardContainer">
+    <div class="container mt-5 px-5 pt-3" id="cardContainer">
         <div class="row row-cols-1 row-cols-md-4">
             {#each currentCards as card}
                 <div class="col mt-5 d-flex justify-content-center mx-auto">

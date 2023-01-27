@@ -74,25 +74,18 @@ router.get('/users/:userId', isLoggedIn, async (req, res) => {
     }
 });
 router.post('/', isLoggedIn, async (req, res) => {
-    let id = Number(req.body.converter_id);
-    let issue = req.body.logEvent;
-    let log_id;
+    const id =req.body.converter_id
+    const issue = req.body.issue;
+    let log_id: number;
     if (!Number.isInteger(id)) {
         return res.status(400).json({error:"converter_id must be an integer!"});
-    }1
-    await pool.query('INSERT INTO logs(converter_id, log_event) VALUES ($1,$2) RETURNING log_id', [id, issue], (err: any, result: { rows: any; }) => {
-        if (err) {
-            return res.status(400).json({error: "Server side issue (POST)"})
-        }
-        log_id = result.rows;
-    })
-    await pool.query('INSERT INTO tickets (log_id) VALUES ($1) ', [log_id], (err: any, result2:{rows:any}) => {
-        if (err) {
-            return res.status(400).json({error: "Server side issue (POST)"})
-        }
-        res.status(200).json({success: 'Ticket Added Successfully'});
-    })
+    }
+    const {rows} = await pool.query('INSERT INTO logs(converter_id, log_event) VALUES ($1,$2) RETURNING log_id', [id, issue]);
+    log_id = rows[0].log_id;
+    await pool.query('INSERT INTO tickets (log_id) VALUES ($1) ', [log_id])
+    res.status(200).json({success: 'Ticket Added Successfully'});
 })
+
 
 router.delete('/:id',isLoggedIn, async (req:any, res:any) => {
     let id = Number(req.body.log_id);

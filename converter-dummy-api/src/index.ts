@@ -27,14 +27,18 @@ cron.schedule('*/5 * * * *', () => {
 function updateConverterStatuses() {
     for (let i = 0; i < converters.length; i++) {
         let randomIndex = Math.floor(Math.random() * 5);
-        converters[i].device.status = statusMessages[randomIndex];
+
+           converters[i].device.status = statusMessages[randomIndex];
+
     }
 }
 
 
 function updateConverterThroughOutPuts() {
     for (let i = 0; i < converters.length; i++) {
-        converters[i].pvGeneration = simulateSolarPanelDailyThroughput();
+
+            converters[i].pvGeneration = simulateSolarPanelDailyThroughput();
+
     }
 }
 
@@ -93,7 +97,13 @@ app.get(`/v1/devices/:id/measurements/sets/EnergyAndPowerBattery/Day`, async (re
         }
     }
 
-    let throughOutPut: number = converter.pvGeneration;
+    let throughOutPut: number ;
+
+    try {
+            throughOutPut = converter.pvGeneration;
+    }catch (e){
+        throughOutPut = 0;
+    }
 
     if (throughOutPut != undefined || isNaN(throughOutPut)) {
         return res.status(200).json(converter);

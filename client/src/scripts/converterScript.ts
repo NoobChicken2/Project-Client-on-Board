@@ -2,10 +2,10 @@ import {apiData} from "../stores/store";
 
 let converters;
 
-export async function loadConverters() {
-    const resp = await fetch('http://localhost:3000/converters',{
-        headers:{
-            'Authorization':'Bearer '+ localStorage.getItem('token')
+export async function loadConvertersGlobal() {
+    const resp = await fetch('http://localhost:3000/converters', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
     });
     converters = await resp.json();
@@ -15,10 +15,11 @@ export async function loadConverters() {
         return converters;
     });
 }
+
 export async function loadSelectConverters(installerId) {
-    const resp = await fetch('http://localhost:3000/converters/installer/'+installerId,{
-        headers:{
-            'Authorization':'Bearer '+ localStorage.getItem('token')
+    const resp = await fetch('http://localhost:3000/converters/installer/' + installerId, {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
     });
     converters = await resp.json();
@@ -28,10 +29,11 @@ export async function loadSelectConverters(installerId) {
         return converters;
     });
 }
+
 export async function loadClientConverters(ownerId) {
-    const resp = await fetch('http://localhost:3000/converters/owner/'+ownerId,{
-        headers:{
-            'Authorization':'Bearer '+ localStorage.getItem('token')
+    const resp = await fetch('http://localhost:3000/converters/owner/' + ownerId, {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
     });
     converters = await resp.json();
@@ -44,28 +46,34 @@ export async function loadClientConverters(ownerId) {
 
 
 export async function editConverter(data, id) {
-    return await fetch(`http://localhost:3000/converters/${id}`, {
-        method: "PATCH",
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization':'Bearer '+ localStorage.getItem('token')
-        },
-        body: JSON.stringify(data)
-    }).then(res => res.json())
-        .catch(err => alert(err))
+    if (validateConverterUpdate(data)) {
+        return await fetch(`http://localhost:3000/converters/${id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            body: JSON.stringify(data)
+        }).then(res => res.json())
+            .catch(err => alert(err))
+    }
 }
 
-export async function addConverter(ownerId, installerId) {
+export async function addConverter(ownerId, installerId, expected_throughput, serial_number, converter_name, converter_id,) {
     let Converter = {
         owner_id: ownerId,
-        installer_id: installerId
-
+        installer_id: installerId,
+        expected_throughput: expected_throughput,
+        serial_number: serial_number,
+        converter_name: converter_name,
+        converter_id: converter_id
     }
+    console.log(Converter)
     const resp = await fetch('http://localhost:3000/converters', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization':'Bearer '+ localStorage.getItem('token')
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
 
         },
         body: JSON.stringify(Converter)
@@ -79,7 +87,7 @@ export async function removeConverter(converterId) {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization':'Bearer '+ localStorage.getItem('token')
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
         },
 
     });
@@ -98,11 +106,22 @@ function validateNumberField(field, fieldName) {
     return true;
 }
 
-export function isValidConverter(ownerId, installerId, expectedThroughput) {
+function validateTextField(field, fieldName) {
+    if (field === undefined || field === null || field === "") {
+        alert(`${fieldName} cannot be empty, null or undefined`);
+        return false;
+    }
+
+    return true;
+}
+
+export function isValidConverter(ownerId, installerId, expected_throughput, serial_number, converter_name, converter_id) {
     return (validateNumberField(ownerId, "Owner ID") ||
         validateNumberField(installerId, "Installer ID") ||
-        validateNumberField(expectedThroughput, "Expected throughput"));
-
+        validateNumberField(expected_throughput, "Expected Throughput") ||
+        validateTextField(serial_number, "Serial Number") ||
+        validateTextField(converter_name, "Converter Name") ||
+        validateNumberField(converter_id, "Converter ID") );
 }
 
 export function validateConverterUpdate(data) {
@@ -141,5 +160,37 @@ export function validateConverterUpdate(data) {
             return false;
         }
     }
+
+    if (data.serial_number !== undefined) {
+        if (isNaN(data.serial_number)) {
+            alert("Serial number must be a number")
+            return false;
+        }
+
+        if (data.serial_number === null) {
+            alert("Serial number cannot be null")
+            return false;
+        }
+    }
+
+    if (data.converter_name !== undefined) {
+        if (data.converter_name === null) {
+            alert("Converter name cannot be null")
+            return false;
+        }
+    }
+
+
     return true;
+}
+
+export function loadSelectedData() {
+    if (localStorage.getItem('role') === 'CompanyAdmin') {
+        return loadSelectConverters(localStorage.getItem('company_id'))
+
+    } else if (localStorage.getItem('role') === 'GlobalAdmin') {
+        return loadConvertersGlobal()
+    } else if (localStorage.getItem('role') === 'Client') {
+        return loadClientConverters(localStorage.getItem('id'));
+    }
 }

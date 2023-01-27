@@ -7,6 +7,7 @@ import converter from'./routes/converters'
 import customers from "./routes/customers";
 import companies from "./routes/companies"
 import token from './routes/token';
+import global from "./routes/global";
 import {runUpdateStatusCronJob} from "./cron/fetchStatusCronJob";
 import {runUpdateThroughputCronJob} from "./cron/fetchThroughputCronJob";
 
@@ -22,6 +23,7 @@ app.use('/converters',converter);
 app.use('/customers',customers);
 app.use('/token', token);
 app.use('/companies', companies);
+app.use('/users',global);
 app.get('/converters', () => {
 });
 

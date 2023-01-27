@@ -1,10 +1,11 @@
 import {apiData} from "../stores/store";
+import {loadClientConverters, loadConvertersGlobal, loadSelectConverters} from "./converterScript";
 
 let customers;
 let response;
 
-export async function loadCustomers() {
-    const resp = await fetch('http://localhost:3000/customers',{
+export async function loadCustomersGlobal() {
+    const resp = await fetch('http://localhost:3000/users',{
         method: 'GET',
         headers: {
             'Content-Type':'application/json',
@@ -212,4 +213,14 @@ function validateEmail(email) {
 function validatePhoneNumber(phone_number) {
     let re = new RegExp(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im);
     return re.test(phone_number);
+}
+export async function loadSelectedData(){
+    if(localStorage.getItem('role') === 'CompanyAdmin'){
+        await  loadSelectCustomers(localStorage.getItem('company_id'))
+
+    } else if (localStorage.getItem('role') === 'GlobalAdmin'){
+        console.log("hit")
+        await  loadCustomersGlobal()
+    }
+
 }
