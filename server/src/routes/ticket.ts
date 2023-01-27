@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/',isLoggedIn, async (req:any, res:any) => {
     if (req.user.role === 'GlobalAdmin' || req.user.role === 'CompanyAdmin'){
-        pool.query('SELECT * FROM tickets INNER JOIN logs ON tickets.log_id = logs.log_id', (error: any, results: { rows: any; }) => {
+        pool.query('SELECT * FROM tickets INNER JOIN logs ON tickets.log_id = logs.log_id ORDER BY tickets.created_at DESC', (error: any, results: { rows: any; }) => {
             if (error) {
                 throw error
             }
