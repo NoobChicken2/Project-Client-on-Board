@@ -1,4 +1,9 @@
 {
+  "scripts" : {
+    "server": "npm --prefix ./server run start",
+    "client": "npm --prefix ./client run dev",
+    "start": "npm run client && npm run server"
+  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "bootstrap-icons": "^1.10.2",
