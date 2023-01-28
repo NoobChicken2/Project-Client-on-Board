@@ -1,8 +1,9 @@
 <script>
     import {afterUpdate, createEventDispatcher, onMount, setContext} from "svelte";
-    import {loadTickets} from "../scripts/ticketScript.ts";
+    import {loadTickets, checkingValidTicket, addTicket} from "../scripts/ticketScript.ts";
     import {apiData} from "../stores/store.ts";
     import Pagination from "../components/Pagination.svelte";
+    import Modal from "../Components/Modal.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -13,9 +14,14 @@
     let responsive = true;
     let rows = [];
     let serverSide = false;
+    let showAddPopup = false;
+    let showEditPopup = false;
+    let error;
+    let message;
 
+    let issue;
+    let converter_id;
     onMount(loadTickets)
-
     afterUpdate(() => {
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
         var popoverList = popoverTriggerList.map(function(element){
@@ -60,14 +66,53 @@
     }
 
 
+    function handleAdd() {
+        if (checkingValidTicket(converter_id)) {
+            addTicket(issue, converter_id)
+            showAddPopup = false;
+        }else {
+
+        }
+        loadTickets();
+    }
 </script>
 
 <body>
-    <div class="p-4 my-4 bg-light rounded- container">
+<div class="container">
+    <Modal  open={showAddPopup} on:click={ () => showEditPopup = false} >
+        <form>
+            <div class="modal-header">
+                <h5 class="modal-title">Add</h5>
+                <button type="button" class="bi bi-x-circle" data-dismiss="modal"
+                        on:click={ () => showAddPopup = false}>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Issue</label>
+                    <input type="text" class="form-control" bind:value={issue} required>
+                </div>
+                <div class="form-group">
+                    <label>Converter ID</label>
+                    <input type="number" class="form-control" bind:value={converter_id} required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        on:click={ () => showAddPopup = false}>Close
+                </button>
+                <button type="button" class="btn btn-success" on:click={() => handleAdd()}>Add</button>
+            </div>
 
-        <!-- Table of tickets -->
-        <table style="text-align: left" class="table table-hover" id="table__tickets">
-            <thead class= "table-dark">
+        </form>
+    </Modal>
+</div>
+        <div class="p-4 my-4 bg-light rounded- container">
+                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add new a ticket
+                </button>
+            <!-- Table of tickets -->
+            <table style="text-align: left" class="table table-hover" id="table__tickets">
+                <thead class= "table-dark">
                 <tr>
                     <th style="width: 100px" scope="col">Converter ID</th>
                     <th style="width: 100px" scope="col">Ticket ID</th>
@@ -76,70 +121,62 @@
                     <th style="width: 200px" scope="col">Date</th>
                     <th style="width: 50px" scope="col"></th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
 
-            {#each $apiData as Ticket, index}
-                {#if page * pageSize <= index && index < (page + 1) * pageSize}
-                <tr>
-                    <th>{Ticket.converter_id}</th>
-                    <th scope="row">{Ticket.ticket_id}</th>
-                    <td>{Ticket.log_event}</td>
-                    <td>{Ticket.log_id}</td>
-                    <td>{Ticket.created_at}</td>
-                    <td>
-                        <button  type="button"  class="bi bi-card-text btn-outline-dark"
-                                 data-bs-toggle="popover" data-bs-placement="left"
-                                 title="Popover title" data-bs-content="Popover on left."
-                        ></button>
-                    </td>
-                </tr>
-                {/if}
-            {/each}
-            </tbody>
-        </table>
+                {#each $apiData as Ticket, index}
+                    {#if page * pageSize <= index && index < (page + 1) * pageSize}
+                        <tr>
+                            <th>{Ticket.converter_id}</th>
+                            <th scope="row">{Ticket.ticket_id}</th>
+                            <td>{Ticket.log_event}</td>
+                            <td>{Ticket.log_id}</td>
+                            <td>{Ticket.created_at}</td>
+                            <td>
+                                <button  type="button"  class="bi bi-card-text btn-outline-dark"
+                                         data-bs-toggle="popover" data-bs-placement="left"
+                                         title="Popover title" data-bs-content="Popover on left."
+                                ></button>
+                            </td>
+                        </tr>
+                    {/if}
+                {/each}
+                </tbody>
+            </table>
 
-        <slot name="bottom">
-            <div class="slot-bottom">
-                <svelte:component
-                        this={Pagination}
-                        {page}
-                        {pageSize}
-                        {serverSide}
-                        count={filteredRows.length - 1}
-                        on:pageChange={onPageChange} />
-            </div>
-        </slot>
-
-    </div>
+            <slot name="bottom">
+                <div class="slot-bottom">
+                    <svelte:component
+                            this={Pagination}
+                            {page}
+                            {pageSize}
+                            {serverSide}
+                            count={filteredRows.length - 1}
+                            on:pageChange={onPageChange} />
+                </div>
+            </slot>
+        </div>
 </body>
 
 <style>
-
-    body, div {
+    main {
+        top: 50px;
+        left: 150px;
+        position: absolute;
+    }
+    table, div,body {
         background: url("../lib/Image 2.svg") no-repeat fixed center;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
-        overflow-y: hidden;
-        height: 100vh;
+        overflow-x: hidden;
     }
-
-    main{
-        top: 50px;
-        left: 150px;
-        position: absolute;
-    }
-
     table{
         color: azure;
     }
-
-
-    /*.popover{*/
-    /*    width: 200px;*/
-    /*    height: 200px;*/
-    /*}*/
+    body{
+        height: 100vh;
+    }
 
 </style>
