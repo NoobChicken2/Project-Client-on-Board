@@ -110,25 +110,44 @@ router.post('/',isLoggedIn,validateUser, async (req, resp) => {
 
 router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
     const id = Number(req.params.id);
-    const updates = req.body;
+    let updates = req.body;
     if (isNaN(id)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
 
     if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
+        console.log(req.body.password);
+
+        // DO NOT TOUCH.
         if(req.body.password !== undefined) {
             bcrypt.hash(req.body.password, 10, function (err, hash) {
                 if (err) {
                     throw err
                 }
                 updates.password = hash;
+                console.log(hash);
+                console.log(updates);
+
+                let updatesString = Object.entries(updates)
+                    .map(([key, value]) => `${key}='${value}'`)
+                    .join(', ');
+
+                console.log(updatesString);
+
+                pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
+                    if (error) {
+                        res.status(500).json({error});
+                    }
+                    res.status(200).json(results);
+
+                });
             });
-        }
+        } else {
+            let updatesString = Object.entries(updates)
+                .map(([key, value]) => `${key}='${value}'`)
+                .join(', ');
 
-        const updatesString = Object.entries(updates)
-            .map(([key, value]) => `${key}='${value}'`)
-            .join(', ');
-
+            console.log(updatesString);
 
             pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
                 if (error) {
@@ -136,9 +155,10 @@ router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
                 }
                 res.status(200).json(results);
 
-        });
-    }
+            });
+        }
 
+    }
 
 });
 

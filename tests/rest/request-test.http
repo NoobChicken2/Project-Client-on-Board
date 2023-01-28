@@ -60,3 +60,30 @@ client.test(
     }
 );
 %}
+
+### Login CompanyAdmin
+POST localhost:3000/token
+Content-Type: application/json
+
+{
+  "username": "Harry4324",
+  "password": "companyadmin"
+}
+
+### Login GlobalAdmin
+POST localhost:3000/token
+Content-Type: application/json
+
+{
+  "username": "AdminFred",
+  "password": "admin"
+}
+
+### Good weather PATCH
+PATCH localhost:3000/companyAdmins/78
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55X2lkIjpudWxsLCJ1c2VyX2lkIjoxMCwidXNlcm5hbWUiOiJBZG1pbkZyZWQiLCJkYXRlIjoiMjAyMy0wMS0yOFQyMjoxMjoyNi4yMDZaIiwicm9sZSI6Ikdsb2JhbEFkbWluIiwiaWF0IjoxNjc0OTQzOTQ2fQ.UF62l29531J0QKovpnOC5Goj988KxOXChx1jvnCzcu8
+
+{
+  "password": "concac"
+}
