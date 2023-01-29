@@ -79,8 +79,7 @@
             }
         });
 
-        console.log(dataToUpdate)
-        console.log(selectedId)
+
         if (validateConverterUpdate(dataToUpdate)) {
             await editConverter(dataToUpdate, selectedId);
             showEditPopup = false;

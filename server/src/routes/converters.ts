@@ -143,8 +143,7 @@ router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
         if (updates.installer_id !== undefined && updates.installer_id !== '')
             converterUpdate.installer_id = updates.installer_id;
 
-        console.log("converters " + converterUpdate)
-        console.log("details " + converterDetailsUpdate)
+
 
         try{
 

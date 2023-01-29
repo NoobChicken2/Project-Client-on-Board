@@ -29,7 +29,6 @@
 
     let isEdit = (company) => {
         showEditPopup = true;
-        console.log(company)
         data = company;
     }
     const updateCompany = async (id) => {

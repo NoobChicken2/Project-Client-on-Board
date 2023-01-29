@@ -21,18 +21,8 @@
 
     let issue;
     let converter_id;
-    onMount(loadTickets)
-    afterUpdate(() => {
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-        var popoverList = popoverTriggerList.map(function(element){
-            return new bootstrap.Popover(element);
-        });
-    });
-    document.addEventListener("DOMContentLoaded", function(){
+    onMount(loadTickets);
 
-    });
-
-    $: console.log($apiData);
 
     $: rows = new Array($apiData.length);
 
@@ -132,12 +122,6 @@
                             <td>{Ticket.log_event}</td>
                             <td>{Ticket.log_id}</td>
                             <td>{Ticket.created_at}</td>
-                            <td>
-                                <button  type="button"  class="bi bi-card-text btn-outline-dark"
-                                         data-bs-toggle="popover" data-bs-placement="left"
-                                         title="Popover title" data-bs-content="Popover on left."
-                                ></button>
-                            </td>
                         </tr>
                     {/if}
                 {/each}

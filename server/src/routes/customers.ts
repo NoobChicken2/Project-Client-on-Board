@@ -116,7 +116,7 @@ router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
     }
 
     if (req.user.role === 'CompanyAdmin' || req.user.role === 'GlobalAdmin'){
-        console.log(req.body.password);
+
 
         // DO NOT TOUCH.
         if(req.body.password !== undefined) {
@@ -125,14 +125,13 @@ router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
                     throw err
                 }
                 updates.password = hash;
-                console.log(hash);
-                console.log(updates);
+
 
                 let updatesString = Object.entries(updates)
                     .map(([key, value]) => `${key}='${value}'`)
                     .join(', ');
 
-                console.log(updatesString);
+
 
                 pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
                     if (error) {
@@ -147,7 +146,7 @@ router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
                 .map(([key, value]) => `${key}='${value}'`)
                 .join(', ');
 
-            console.log(updatesString);
+
 
             pool.query(`UPDATE users SET ${updatesString}  WHERE user_id =${id} `, (error: any, results: any) => {
                 if (error) {

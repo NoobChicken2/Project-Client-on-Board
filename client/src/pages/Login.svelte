@@ -21,7 +21,7 @@
             } else {
                 message = "Logged in";
                 handleToken(response)
-                router("/");
+                router("/main");
             }
         });
 
