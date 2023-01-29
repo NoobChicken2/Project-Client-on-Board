@@ -51,7 +51,7 @@ router.get('/users/:userId', isLoggedIn, async (req, res) => {
                     INNER JOIN logs ON tickets.log_id = logs.log_id
                     INNER JOIN converters ON logs.converter_id = converters.converter_id
                     INNER JOIN users ON converters.owner_id = users.user_id
-                WHERE users.user_id = $1`, [userId], (error: any, results: { rows: any; }) => {
+                WHERE users.user_id = $1 ORDER BY tickets.created_at DESC`, [userId], (error: any, results: { rows: any; }) => {
                 if (error) {
                     throw error
                 }
