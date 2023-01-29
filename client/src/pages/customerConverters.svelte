@@ -2,7 +2,7 @@
     import {apiData} from "../stores/store.ts";
 
     export let params;
-    import {afterUpdate, createEventDispatcher, onMount, setContext} from "svelte";
+    import {createEventDispatcher, onMount, setContext} from "svelte";
     import {
         loadClientConverters,
         addConverter,
@@ -14,6 +14,7 @@
     import Pagination from "../components/Pagination.svelte";
 
     const dispatch = createEventDispatcher();
+    let role = localStorage.getItem('role');
     let url = document.URL;
     let customerId = url.split("/")
     let loading = false;
@@ -26,8 +27,8 @@
 
     onMount(() => {
         loadClientConverters(customerId[4]);
-    }
-    )
+    });
+
     let showEditPopup = false;
     let showAddPopup = false;
     let showDeletePopup = false;
@@ -231,8 +232,9 @@
 <div class="container">
     <div class="table-wrapper">
         <div class="col-md-6">
-            <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add a new converter
-            </button>
+            {#if role !== "Client"}
+                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add a new converter</button>
+            {/if}
         </div>
         <table class="table table-hover">
             <thead>

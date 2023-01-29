@@ -12,7 +12,6 @@
     import router from "page";
     import {addCompanyAdmin} from "../scripts/companyAdminScript";
     import Pagination from "../components/Pagination.svelte";
-
     const dispatch = createEventDispatcher();
 
     let loading = false;

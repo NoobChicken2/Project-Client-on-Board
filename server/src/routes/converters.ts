@@ -86,7 +86,7 @@ router.get('/:id/logs', isLoggedIn, async (req: any, resp: any) => {
         let converterId = req.params.id;
         pool.query(`SELECT *
                     FROM logs
-                    WHERE converter_id = $1 ORDER BY logs.log_id DESC`, [converterId], (err, result) => {
+                    WHERE converter_id = $1 ORDER BY logs.created_at DESC`, [converterId], (err, result) => {
             if (err) {
                 return resp.status(400).json({error: "Server side issue(GET)"});
             }
@@ -143,8 +143,7 @@ router.patch('/:id', isLoggedIn, async (req: any, res: any) => {
         if (updates.installer_id !== undefined && updates.installer_id !== '')
             converterUpdate.installer_id = updates.installer_id;
 
-        console.log("converters " + converterUpdate)
-        console.log("details " + converterDetailsUpdate)
+
 
         try{
 

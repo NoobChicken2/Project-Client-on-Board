@@ -4,10 +4,7 @@
     let role = localStorage.getItem('role');
 
     function checkSignOut() {
-        localStorage.setItem("token", "");
-        localStorage.setItem("role", "");
-        localStorage.setItem("id", "");
-        localStorage.setItem("username", "");
+        localStorage.clear();
     }
 
     let navActive = false;
@@ -127,14 +124,20 @@
         <section class="menu_List">
             <ul class="menu_List">
                 <li class="menu_Item">
-                    <a id="home" class="menu_home_Link" href="/">
+                    <a id="home" class="menu_home_Link" href="/main">
                         <h1 class="homeHeading" id="homeText">Home</h1>
                     </a>
                 </li>
                 {#if role !== "Client"}
                     <li class="menu_Item">
                         <a id="customer" class="menu_customers_Link" href="/customers">
-                            <h1 class="customerHeading" id="customerText">Customer</h1>
+                            <h1 class="customerHeading" id="customerText">
+                                {#if role === "GlobalAdmin"}
+                                    Users
+                                {:else}
+                                    Customers
+                                {/if}
+                            </h1>
                         </a>
                     </li>
                 {/if}
@@ -156,7 +159,7 @@
                     </a>
                 </li>
                 <li class="menu_Item">
-                    <a on:click={checkSignOut} id="signOut" class="menu_Link" href="/login">
+                    <a on:click={checkSignOut} id="signOut" class="menu_Link" href="/">
                         <h1 class="signOutHeading" id="signOutText">Sign out</h1>
                     </a>
                 </li>

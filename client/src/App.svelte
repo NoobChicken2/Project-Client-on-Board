@@ -22,7 +22,7 @@
     router('/companies', (ctx) =>{
         page = company;
     })
-    router('/login', (ctx) => {
+    router('/', (ctx) => {
         page = login;
     })
     router('/customers', (ctx) =>{
@@ -43,7 +43,7 @@
     router('/converters/:id/logs', (ctx) => {
         page = converterLog;
     })
-    router('/', (ctx) => {
+    router('/main', (ctx) => {
         page = main;
     })
 

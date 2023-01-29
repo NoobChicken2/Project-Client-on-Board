@@ -9,7 +9,6 @@ export async function loadConvertersGlobal() {
         }
     });
     converters = await resp.json();
-    console.log(converters)
 
     apiData.update((oldValue) => {
         return converters;
@@ -23,7 +22,6 @@ export async function loadSelectConverters(installerId) {
         }
     });
     converters = await resp.json();
-    console.log(converters)
 
     apiData.update((oldValue) => {
         return converters;
@@ -37,7 +35,6 @@ export async function loadClientConverters(ownerId) {
         }
     });
     converters = await resp.json();
-    console.log(converters)
 
     apiData.update((oldValue) => {
         return converters;
@@ -68,7 +65,6 @@ export async function addConverter(ownerId, installerId, expected_throughput, se
         converter_name: converter_name,
         converter_id: converter_id
     }
-    console.log(Converter)
     const resp = await fetch('http://localhost:3000/converters', {
         method: 'POST',
         headers: {

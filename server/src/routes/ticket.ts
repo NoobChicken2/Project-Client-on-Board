@@ -1,11 +1,12 @@
 import express from 'express';
 import pool from "../database/databaseConnection";
 import {isLoggedIn} from "../middleware/authorizationMiddleware";
+import error from "svelte/types/compiler/utils/error";
 const router = express.Router();
 
 router.get('/',isLoggedIn, async (req:any, res:any) => {
     if (req.user.role === 'GlobalAdmin' || req.user.role === 'CompanyAdmin'){
-        pool.query('SELECT * FROM tickets INNER JOIN logs ON tickets.log_id = logs.log_id ORDER BY logs.log_id DESC', (error: any, results: { rows: any; }) => {
+        pool.query('SELECT * FROM tickets INNER JOIN logs ON tickets.log_id = logs.log_id ORDER BY tickets.created_at DESC', (error: any, results: { rows: any; }) => {
             if (error) {
                 throw error
             }
@@ -22,12 +23,11 @@ router.get('/:id',isLoggedIn, async (req:any, res:any) => {
     if (isNaN(id)) {
         return res.status(400).json({error:"Bad ID format!"});
     }
-
     if (req.user.role === 'GlobalAdmin' || req.user.role === 'CompanyAdmin'){
         pool.query(`SELECT *
                 FROM tickets
                          INNER JOIN logs ON tickets.log_id = logs.log_id
-                WHERE ticket_id = $1 ORDER BY tickets.log_id DESC`,[id], (error: any, results: { rows: any; }) => {
+                WHERE ticket_id = ${id}`, (error: any, results: { rows: any; }) => {
             if (error) {
                 throw error
             }
@@ -51,7 +51,7 @@ router.get('/users/:userId', isLoggedIn, async (req, res) => {
                     INNER JOIN logs ON tickets.log_id = logs.log_id
                     INNER JOIN converters ON logs.converter_id = converters.converter_id
                     INNER JOIN users ON converters.owner_id = users.user_id
-                WHERE users.user_id = $1  ORDER BY tickets.log_id DESC`, [userId], (error: any, results: { rows: any; }) => {
+                WHERE users.user_id = $1 ORDER BY tickets.created_at DESC`, [userId], (error: any, results: { rows: any; }) => {
                 if (error) {
                     throw error
                 }
@@ -64,7 +64,7 @@ router.get('/users/:userId', isLoggedIn, async (req, res) => {
                     INNER JOIN logs ON tickets.log_id = logs.log_id
                     INNER JOIN converters ON logs.converter_id = converters.converter_id
                     INNER JOIN users ON converters.installer_id = users.company_id
-                WHERE users.user_id = $1  ORDER BY tickets.log_id DESC`, [userId], (error: any, results: { rows: any; }) => {
+                WHERE users.user_id = $1`, [userId], (error: any, results: { rows: any; }) => {
                 if (error) {
                     throw error
                 }
@@ -73,32 +73,19 @@ router.get('/users/:userId', isLoggedIn, async (req, res) => {
             break;
     }
 });
-
-router.post('/', isLoggedIn,async (req, res) => {
-    let id = Number(req.body.log_id);
+router.post('/', isLoggedIn, async (req, res) => {
+    const id =req.body.converter_id
+    const issue = req.body.issue;
+    let log_id: number;
     if (!Number.isInteger(id)) {
-        return res.status(400).json({error:"log_id must be an integer!"});
+        return res.status(400).json({error:"converter_id must be an integer!"});
     }
-    try {
-        let {rows} = await pool.query(`SELECT *
-                FROM tickets
-                WHERE log_id = ${id} ORDER BY log_id DESC`)
+    const {rows} = await pool.query('INSERT INTO logs(converter_id, log_event) VALUES ($1,$2) RETURNING log_id', [id, issue]);
+    log_id = rows[0].log_id;
+    await pool.query('INSERT INTO tickets (log_id) VALUES ($1) ', [log_id])
+    res.status(200).json({success: 'Ticket Added Successfully'});
+})
 
-        if (rows.length > 0) {
-            return res.status(400).json({error:"A ticket for this log is already existed!"});
-        }
-    } catch (e) {
-
-    }
-    pool.query(`INSERT INTO tickets (log_id)
-                VALUES (${id})`, (error: any, results: { rows: any; }) => {
-        if (error) {
-            return res.status(500).json(error)
-        }
-        res.status(200).json(results.rows)
-    })
-
-});
 
 router.delete('/:id',isLoggedIn, async (req:any, res:any) => {
     let id = Number(req.body.log_id);

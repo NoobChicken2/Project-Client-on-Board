@@ -10,8 +10,7 @@ const LOW_THROUGHPUT_MULTIPLIER = 0.7;
 
 
 export async function runUpdateThroughputCronJob() {
-    cron.schedule('*/5 * * * *', async () => {
-
+    cron.schedule('0 0 * * *', async () => {
         await fetchConvertersThroughputs()
     });
 }
@@ -72,9 +71,6 @@ async function updateThroughPut(throughput: number, converterId: number) {
 
             let newExpectedThroughput = Math.round((throughput + expectedThroughput) / 2);
 
-            await pool.query(`UPDATE converter_details
-                              SET expected_throughput = ($1)
-                              WHERE converter_id = ($2)`, [newExpectedThroughput, converterId]);
 
         }
 

@@ -1,3 +1,8 @@
+.dropdown-menu{
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
 /*:root {*/
 /*  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;*/
 /*  font-size: 16px;*/

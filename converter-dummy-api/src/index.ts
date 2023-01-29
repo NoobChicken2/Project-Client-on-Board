@@ -15,12 +15,12 @@ let statusMessages = ["Ok", "Off", "CommunicationFault", "Warning", "Alarm", "Co
 updateConverterStatuses();
 updateConverterThroughOutPuts();
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('0-59 0-23 * * *', () => {
     updateConverterStatuses()
 });
 
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('59 23 * * *', () => {
     updateConverterThroughOutPuts();
 });
 

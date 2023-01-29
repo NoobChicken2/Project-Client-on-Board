@@ -79,8 +79,7 @@
             }
         });
 
-        console.log(dataToUpdate)
-        console.log(selectedId)
+
         if (validateConverterUpdate(dataToUpdate)) {
             await editConverter(dataToUpdate, selectedId);
             showEditPopup = false;
@@ -148,6 +147,12 @@
         dispatch("search", event.detail);
     }
 
+    let isClient;
+    if (localStorage.getItem('role') === "Client") {
+        isClient = 'pt-5';
+    } else {
+        isClient = '';
+    }
 
 </script>
 
@@ -226,8 +231,6 @@
         </form>
     </Modal>
 </div>
-
-
 <div class="container">
     <Modal open={showEditPopup} on:click={() => showEditPopup = false}>
         <form>
@@ -271,11 +274,12 @@
 </div>
 
 <div class="container">
-    <div class="table-wrapper">
-        <div class="col-md-6">
-            <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add a new converter
-            </button>
-        </div>
+    <div class="table-wrapper {isClient}">
+        {#if localStorage.getItem('role') !== "Client"}
+            <div class="col-md-6">
+                <button class=" btn btn-success" type="button" on:click={ () => showAddPopup = true}>Add a new converter</button>
+            </div>
+        {/if}
         <table class="table table-hover">
             <thead class="table-dark">
                 <tr>

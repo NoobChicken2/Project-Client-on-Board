@@ -100,35 +100,58 @@ router.patch('/:id',isLoggedIn,validateUserPatch, async (req:any, res:any) => {
         return res.status(400).json({error:"Bad ID format!"});
     }
 
+    // DO NOT TOUCH.
     if (req.user.role === 'GlobalAdmin') {
-        if(req.body.password !== undefined) {
+        if (req.body.password !== undefined) {
             bcrypt.hash(req.body.password, 10, function (err, hash) {
                 if (err) {
                     throw err
                 }
                 updates.password = hash;
+
+                const updatesString = Object.entries(updates)
+                    .map(([key, value]) => `${key}='${value}'`)
+                    .join(', ');
+
+
+                pool.query(`UPDATE users
+                            SET ${updatesString}
+                            WHERE user_id = ${id}
+                              AND role = 'CompanyAdmin'`, (error: any, results: any) => {
+                    if (error) {
+                        if (error.code == 23505) {
+                            return res.status(409).json(error.detail);
+                        } else if (error.code == 23514 && error.constraint === "users_email_check") {
+                            return res.status(400).json({error: "Bad email format!"});
+                        } else {
+                            return res.status(500).json(error);
+                        }
+                    }
+                    res.status(200).json(results);
+                });
+            });
+        } else {
+            const updatesString = Object.entries(updates)
+                .map(([key, value]) => `${key}='${value}'`)
+                .join(', ');
+
+
+            pool.query(`UPDATE users
+                        SET ${updatesString}
+                        WHERE user_id = ${id}
+                          AND role = 'CompanyAdmin'`, (error: any, results: any) => {
+                if (error) {
+                    if (error.code == 23505) {
+                        return res.status(409).json(error.detail);
+                    } else if (error.code == 23514 && error.constraint === "users_email_check") {
+                        return res.status(400).json({error: "Bad email format!"});
+                    } else {
+                        return res.status(500).json(error);
+                    }
+                }
+                res.status(200).json(results);
             });
         }
-        const updatesString = Object.entries(updates)
-            .map(([key, value]) => `${key}='${value}'`)
-            .join(', ');
-
-
-        pool.query(`UPDATE users
-                SET ${updatesString}
-                WHERE user_id = ${id}
-                  AND role = 'CompanyAdmin'`, (error: any, results: any) => {
-            if (error) {
-                if (error.code == 23505) {
-                    return res.status(409).json(error.detail);
-                } else if (error.code == 23514 && error.constraint === "users_email_check") {
-                    return res.status(400).json({error:"Bad email format!"});
-                } else {
-                    return res.status(500).json(error);
-                }
-            }
-            res.status(200).json(results);
-        });
     }
 })
 
