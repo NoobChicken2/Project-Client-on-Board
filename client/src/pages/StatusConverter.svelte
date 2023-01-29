@@ -9,7 +9,6 @@
     } from "../scripts/converterScript";
     import Modal from "../Components/Modal.svelte";
     import {apiData} from "../stores/store.ts";
-    import {loadCustomersGlobal, loadSelectCustomers} from "../scripts/customerScript";
     import Pagination from "../components/Pagination.svelte"
 
     const dispatch = createEventDispatcher();
